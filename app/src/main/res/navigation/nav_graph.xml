@@ -23,5 +23,5 @@
     <fragment
         android:id="@+id/weatherFragment"
         android:name="com.example.weather.ui.weather.WeatherFragment"
-        android:label="WeatherFragment" />
+        android:label="" />
 </navigation>

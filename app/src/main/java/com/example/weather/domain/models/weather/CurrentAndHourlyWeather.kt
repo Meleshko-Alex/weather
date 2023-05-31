@@ -5,7 +5,7 @@ data class CurrentAndHourlyWeather(
     val hourly: List<CurrentWeather>
 ) {
     data class CurrentWeather(
-        val time: Int,
+        val time: Long,
         val date: String,
         val temp: Double,
         val feelsLikeTemperature: Double,

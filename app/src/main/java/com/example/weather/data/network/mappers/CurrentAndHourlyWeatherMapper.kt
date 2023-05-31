@@ -20,6 +20,6 @@ fun OneCallCurrentAndHourlyDto.toCurrentAndHourlyWeather(): CurrentAndHourlyWeat
     val currentWeather = hourlyWeather[0]
     return CurrentAndHourlyWeather(
         current = currentWeather,
-        hourly = hourlyWeather
+        hourly = hourlyWeather.subList(0, 25) // 24hr range
     )
 }

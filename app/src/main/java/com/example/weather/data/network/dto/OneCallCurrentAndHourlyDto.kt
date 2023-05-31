@@ -11,7 +11,7 @@ data class OneCallCurrentAndHourlyDto(
     val hourly: List<CurrentWeatherDto> = listOf()
 ) {
     data class CurrentWeatherDto(
-        @Json(name = "dt") val currentTime: Int = 0,
+        @Json(name = "dt") val currentTime: Long = 0,
         val sunrise: Int = 0,
         val sunset: Int = 0,
         val temp: Double = 0.0,
