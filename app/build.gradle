@@ -44,22 +44,28 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Navigation component
-    implementation "androidx.navigation:navigation-fragment-ktx:${nav_version}"
-    implementation "androidx.navigation:navigation-ui-ktx:${nav_version}"
+    implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
 
     // Retrofit
-    implementation "com.squareup.retrofit2:retrofit:${retrofit_version}"
-    implementation "com.squareup.retrofit2:converter-moshi:${retrofit_version}"
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"
 
     // Moshi
-    implementation "com.squareup.moshi:moshi-kotlin:1.14.0"
+    implementation "com.squareup.moshi:moshi-kotlin:$moshi_version"
 
     // OkHttp3
-    implementation "com.squareup.okhttp3:logging-interceptor:4.11.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:$okhttp_version"
 
     // Hilt
-    implementation 'com.google.dagger:hilt-android:2.46.1'
-    kapt 'com.google.dagger:hilt-compiler:2.46.1'
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-compiler:$hilt_version"
+
+    // Epoxy
+    implementation "com.airbnb.android:epoxy:$epoxy_version"
+    implementation "com.airbnb.android:epoxy-paging3:$epoxy_version"
+    kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
+
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
-import com.example.weather.R
 import com.example.weather.databinding.FragmentWeatherBinding
+import com.example.weather.domain.models.weather.CurrentAndHourlyWeather
 import com.example.weather.ui.State
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.util.*
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -37,17 +36,32 @@ class WeatherFragment : Fragment() {
             when (state) {
                 is State.Success -> {
                     hideLoading()
-                    binding.textView.text = state.data.toString()
+                    bindCurrentWeatherData(state.data!!.current)
                 }
                 is State.Error -> {
                     hideLoading()
-                    binding.textView.text = state.message.toString()
                 }
                 is State.Loading -> {
                     showLoading()
                 }
             }
         }
+    }
+
+    private fun bindCurrentWeatherData(currentWeather: CurrentAndHourlyWeather.CurrentWeather) {
+        binding.tvCityName.text = "Zaporizhzhia" // change to set dynamically
+        binding.tvWeatherName.text = currentWeather.weather.weather.weatherName
+        val currentDate = LocalDateTime.now()
+        val formatter: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("EEEE, d MMM", Locale.ENGLISH)
+        val formattedDate = currentDate.format(formatter)
+        binding.tvDate.text = formattedDate
+        binding.tvTemperature.text = currentWeather.temp.toInt().toString() + "°"
+        binding.tvWind.text = currentWeather.windSpeed.toString() + " metre/sec"
+        binding.tvFeelsLike.text = currentWeather.feelsLikeTemperature.toInt().toString() + "°"
+        binding.tvIndexUv.text = currentWeather.uvi.toInt().toString()
+        binding.tvHumidity.text = currentWeather.humidity.toString() + "%"
+        binding.ivWeatherIcon.setImageResource(currentWeather.weather.icon.iconNormal)
     }
 
     private fun showLoading() {

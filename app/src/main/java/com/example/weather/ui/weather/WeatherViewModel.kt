@@ -29,10 +29,10 @@ class WeatherViewModel @Inject constructor(
         viewModelScope.launch {
             when (val result = repository.getCurrentAndHourlyWeather(latitude, longitude)) {
                 is NetworkResult.Success -> {
-                    _state.value = State.Success(result.data!!)
+                    _state.postValue(State.Success(result.data!!))
                 }
                 is NetworkResult.Error -> {
-                    _state.value = State.Error(result.message!!)
+                    _state.postValue(State.Error(result.message!!))
                 }
             }
         }

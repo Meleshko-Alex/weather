@@ -250,7 +250,7 @@ sealed class WeatherType(
             }
         }
 
-        enum class WEATHER_NAME(name: String) {
+        enum class WEATHER_NAME(val weatherName: String) {
             THUNDERSTORM_LIGHT_RAIN("Thunderstorm with light rain"),
             THUNDERSTORM_HEAVY_RAIN("Thunderstorm with heavy rain"),
             THUNDERSTORM("Thunderstorm"),

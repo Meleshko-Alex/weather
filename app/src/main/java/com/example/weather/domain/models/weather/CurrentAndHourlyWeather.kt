@@ -6,6 +6,7 @@ data class CurrentAndHourlyWeather(
 ) {
     data class CurrentWeather(
         val time: Int,
+        val date: String,
         val temp: Double,
         val feelsLikeTemperature: Double,
         val humidity: Int,

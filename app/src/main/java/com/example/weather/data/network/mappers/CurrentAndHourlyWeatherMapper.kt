@@ -8,6 +8,7 @@ fun OneCallCurrentAndHourlyDto.toCurrentAndHourlyWeather(): CurrentAndHourlyWeat
     val hourlyWeather = hourly.map { currentWeatherDto ->
         CurrentAndHourlyWeather.CurrentWeather(
             time = currentWeatherDto.currentTime,
+            date = "CHANGE ME",
             temp = currentWeatherDto.temp,
             feelsLikeTemperature = currentWeatherDto.feelsLikeTemperature,
             humidity = currentWeatherDto.humidity,
