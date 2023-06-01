@@ -4,203 +4,279 @@ import androidx.annotation.DrawableRes
 import com.example.weather.R
 
 sealed class WeatherType(
-    val weather: WEATHER_NAME,
+    val weather: WeatherName,
     val icon: Icon
 ) {
     data class Icon(
-        @DrawableRes val iconSmall: Int,
-        @DrawableRes val iconNormal: Int
+        @DrawableRes val iconSmallDay: Int = 0,
+        @DrawableRes val iconNormalDay: Int = 0,
+        @DrawableRes val iconSmallNight: Int = 0,
+        @DrawableRes val iconNormalNight: Int = 0
     )
 
-    object ThunderstormLightRain : WeatherType(
-        weather = WEATHER_NAME.THUNDERSTORM_LIGHT_RAIN,
+    object LightThunderstorm : WeatherType(
+        weather = WeatherName.LIGHT_THUNDERSTORM,
         icon = Icon(
-            iconSmall = R.drawable.ic_storm_48,
-            iconNormal = R.drawable.ic_storm_96
+            iconSmallDay = R.drawable.ic_isolated_thunderstorms_day_small,
+            iconNormalDay = R.drawable.ic_isolated_thunderstorms_day_normal,
+            iconSmallNight = R.drawable.ic_isolated_thunderstorms_night_small,
+            iconNormalNight = R.drawable.ic_isolated_thunderstorms_night_normal   
         )
     )
 
-    object ThunderstormHeavyRain : WeatherType(
-        weather = WEATHER_NAME.THUNDERSTORM_HEAVY_RAIN,
+    object HeavyThunderstorm : WeatherType(
+        weather = WeatherName.HEAVY_THUNDERSTORM,
         icon = Icon(
-            iconSmall = R.drawable.ic_storm_with_heavy_rain_48,
-            iconNormal = R.drawable.ic_storm_with_heavy_rain_96
+            iconSmallDay = R.drawable.ic_severe_thunderstorm_small,
+            iconNormalDay = R.drawable.ic_severe_thunderstorm_normal,
+            iconSmallNight = R.drawable.ic_severe_thunderstorm_small,
+            iconNormalNight = R.drawable.ic_severe_thunderstorm_normal
         )
     )
 
     object Thunderstorm : WeatherType(
-        weather = WEATHER_NAME.THUNDERSTORM,
+        weather = WeatherName.THUNDERSTORM,
         icon = Icon(
-            iconSmall = R.drawable.ic_cloud_lightning_48,
-            iconNormal = R.drawable.ic_cloud_lightning_96
+            iconSmallDay = R.drawable.ic_scattered_thunderstorms_day_small,
+            iconNormalDay = R.drawable.ic_scattered_thunderstorms_day_normal,
+            iconSmallNight = R.drawable.ic_scattered_thunderstorms_night_small,
+            iconNormalNight = R.drawable.ic_scattered_thunderstorms_night_normal
         )
     )
 
     object Drizzle : WeatherType(
-        weather = WEATHER_NAME.DRIZZLE,
+        weather = WeatherName.DRIZZLE,
         icon = Icon(
-            iconSmall = R.drawable.ic_rain_cloud_48,
-            iconNormal = R.drawable.ic_rain_cloud_96
+            iconSmallDay = R.drawable.ic_rainy_1_small,
+            iconNormalDay = R.drawable.ic_rainy_1_normal,
+            iconSmallNight = R.drawable.ic_rainy_1_small,
+            iconNormalNight = R.drawable.ic_rainy_1_normal
         )
     )
 
     object LightRain : WeatherType(
-        weather = WEATHER_NAME.LIGHT_RAIN,
+        weather = WeatherName.LIGHT_RAIN,
         icon = Icon(
-            iconSmall = R.drawable.ic_light_rain_48,
-            iconNormal = R.drawable.ic_light_rain_96
+            iconSmallDay = R.drawable.ic_rainy_1_day_small,
+            iconNormalDay = R.drawable.ic_rainy_1_day_normal,
+            iconSmallNight = R.drawable.ic_rainy_1_night_small,
+            iconNormalNight = R.drawable.ic_rainy_1_night_normal
         )
     )
 
     object Rain : WeatherType(
-        weather = WEATHER_NAME.RAIN,
+        weather = WeatherName.RAIN,
         icon = Icon(
-            iconSmall = R.drawable.ic_rain_48,
-            iconNormal = R.drawable.ic_rain_96
+            iconSmallDay = R.drawable.ic_rainy_2_day_small,
+            iconNormalDay = R.drawable.ic_rainy_2_day_normal,
+            iconSmallNight = R.drawable.ic_rainy_2_night_small,
+            iconNormalNight = R.drawable.ic_rainy_2_night_normal
         )
     )
 
     object HeavyRain : WeatherType(
-        weather = WEATHER_NAME.HEAVY_RAIN,
+        weather = WeatherName.HEAVY_RAIN,
         icon = Icon(
-            iconSmall = R.drawable.ic_heavy_rain_48,
-            iconNormal = R.drawable.ic_heavy_rain_96
+            iconSmallDay = R.drawable.ic_rainy_3_day_small,
+            iconNormalDay = R.drawable.ic_rainy_3_day_normal,
+            iconSmallNight = R.drawable.ic_rainy_3_night_small,
+            iconNormalNight = R.drawable.ic_rainy_3_night_normal
         )
     )
 
     object Showers : WeatherType(
-        weather = WEATHER_NAME.SHOWERS,
+        weather = WeatherName.SHOWERS,
         icon = Icon(
-            iconSmall = R.drawable.ic_rainfall_48,
-            iconNormal = R.drawable.ic_rainfall_96
+            iconSmallDay = R.drawable.ic_rainy_3_small,
+            iconNormalDay = R.drawable.ic_rainy_3_normal,
+            iconSmallNight = R.drawable.ic_rainy_3_small,
+            iconNormalNight = R.drawable.ic_rainy_3_normal
+        )
+    )
+
+    object LightSnow : WeatherType(
+        weather = WeatherName.LIGHT_SNOW,
+        icon = Icon(
+            iconSmallDay = R.drawable.ic_snowy_1_day_small,
+            iconNormalDay = R.drawable.ic_snowy_1_day_normal,
+            iconSmallNight = R.drawable.ic_snowy_1_night_small,
+            iconNormalNight = R.drawable.ic_snowy_1_night_normal
         )
     )
 
     object Snow : WeatherType(
-        weather = WEATHER_NAME.SNOW,
+        weather = WeatherName.SNOW,
         icon = Icon(
-            iconSmall = R.drawable.ic_snow_48,
-            iconNormal = R.drawable.ic_snow_96,
+            iconSmallDay = R.drawable.ic_snowy_2_day_small,
+            iconNormalDay = R.drawable.ic_snowy_2_day_normal,
+            iconSmallNight = R.drawable.ic_snowy_2_night_small,
+            iconNormalNight = R.drawable.ic_snowy_2_night_normal
+        )
+    )
+
+    object RainSnow : WeatherType(
+        weather = WeatherName.RAIN_SNOW,
+        icon = Icon(
+            iconSmallDay = R.drawable.ic_rain_and_snow_small,
+            iconNormalDay = R.drawable.ic_rain_and_snow_normal,
+            iconSmallNight = R.drawable.ic_rain_and_snow_small,
+            iconNormalNight = R.drawable.ic_rain_and_snow_normal,
         )
     )
 
     object Sleet : WeatherType(
-        weather = WEATHER_NAME.SLEET,
+        weather = WeatherName.SLEET,
         icon = Icon(
-            iconSmall = R.drawable.ic_sleet_48,
-            iconNormal = R.drawable.ic_sleet_96
+            iconSmallDay = R.drawable.ic_snow_and_sleet_small,
+            iconNormalDay = R.drawable.ic_snow_and_sleet_normal,
+            iconSmallNight = R.drawable.ic_snow_and_sleet_small,
+            iconNormalNight = R.drawable.ic_snow_and_sleet_normal,
+        )
+    )
+
+    object RainSleet : WeatherType(
+        weather = WeatherName.RAIN_SLEET,
+        icon = Icon(
+            iconSmallDay = R.drawable.ic_rain_and_sleet_small,
+            iconNormalDay = R.drawable.ic_rain_and_sleet_normal,
+            iconSmallNight = R.drawable.ic_rain_and_sleet_small,
+            iconNormalNight = R.drawable.ic_rain_and_sleet_normal,
         )
     )
 
     object HeavySnow : WeatherType(
-        weather = WEATHER_NAME.HEAVY_SNOW,
+        weather = WeatherName.HEAVY_SNOW,
         icon = Icon(
-            iconSmall = R.drawable.ic_snow_storm_48,
-            iconNormal = R.drawable.ic_snow_storm_96
+            iconSmallDay = R.drawable.ic_snowy_3_day_small,
+            iconNormalDay = R.drawable.ic_snowy_3_day_normal,
+            iconSmallNight = R.drawable.ic_snowy_3_night_small,
+            iconNormalNight = R.drawable.ic_snowy_3_night_normal
         )
     )
 
     object Mist : WeatherType(
-        weather = WEATHER_NAME.MIST,
+        weather = WeatherName.MIST,
         icon = Icon(
-            iconSmall = R.drawable.ic_fog_48,
-            iconNormal = R.drawable.ic_fog_96
+            iconSmallDay = R.drawable.ic_fog_day_small,
+            iconNormalDay = R.drawable.ic_fog_day_normal,
+            iconSmallNight = R.drawable.ic_fog_night_small,
+            iconNormalNight = R.drawable.ic_fog_night_normal
         )
     )
 
     object Smoke : WeatherType(
-        weather = WEATHER_NAME.SMOKE,
+        weather = WeatherName.SMOKE,
         icon = Icon(
-            iconSmall = R.drawable.ic_fog_48,
-            iconNormal = R.drawable.ic_fog_96
+            iconSmallDay = R.drawable.ic_fog_day_small,
+            iconNormalDay = R.drawable.ic_fog_day_normal,
+            iconSmallNight = R.drawable.ic_fog_night_small,
+            iconNormalNight = R.drawable.ic_fog_night_normal
         )
     )
 
     object Haze : WeatherType(
-        weather = WEATHER_NAME.HAZE,
+        weather = WeatherName.HAZE,
         icon = Icon(
-            iconSmall = R.drawable.ic_haze_48,
-            iconNormal = R.drawable.ic_haze_96
+            iconSmallDay = R.drawable.ic_haze_day_small,
+            iconNormalDay = R.drawable.ic_haze_day_normal,
+            iconSmallNight = R.drawable.ic_haze_night_small,
+            iconNormalNight = R.drawable.ic_haze_night_normal
         )
     )
 
     object Dust : WeatherType(
-        weather = WEATHER_NAME.DUST,
+        weather = WeatherName.DUST,
         icon = Icon(
-            iconSmall = R.drawable.ic_dust_48,
-            iconNormal = R.drawable.ic_dust_96
+            iconSmallDay = R.drawable.ic_dust_small,
+            iconNormalDay = R.drawable.ic_dust_normal,
+            iconSmallNight = R.drawable.ic_dust_small,
+            iconNormalNight = R.drawable.ic_dust_normal
         )
     )
 
     object Fog : WeatherType(
-        weather = WEATHER_NAME.FOG,
+        weather = WeatherName.FOG,
         icon = Icon(
-            iconSmall = R.drawable.ic_fog_48,
-            iconNormal = R.drawable.ic_fog_96
+            iconSmallDay = R.drawable.ic_fog_day_small,
+            iconNormalDay = R.drawable.ic_fog_day_normal,
+            iconSmallNight = R.drawable.ic_fog_night_small,
+            iconNormalNight = R.drawable.ic_fog_night_normal
         )
     )
 
     object Squall : WeatherType(
-        weather = WEATHER_NAME.SQUALL,
+        weather = WeatherName.SQUALL,
         icon = Icon(
-            iconSmall = R.drawable.ic_wind_48,
-            iconNormal = R.drawable.ic_wind_96
+            iconSmallDay = R.drawable.ic_wind_small,
+            iconNormalDay = R.drawable.ic_wind_normall,
+            iconSmallNight = R.drawable.ic_wind_small,
+            iconNormalNight = R.drawable.ic_wind_normall
         )
     )
 
     object Tornado : WeatherType(
-        weather = WEATHER_NAME.TORNADO,
+        weather = WeatherName.TORNADO,
         icon = Icon(
-            iconSmall = R.drawable.ic_tornado_48,
-            iconNormal = R.drawable.ic_tornado_96
+            iconSmallDay = R.drawable.ic_tornado_small,
+            iconNormalDay = R.drawable.ic_tornado_normal,
+            iconSmallNight = R.drawable.ic_tornado_small,
+            iconNormalNight = R.drawable.ic_tornado_normal
         )
     )
 
     object Clear : WeatherType(
-        weather = WEATHER_NAME.CLEAR,
+        weather = WeatherName.CLEAR,
         icon = Icon(
-            iconSmall = R.drawable.ic_sun_48,
-            iconNormal = R.drawable.ic_sun_96
+            iconSmallDay = R.drawable.ic_clear_day_small,
+            iconNormalDay = R.drawable.ic_clear_day_normal,
+            iconSmallNight = R.drawable.ic_clear_night_small,
+            iconNormalNight = R.drawable.ic_clear_night_normal
         )
     )
 
     object Clouds : WeatherType(
-        weather = WEATHER_NAME.CLOUDS,
+        weather = WeatherName.CLOUDS,
         icon = Icon(
-            iconSmall = R.drawable.ic_cloud_48,
-            iconNormal = R.drawable.ic_cloud_96
+            iconSmallDay = R.drawable.ic_cloudy_2_day_small,
+            iconNormalDay = R.drawable.ic_cloudy_2_day_normal,
+            iconSmallNight = R.drawable.ic_cloudy_2_night_small,
+            iconNormalNight = R.drawable.ic_cloudy_2_night_normal
         )
     )
 
     object FewClouds : WeatherType(
-        weather = WEATHER_NAME.FEW_CLOUDS,
+        weather = WeatherName.FEW_CLOUDS,
         icon = Icon(
-            iconSmall = R.drawable.ic_partly_cloudy_day_48,
-            iconNormal = R.drawable.ic_partly_cloudy_day_96
+            iconSmallDay = R.drawable.ic_cloudy_1_day_small,
+            iconNormalDay = R.drawable.ic_cloudy_1_day_normal,
+            iconSmallNight = R.drawable.ic_cloudy_1_night_small,
+            iconNormalNight = R.drawable.ic_cloudy_1_night_normal
         )
     )
 
     object OvercastClouds : WeatherType(
-        weather = WEATHER_NAME.OVERCAST_CLOUDS,
+        weather = WeatherName.OVERCAST_CLOUDS,
         icon = Icon(
-            iconSmall = R.drawable.ic_clouds_48,
-            iconNormal = R.drawable.ic_clouds_96
+            iconSmallDay = R.drawable.ic_cloudy_3_day_small,
+            iconNormalDay = R.drawable.ic_cloudy_3_day_normal,
+            iconSmallNight = R.drawable.ic_cloudy_3_night_small,
+            iconNormalNight = R.drawable.ic_cloudy_3_night_normal
         )
     )
 
     companion object {
         fun toWeatherType(id: Int): WeatherType {
             return when (id) {
-                200 -> ThunderstormLightRain
-                201 -> ThunderstormLightRain
-                202 -> ThunderstormHeavyRain
-                210 -> Thunderstorm
+                200 -> LightThunderstorm
+                201 -> Thunderstorm
+                202 -> HeavyThunderstorm
+                210 -> LightThunderstorm
                 211 -> Thunderstorm
-                212 -> Thunderstorm
+                212 -> HeavyThunderstorm
                 221 -> Thunderstorm
-                230 -> ThunderstormLightRain
-                231 -> ThunderstormLightRain
-                232 -> ThunderstormHeavyRain
+                230 -> LightThunderstorm
+                231 -> Thunderstorm
+                232 -> HeavyThunderstorm
                 300 -> Drizzle
                 301 -> Drizzle
                 302 -> Drizzle
@@ -220,17 +296,17 @@ sealed class WeatherType(
                 521 -> Showers
                 522 -> Showers
                 531 -> Showers
-                600 -> Snow
+                600 -> LightSnow
                 601 -> Snow
                 602 -> HeavySnow
                 611 -> Sleet
-                612 -> Sleet
-                613 -> Snow
-                615 -> Snow
-                616 -> Snow
-                620 -> Snow
-                621 -> Snow
-                622 -> Snow
+                612 -> RainSleet
+                613 -> RainSleet
+                615 -> RainSnow
+                616 -> RainSnow
+                620 -> RainSnow
+                621 -> RainSnow
+                622 -> RainSnow
                 701 -> Mist
                 711 -> Smoke
                 721 -> Haze
@@ -250,30 +326,32 @@ sealed class WeatherType(
             }
         }
 
-        enum class WEATHER_NAME(val weatherName: String) {
-            THUNDERSTORM_LIGHT_RAIN("Thunderstorm with light rain"),
-            THUNDERSTORM_HEAVY_RAIN("Thunderstorm with heavy rain"),
+        enum class WeatherName(val weatherName: String) {
+            LIGHT_THUNDERSTORM("Light thunderstorm"),
+            HEAVY_THUNDERSTORM("Heavy thunderstorm"),
             THUNDERSTORM("Thunderstorm"),
             DRIZZLE("Drizzle"),
             LIGHT_RAIN("Light rain"),
             RAIN("Rain"),
             HEAVY_RAIN("Heavy rain"),
             SHOWERS("Showers"),
+            LIGHT_SNOW("Light snow"),
             SNOW("Snow"),
+            RAIN_SNOW("Rain and snow"),
             SLEET("Sleet"),
+            RAIN_SLEET("Rain and sleet"),
             HEAVY_SNOW("Heavy snow"),
             MIST("Mist"),
             FOG("Fog"),
             SMOKE("Smoke"),
             HAZE("Haze"),
             DUST("Dust"),
-            Sand("Sand"),
             SQUALL("Squall"),
             TORNADO("Tornado"),
             CLEAR("Clear sky"),
             CLOUDS("Clouds"),
             FEW_CLOUDS("Few clouds"),
-            OVERCAST_CLOUDS("Overcast clouds")
+            OVERCAST_CLOUDS("Overcast clouds"),
         }
     }
 }

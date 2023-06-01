@@ -1,12 +1,9 @@
 package com.example.weather.ui.weather
 
 import ViewBindingKotlinModel
-import android.content.Context
-import android.graphics.ColorFilter
-import android.graphics.drawable.ColorDrawable
-import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyController
 import com.example.weather.R
+import com.example.weather.common.Utils
 import com.example.weather.databinding.ItemWeatherCardBinding
 import com.example.weather.domain.models.weather.CurrentAndHourlyWeather
 import java.time.Instant
@@ -34,9 +31,15 @@ class WeatherHourlyEpoxyController : EpoxyController() {
         ViewBindingKotlinModel<ItemWeatherCardBinding>(R.layout.item_weather_card) {
 
         override fun ItemWeatherCardBinding.bind() {
-            tvTime.text = convertEpochToLocalTime(weather.time)
+            val time = convertEpochToLocalTime(weather.time)
+            tvTime.text = time
             tvTemperature.text = weather.temp.toInt().toString()
-            ivWeatherIcon.setImageResource(weather.weather.icon.iconSmall)
+            ivWeatherIcon.setImageResource(
+                Utils.getWeatherIcon(
+                    weather = weather.weather,
+                    time = time.substringBeforeLast(":").toInt()
+                )
+            )
         }
 
         private fun convertEpochToLocalTime(epochTime: Long): String {

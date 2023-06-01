@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.weather.MainActivity
+import com.example.weather.common.Utils.getWeatherIcon
 import com.example.weather.databinding.FragmentWeatherBinding
 import com.example.weather.domain.models.weather.CurrentAndHourlyWeather
 import com.example.weather.ui.State
@@ -15,7 +16,6 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -63,21 +63,13 @@ class WeatherFragment : Fragment() {
     private fun bindCurrentWeatherData(currentWeather: CurrentAndHourlyWeather.CurrentWeather) {
 //        binding.tvCityName.text = "Zaporizhzhia" // change to set dynamically
         binding.tvWeatherName.text = currentWeather.weather.weather.weatherName
-        binding.tvDate.text = convertEpochToLocalTime(currentWeather.time)
+        binding.tvDate.text = viewModel.convertEpochToLocalTime(currentWeather.time)
         binding.tvTemperature.text = currentWeather.temp.toInt().toString() + "°"
         binding.tvWind.text = currentWeather.windSpeed.toString() + " m/s"
         binding.tvFeelsLike.text = currentWeather.feelsLikeTemperature.toInt().toString() + "°"
         binding.tvIndexUv.text = currentWeather.uvi.toInt().toString()
         binding.tvHumidity.text = currentWeather.humidity.toString() + "%"
-        binding.ivWeatherIcon.setImageResource(currentWeather.weather.icon.iconNormal)
-    }
-
-    private fun convertEpochToLocalTime(epochTime: Long): String {
-        val instant =
-            Instant.ofEpochMilli(epochTime * 1000) // Multiply by 1000 to convert to milliseconds
-        val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-        val formatter = DateTimeFormatter.ofPattern("EEEE, d MMM")
-        return localDateTime.format(formatter)
+        binding.ivWeatherIcon.setImageResource(getWeatherIcon(currentWeather.weather))
     }
 
     private fun showLoading() {
