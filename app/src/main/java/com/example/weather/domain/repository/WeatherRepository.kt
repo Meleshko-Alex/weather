@@ -1,35 +1,26 @@
 package com.example.weather.domain.repository
 
 import com.example.weather.data.network.NetworkResult
-import com.example.weather.domain.models.weather.CurrentAndHourlyWeather
+import com.example.weather.domain.models.weather.DailyWeather
+import com.example.weather.domain.models.weather.HourlyWeather
 
 interface WeatherRepository {
 
-//    suspend fun getCurrentWeather(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String = Units.METRIC.name
-//    ): NetworkResult<CurrentWeather>
-//
-//    suspend fun getWeatherForecast(
-//        latitude: Double,
-//        longitude: Double,
-//        units: String = Units.METRIC.name,
-//        timestampsCount: Int = DEFAULT_TIMESTAMPS
-//    ): NetworkResult<WeatherForecast>
-
-    suspend fun getCurrentAndHourlyWeather(
+    suspend fun getHourlyWeather(
         latitude: Double,
         longitude: Double,
-        units: String = Units.METRIC.name
-    ): NetworkResult<CurrentAndHourlyWeather>
+        units: String = Units.METRIC.value
+    ): NetworkResult<HourlyWeather>
+
+    suspend fun getDailyWeather(
+        latitude: Double,
+        longitude: Double,
+        units: String = Units.METRIC.value
+    ): NetworkResult<DailyWeather>
 
     companion object {
 
-        // default number of timestamps is (24hrs / 3hr-step)
-        const val DEFAULT_TIMESTAMPS = 8
-
-        enum class Units(name: String) {
+        enum class Units(val value: String) {
             KELVIN("standard"),
             METRIC("metric"),
             IMPERIAL("imperial")

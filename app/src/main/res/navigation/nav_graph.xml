@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/initialSetupFragment"
         android:name="com.example.weather.ui.initial_setup.InitialSetupFragment"
-        android:label="InitialSetupFragment" >
+        android:label="InitialSetupFragment">
         <action
             android:id="@+id/action_initialSetupFragment_to_weatherFragment"
             app:destination="@id/weatherFragment" />
@@ -15,13 +15,21 @@
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.weather.ui.registration.RegistrationFragment"
-        android:label="RegistrationFragment" >
+        android:label="RegistrationFragment">
         <action
             android:id="@+id/action_registrationFragment_to_initialSetupFragment"
             app:destination="@id/initialSetupFragment" />
     </fragment>
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.example.weather.ui.weather.WeatherFragment"
-        android:label="" />
+        android:name="com.example.weather.ui.weather_hourly.HourlyWeatherFragment"
+        android:label="">
+        <action
+            android:id="@+id/action_weatherFragment_to_dailyWeatherFragment"
+            app:destination="@id/dailyWeatherFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dailyWeatherFragment"
+        android:name="com.example.weather.ui.weather_daily.DailyWeatherFragment"
+        android:label="DailyWeatherFragment" />
 </navigation>
