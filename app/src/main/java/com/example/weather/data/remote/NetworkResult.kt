@@ -1,4 +1,4 @@
-package com.example.weather.data.network
+package com.example.weather.data.remote
 
 sealed class NetworkResult<T>(
     val data: T? = null,

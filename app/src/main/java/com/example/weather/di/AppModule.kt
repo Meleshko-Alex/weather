@@ -1,7 +1,9 @@
 package com.example.weather.di
 
-import com.example.weather.data.network.RetrofitClient
-import com.example.weather.data.network.WeatherService
+import com.example.weather.data.remote.api.AccuWeatherService
+import com.example.weather.data.remote.retrofit.OpenWeatherRetrofitClient
+import com.example.weather.data.remote.api.OpenWeatherService
+import com.example.weather.data.remote.retrofit.AccuWeatherRetrofitClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,6 +16,11 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideWeatherService(): WeatherService =
-        RetrofitClient.instance.create(WeatherService::class.java)
+    fun provideOpenWeatherService(): OpenWeatherService =
+        OpenWeatherRetrofitClient.instance.create(OpenWeatherService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideAccuWeatherService(): AccuWeatherService =
+        AccuWeatherRetrofitClient.instance.create(AccuWeatherService::class.java)
 }

@@ -5,13 +5,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.example.weather.R
 import com.example.weather.common.Utils
 import com.example.weather.databinding.ItemDailyWeatherCardBinding
-import com.example.weather.databinding.ItemHourlyWeatherCardBinding
 import com.example.weather.domain.models.weather.DailyWeather
-import com.example.weather.domain.models.weather.HourlyWeather
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 class DailyWeatherEpoxyController : EpoxyController() {
 

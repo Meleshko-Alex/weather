@@ -1,13 +1,13 @@
-package com.example.weather.ui.weather_hourly
+package com.example.weather.ui.weather_home
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.weather.data.network.NetworkResult
+import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.weather.HourlyWeather
-import com.example.weather.domain.repository.WeatherRepository
+import com.example.weather.domain.repository.OpenWeatherRepository
 import com.example.weather.ui.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HourlyWeatherViewModel @Inject constructor(
-    private val repository: WeatherRepository
+    private val repository: OpenWeatherRepository
 ) : ViewModel() {
     private var _state = MutableLiveData<State<HourlyWeather>>()
     val state: LiveData<State<HourlyWeather>> = _state

@@ -22,14 +22,21 @@
     </fragment>
     <fragment
         android:id="@+id/weatherFragment"
-        android:name="com.example.weather.ui.weather_hourly.HourlyWeatherFragment"
+        android:name="com.example.weather.ui.weather_home.HourlyWeatherFragment"
         android:label="">
         <action
             android:id="@+id/action_weatherFragment_to_dailyWeatherFragment"
             app:destination="@id/dailyWeatherFragment" />
+        <action
+            android:id="@+id/action_weatherFragment_to_citiesListFragment"
+            app:destination="@id/citiesListFragment" />
     </fragment>
     <fragment
         android:id="@+id/dailyWeatherFragment"
         android:name="com.example.weather.ui.weather_daily.DailyWeatherFragment"
         android:label="DailyWeatherFragment" />
+    <fragment
+        android:id="@+id/citiesListFragment"
+        android:name="com.example.weather.ui.cities_list.CitiesListFragment"
+        android:label="" />
 </navigation>

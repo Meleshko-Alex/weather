@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/main_horizontal_indent"
+        android:hint="@string/search"
+        app:helperText="@string/tip_message"
+        app:helperTextEnabled="true"
+        app:startIconDrawable="@drawable/ic_search_16dp"
+        app:boxBackgroundColor="@color/light_gray_lighten"
+        app:boxStrokeWidth="0dp"
+        android:textColorHint="@color/gray"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.airbnb.epoxy.EpoxyRecyclerView
+        android:id="@+id/rvCities"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/main_horizontal_indent"
+        android:paddingVertical="8dp"
+        android:clipToPadding="false"
+        app:itemSpacing="16dp"
+        tools:listitem="@layout/item_search_result"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tilSearch" />
+</androidx.constraintlayout.widget.ConstraintLayout>

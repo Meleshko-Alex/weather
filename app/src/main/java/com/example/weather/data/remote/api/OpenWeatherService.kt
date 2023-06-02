@@ -1,12 +1,12 @@
-package com.example.weather.data.network
+package com.example.weather.data.remote.api
 
-import com.example.weather.data.network.dto.DailyWeatherDto
-import com.example.weather.data.network.dto.HourlyWeatherDto
+import com.example.weather.data.remote.dto.DailyWeatherDto
+import com.example.weather.data.remote.dto.HourlyWeatherDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface WeatherService {
+interface OpenWeatherService {
 
     @GET("onecall")
     suspend fun getHourlyWeather(
@@ -27,7 +27,7 @@ interface WeatherService {
     ): Response<DailyWeatherDto>
 
     companion object {
-        const val API_KEY = "124c24ac7ae91b33384bcfd450f0e40c"
+        private const val API_KEY = "124c24ac7ae91b33384bcfd450f0e40c"
         const val BASE_URL = "https://api.openweathermap.org/data/3.0/"
 
         enum class Exclude(val value: String) {

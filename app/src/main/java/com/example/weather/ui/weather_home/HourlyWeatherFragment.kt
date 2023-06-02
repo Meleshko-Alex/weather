@@ -1,12 +1,14 @@
-package com.example.weather.ui.weather_hourly
+package com.example.weather.ui.weather_home
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
@@ -40,6 +42,7 @@ class HourlyWeatherFragment : Fragment() {
         setUpActionBar()
         setUpStatusBar()
         setUpEpoxyRecyclerView()
+        setUpMenu()
         getWeatherData()
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
@@ -120,6 +123,24 @@ class HourlyWeatherFragment : Fragment() {
         binding.tvNext7Days.setOnClickListener {
             findNavController().navigate(R.id.action_weatherFragment_to_dailyWeatherFragment)
         }
+    }
+
+    private fun setUpMenu() {
+        (requireActivity() as MainActivity).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_weather_toolbar, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.menu_item_cities -> {
+                        findNavController().navigate(R.id.action_weatherFragment_to_citiesListFragment)
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun showLoading() {

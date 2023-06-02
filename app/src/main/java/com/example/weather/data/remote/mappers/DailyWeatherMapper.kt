@@ -1,6 +1,6 @@
-package com.example.weather.data.network.mappers
+package com.example.weather.data.remote.mappers
 
-import com.example.weather.data.network.dto.DailyWeatherDto
+import com.example.weather.data.remote.dto.DailyWeatherDto
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.WeatherType
 

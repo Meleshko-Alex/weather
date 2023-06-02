@@ -1,16 +1,16 @@
-package com.example.weather.data.network.repository
+package com.example.weather.data.remote.repository
 
-import com.example.weather.data.network.NetworkResult
-import com.example.weather.data.network.WeatherService
-import com.example.weather.data.network.mappers.toCurrentAndHourlyWeather
-import com.example.weather.data.network.mappers.toDailyWeather
+import com.example.weather.data.remote.NetworkResult
+import com.example.weather.data.remote.api.OpenWeatherService
+import com.example.weather.data.remote.mappers.toCurrentAndHourlyWeather
+import com.example.weather.data.remote.mappers.toDailyWeather
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.HourlyWeather
-import com.example.weather.domain.repository.WeatherRepository
+import com.example.weather.domain.repository.OpenWeatherRepository
 import javax.inject.Inject
 
-class WeatherRepositoryImpl @Inject constructor(private val weatherService: WeatherService) :
-    WeatherRepository {
+class OpenWeatherRepositoryImpl @Inject constructor(private val weatherService: OpenWeatherService) :
+    OpenWeatherRepository {
 
     override suspend fun getHourlyWeather(
         latitude: Double,

@@ -1,4 +1,4 @@
-package com.example.weather.data.network.dto
+package com.example.weather.data.remote.dto
 
 data class WeatherDto(
     val description: String = "",

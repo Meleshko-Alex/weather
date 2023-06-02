@@ -1,10 +1,10 @@
 package com.example.weather.domain.repository
 
-import com.example.weather.data.network.NetworkResult
+import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.HourlyWeather
 
-interface WeatherRepository {
+interface OpenWeatherRepository {
 
     suspend fun getHourlyWeather(
         latitude: Double,

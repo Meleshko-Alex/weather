@@ -1,8 +1,6 @@
-package com.example.weather.ui.weather_hourly
+package com.example.weather.ui.weather_home
 
 import ViewBindingKotlinModel
-import android.content.Context
-import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyController
 import com.example.weather.R
 import com.example.weather.common.Utils
