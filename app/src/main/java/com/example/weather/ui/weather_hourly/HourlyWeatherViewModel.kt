@@ -25,8 +25,14 @@ class HourlyWeatherViewModel @Inject constructor(
     fun getWeatherData(
         latitude: Double,
         longitude: Double,
+        onRefresh: Boolean = false
     ) {
+        if (onRefresh) {
+            functionExecuted = false
+        }
+
         if (!functionExecuted) {
+            Log.d("ViewModel", "getWeatherData executed")
             _state.value = State.Loading()
 
             viewModelScope.launch {

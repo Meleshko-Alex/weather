@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">Weather</string>
-    <string name="wind">Wind</string>
+    <string name="wind_header">Wind</string>
     <string name="today">Today</string>
-    <string name="index_uv">Index UV</string>
-    <string name="feels_like">Feels like</string>
-    <string name="humidity">Humidity</string>
+    <string name="index_uv_header">Index UV</string>
+    <string name="feels_like_header">Feels like</string>
+    <string name="humidity_header">Humidity</string>
     <string name="next_7_days">Next 7 Days</string>
+    <string name="temperature">%s°</string>
+    <string name="humidity">%s%%</string>
+    <string name="wind">%sm/s</string>
 </resources>

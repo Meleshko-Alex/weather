@@ -38,7 +38,7 @@ class DailyWeatherEpoxyController : EpoxyController() {
             tvDate.text = date.substringAfterLast(",")
             tvMaxTemp.text = weather.maxTemp.toString() + "°"
             tvMinTemp.text = " / " + weather.minTemp.toString() + "°"
-            ivWeatherIcon.setImageResource(weather.weather.icon.iconDay)
+            ivWeatherIcon.setImageResource(weather.weather.icon.iconNeutral)
         }
     }
 }

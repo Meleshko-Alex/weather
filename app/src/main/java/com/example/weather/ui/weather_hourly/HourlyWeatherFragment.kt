@@ -19,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HourlyWeatherFragment : Fragment() {
-//    private var _binding: FragmentHourlyWeatherBinding? = null
+    //    private var _binding: FragmentHourlyWeatherBinding? = null
 //    private val binding: FragmentHourlyWeatherBinding get() = _binding!!
     private var _binding: FragmentHourlyWeatherFlatBinding? = null
     private val binding: FragmentHourlyWeatherFlatBinding get() = _binding!!
@@ -37,31 +37,17 @@ class HourlyWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val actionBar = (requireActivity() as MainActivity).supportActionBar
-        actionBar?.title = "Zaporizhzhia"
-        actionBar?.setBackgroundDrawable(
-            ColorDrawable(
-                ContextCompat.getColor(requireContext(), R.color.white)
-            )
-        )
-
-        val window: Window = requireActivity().window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
-        val decorView = window.decorView
-        val wic = WindowInsetsControllerCompat(window, decorView)
-        wic.isAppearanceLightStatusBars = true
-
+        setUpActionBar()
+        setUpStatusBar()
         setUpEpoxyRecyclerView()
-
-        viewModel.getWeatherData(latitude = 47.8378, longitude = 35.1383)
+        getWeatherData()
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Success -> {
                     hideLoading()
                     val weather = state.data!!
-                    bindWeatherData(weather.current)
                     epoxyController.items = weather.hourly
+                    bindWeatherData(weather.current)
                 }
 
                 is State.Error -> {
@@ -73,22 +59,64 @@ class HourlyWeatherFragment : Fragment() {
                 }
             }
         }
+        binding.swipeRefreshLayout.apply {
+            setOnRefreshListener {
+                getWeatherData(true)
+                isRefreshing = false
+            }
+        }
+    }
+
+    private fun setUpActionBar() {
+        (requireActivity() as MainActivity).supportActionBar?.apply {
+            title = "Zaporizhzhia"
+            setBackgroundDrawable(
+                ColorDrawable(
+                    ContextCompat.getColor(requireContext(), R.color.white)
+                )
+            )
+        }
+    }
+
+    private fun setUpStatusBar() {
+        requireActivity().window.apply {
+            // change background color
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+
+            // change  text color
+            WindowInsetsControllerCompat(this, this.decorView).isAppearanceLightStatusBars = true
+        }
     }
 
     private fun setUpEpoxyRecyclerView() {
         binding.rvWeatherHourly.setController(epoxyController)
     }
 
+    private fun getWeatherData(onRefresh: Boolean = false) {
+        viewModel.getWeatherData(latitude = 47.8378, longitude = 35.1383, onRefresh = onRefresh)
+    }
+
     private fun bindWeatherData(currentWeather: HourlyWeather.CurrentWeather) {
-//        binding.tvCityName.text = "Zaporizhzhia" // change to set dynamically
-        binding.tvWeatherName.text = currentWeather.weather.weather.weatherName
-        binding.tvDate.text = convertEpochToLocalDate(currentWeather.timeDate)
-        binding.tvTemperature.text = currentWeather.temp.toString() + "°"
-        binding.tvWind.text = currentWeather.windSpeed.toString() + " m/s"
-        binding.tvFeelsLike.text = currentWeather.feelsLikeTemperature.toString() + "°"
-        binding.tvIndexUv.text = currentWeather.uvi.toString()
-        binding.tvHumidity.text = currentWeather.humidity.toString() + "%"
-        binding.ivWeatherIcon.setImageResource(getWeatherIcon(currentWeather.weather))
+        binding.layoutWeatherInfoMain.apply {
+            tvWeatherName.text = currentWeather.weather.weather.weatherName
+            tvDate.text = convertEpochToLocalDate(currentWeather.timeDate)
+            tvTemperature.text =
+                resources.getString(R.string.temperature, currentWeather.temp.toString())
+            ivWeatherIcon.setImageResource(getWeatherIcon(currentWeather.weather))
+        }
+
+        binding.layoutWeatherInfoMain.cardWeatherAdditionalInfo.apply {
+            tvWind.text = resources.getString(R.string.wind, currentWeather.windSpeed.toString())
+            tvFeelsLike.text = resources.getString(
+                R.string.temperature,
+                currentWeather.feelsLikeTemperature.toString()
+            )
+            tvIndexUv.text = currentWeather.uvi.toString()
+            tvHumidity.text =
+                resources.getString(R.string.humidity, currentWeather.humidity.toString())
+        }
+
         binding.tvNext7Days.setOnClickListener {
             findNavController().navigate(R.id.action_weatherFragment_to_dailyWeatherFragment)
         }

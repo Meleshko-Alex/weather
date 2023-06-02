@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="main_horizontal_indent">20dp</dimen>
-    <dimen name="add_info_icon_horizontal_indent">24dp</dimen>
-    <dimen name="add_info_title_horizontal_indent">16dp</dimen>
-    <dimen name="main_card_corner_radius">20dp</dimen>
+    <dimen name="card_addition_info_icon_horizontal_indent">24dp</dimen>
+    <dimen name="card_addition_info_title_horizontal_indent">16dp</dimen>
+    <dimen name="card_main_info_corner_radius">20dp</dimen>
     <dimen name="item_card_corner_radius">10dp</dimen>
     <dimen name="icon_small_size">36dp</dimen>
     <dimen name="icon_normal_size">80dp</dimen>
     <dimen name="add_info_text_size">14sp</dimen>
+    <dimen name="card_addition_info_height">120dp</dimen>
 </resources>

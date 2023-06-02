@@ -8,15 +8,17 @@ sealed class WeatherType(
     val icon: Icon
 ) {
     data class Icon(
-        @DrawableRes val iconDay: Int = 0,
-        @DrawableRes val iconNight: Int = 0
+        @DrawableRes val iconDay: Int,
+        @DrawableRes val iconNight: Int,
+        @DrawableRes val iconNeutral: Int = 0
     )
 
     object LightThunderstorm : WeatherType(
         weather = WeatherName.LIGHT_THUNDERSTORM,
         icon = Icon(
             iconDay = R.drawable.ic_isolated_thunderstorms_day,
-            iconNight = R.drawable.ic_isolated_thunderstorms_night
+            iconNight = R.drawable.ic_isolated_thunderstorms_night,
+            iconNeutral = R.drawable.ic_isolated_thunderstorms
         )
     )
 
@@ -24,7 +26,8 @@ sealed class WeatherType(
         weather = WeatherName.HEAVY_THUNDERSTORM,
         icon = Icon(
             iconDay = R.drawable.ic_severe_thunderstorm,
-            iconNight = R.drawable.ic_severe_thunderstorm
+            iconNight = R.drawable.ic_severe_thunderstorm,
+            iconNeutral = R.drawable.ic_severe_thunderstorm
         )
     )
 
@@ -32,15 +35,17 @@ sealed class WeatherType(
         weather = WeatherName.THUNDERSTORM,
         icon = Icon(
             iconDay = R.drawable.ic_scattered_thunderstorms_day,
-            iconNight = R.drawable.ic_scattered_thunderstorms_night
+            iconNight = R.drawable.ic_scattered_thunderstorms_night,
+            iconNeutral = R.drawable.ic_scattered_thunderstorms
         )
     )
 
     object Drizzle : WeatherType(
         weather = WeatherName.DRIZZLE,
         icon = Icon(
-            iconDay = R.drawable.ic_rainy_1,
-            iconNight = R.drawable.ic_rainy_1
+            iconDay = R.drawable.ic_rainy_1_day,
+            iconNight = R.drawable.ic_rainy_1_night,
+            iconNeutral = R.drawable.ic_rainy_1
         )
     )
 
@@ -48,7 +53,8 @@ sealed class WeatherType(
         weather = WeatherName.LIGHT_RAIN,
         icon = Icon(
             iconDay = R.drawable.ic_rainy_1_day,
-            iconNight = R.drawable.ic_rainy_1_night
+            iconNight = R.drawable.ic_rainy_1_night,
+            iconNeutral = R.drawable.ic_rainy_1
         )
     )
 
@@ -56,7 +62,8 @@ sealed class WeatherType(
         weather = WeatherName.RAIN,
         icon = Icon(
             iconDay = R.drawable.ic_rainy_2_day,
-            iconNight = R.drawable.ic_rainy_2_night
+            iconNight = R.drawable.ic_rainy_2_night,
+            iconNeutral = R.drawable.ic_rainy_2
         )
     )
 
@@ -64,7 +71,8 @@ sealed class WeatherType(
         weather = WeatherName.HEAVY_RAIN,
         icon = Icon(
             iconDay = R.drawable.ic_rainy_3_day,
-            iconNight = R.drawable.ic_rainy_3_night
+            iconNight = R.drawable.ic_rainy_3_night,
+            iconNeutral = R.drawable.ic_rainy_3
         )
     )
 
@@ -72,7 +80,8 @@ sealed class WeatherType(
         weather = WeatherName.SHOWERS,
         icon = Icon(
             iconDay = R.drawable.ic_rainy_3,
-            iconNight = R.drawable.ic_rainy_3
+            iconNight = R.drawable.ic_rainy_3,
+            iconNeutral = R.drawable.ic_rainy_3
         )
     )
 
@@ -80,7 +89,8 @@ sealed class WeatherType(
         weather = WeatherName.LIGHT_SNOW,
         icon = Icon(
             iconDay = R.drawable.ic_snowy_1_day,
-            iconNight = R.drawable.ic_snowy_1_night
+            iconNight = R.drawable.ic_snowy_1_night,
+            iconNeutral = R.drawable.ic_snowy_1
         )
     )
 
@@ -88,7 +98,8 @@ sealed class WeatherType(
         weather = WeatherName.SNOW,
         icon = Icon(
             iconDay = R.drawable.ic_snowy_2_day,
-            iconNight = R.drawable.ic_snowy_2_night
+            iconNight = R.drawable.ic_snowy_2_night,
+            iconNeutral = R.drawable.ic_snowy_2
         )
     )
 
@@ -97,6 +108,7 @@ sealed class WeatherType(
         icon = Icon(
             iconDay = R.drawable.ic_rain_and_snow,
             iconNight = R.drawable.ic_rain_and_snow,
+            iconNeutral = R.drawable.ic_rain_and_snow
         )
     )
 
@@ -105,6 +117,7 @@ sealed class WeatherType(
         icon = Icon(
             iconDay = R.drawable.ic_snow_and_sleet,
             iconNight = R.drawable.ic_snow_and_sleet,
+            iconNeutral = R.drawable.ic_snow_and_sleet
         )
     )
 
@@ -113,6 +126,7 @@ sealed class WeatherType(
         icon = Icon(
             iconDay = R.drawable.ic_rain_and_sleet,
             iconNight = R.drawable.ic_rain_and_sleet,
+            iconNeutral = R.drawable.ic_rain_and_sleet,
         )
     )
 
@@ -120,7 +134,8 @@ sealed class WeatherType(
         weather = WeatherName.HEAVY_SNOW,
         icon = Icon(
             iconDay = R.drawable.ic_snowy_3_day,
-            iconNight = R.drawable.ic_snowy_3_night
+            iconNight = R.drawable.ic_snowy_3_night,
+            iconNeutral = R.drawable.ic_snowy_3
         )
     )
 
@@ -128,7 +143,8 @@ sealed class WeatherType(
         weather = WeatherName.MIST,
         icon = Icon(
             iconDay = R.drawable.ic_fog_day,
-            iconNight = R.drawable.ic_fog_night
+            iconNight = R.drawable.ic_fog_night,
+            iconNeutral = R.drawable.ic_fog
         )
     )
 
@@ -136,7 +152,8 @@ sealed class WeatherType(
         weather = WeatherName.SMOKE,
         icon = Icon(
             iconDay = R.drawable.ic_fog_day,
-            iconNight = R.drawable.ic_fog_night
+            iconNight = R.drawable.ic_fog_night,
+            iconNeutral = R.drawable.ic_fog
         )
     )
 
@@ -144,7 +161,8 @@ sealed class WeatherType(
         weather = WeatherName.HAZE,
         icon = Icon(
             iconDay = R.drawable.ic_haze_day,
-            iconNight = R.drawable.ic_haze_night
+            iconNight = R.drawable.ic_haze_night,
+            iconNeutral = R.drawable.ic_haze
         )
     )
 
@@ -152,7 +170,8 @@ sealed class WeatherType(
         weather = WeatherName.DUST,
         icon = Icon(
             iconDay = R.drawable.ic_dust,
-            iconNight = R.drawable.ic_dust
+            iconNight = R.drawable.ic_dust,
+            iconNeutral = R.drawable.ic_dust
         )
     )
 
@@ -160,7 +179,8 @@ sealed class WeatherType(
         weather = WeatherName.FOG,
         icon = Icon(
             iconDay = R.drawable.ic_fog_day,
-            iconNight = R.drawable.ic_fog_night
+            iconNight = R.drawable.ic_fog_night,
+            iconNeutral = R.drawable.ic_fog
         )
     )
 
@@ -168,7 +188,8 @@ sealed class WeatherType(
         weather = WeatherName.SQUALL,
         icon = Icon(
             iconDay = R.drawable.ic_wind,
-            iconNight = R.drawable.ic_wind
+            iconNight = R.drawable.ic_wind,
+            iconNeutral = R.drawable.ic_wind
         )
     )
 
@@ -176,7 +197,8 @@ sealed class WeatherType(
         weather = WeatherName.TORNADO,
         icon = Icon(
             iconDay = R.drawable.ic_tornado,
-            iconNight = R.drawable.ic_tornado
+            iconNight = R.drawable.ic_tornado,
+            iconNeutral = R.drawable.ic_tornado
         )
     )
 
@@ -184,7 +206,8 @@ sealed class WeatherType(
         weather = WeatherName.CLEAR,
         icon = Icon(
             iconDay = R.drawable.ic_clear_day,
-            iconNight = R.drawable.ic_clear_night
+            iconNight = R.drawable.ic_clear_night,
+            iconNeutral = R.drawable.ic_clear_day
         )
     )
 
@@ -192,7 +215,8 @@ sealed class WeatherType(
         weather = WeatherName.CLOUDS,
         icon = Icon(
             iconDay = R.drawable.ic_cloudy_2_day,
-            iconNight = R.drawable.ic_cloudy_2_night
+            iconNight = R.drawable.ic_cloudy_2_night,
+            iconNeutral = R.drawable.ic_cloudy
         )
     )
 
@@ -200,7 +224,8 @@ sealed class WeatherType(
         weather = WeatherName.FEW_CLOUDS,
         icon = Icon(
             iconDay = R.drawable.ic_cloudy_1_day,
-            iconNight = R.drawable.ic_cloudy_1_night
+            iconNight = R.drawable.ic_cloudy_1_night,
+            iconNeutral = R.drawable.ic_cloudy
         )
     )
 
@@ -208,7 +233,8 @@ sealed class WeatherType(
         weather = WeatherName.OVERCAST_CLOUDS,
         icon = Icon(
             iconDay = R.drawable.ic_cloudy_3_day,
-            iconNight = R.drawable.ic_cloudy_3_night
+            iconNight = R.drawable.ic_cloudy_3_night,
+            iconNeutral = R.drawable.ic_cloudy
         )
     )
 

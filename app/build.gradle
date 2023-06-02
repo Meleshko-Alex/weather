@@ -66,6 +66,8 @@ dependencies {
     implementation "com.airbnb.android:epoxy-paging3:$epoxy_version"
     kapt "com.airbnb.android:epoxy-processor:$epoxy_version"
 
+    // Swipe to refresh
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefresh_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

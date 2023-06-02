@@ -1,0 +1,159 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/card_addition_info_height">
+
+    <ImageView
+        android:id="@+id/icWind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="@id/icSun"
+        app:layout_constraintStart_toStartOf="@id/icSun"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_wind_white" />
+
+    <TextView
+        android:id="@+id/tvWindHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_addition_info_title_horizontal_indent"
+        android:layout_marginTop="10dp"
+        android:text="@string/wind_header"
+        android:textAllCaps="true"
+        android:textColor="@color/light_gray_lighten"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/icWind"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvWind"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/add_info_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/dividerHorizontal"
+        app:layout_constraintStart_toStartOf="@id/tvWindHeader"
+        tools:text="19.2 m/s" />
+
+    <ImageView
+        android:id="@+id/icSun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_addition_info_icon_horizontal_indent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dividerHorizontal"
+        app:srcCompat="@drawable/ic_sun_white" />
+
+    <TextView
+        android:id="@+id/tvIndexUvHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_addition_info_title_horizontal_indent"
+        android:layout_marginTop="10dp"
+        android:text="@string/index_uv_header"
+        android:textAllCaps="true"
+        android:textColor="@color/light_gray_lighten"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/icSun"
+        app:layout_constraintTop_toTopOf="@id/dividerHorizontal" />
+
+    <TextView
+        android:id="@+id/tvIndexUv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/add_info_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvWindHeader"
+        tools:text="2" />
+
+    <ImageView
+        android:id="@+id/icThermometer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="@id/icHumidity"
+        app:layout_constraintStart_toStartOf="@id/icHumidity"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_thermometer_white_cropped" />
+
+    <TextView
+        android:id="@+id/tvFeelsLikeHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_addition_info_title_horizontal_indent"
+        android:layout_marginTop="10dp"
+        android:text="@string/feels_like_header"
+        android:textAllCaps="true"
+        android:textColor="@color/light_gray_lighten"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/icThermometer"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvFeelsLike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/add_info_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/dividerHorizontal"
+        app:layout_constraintStart_toStartOf="@id/tvFeelsLikeHeader"
+        tools:text="25°" />
+
+    <ImageView
+        android:id="@+id/icHumidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_addition_info_icon_horizontal_indent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/dividerVertical"
+        app:layout_constraintTop_toTopOf="@id/dividerHorizontal"
+        app:srcCompat="@drawable/ic_humidity_white" />
+
+    <TextView
+        android:id="@+id/tvHumidityHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/card_addition_info_title_horizontal_indent"
+        android:layout_marginTop="10dp"
+        android:text="@string/humidity_header"
+        android:textAllCaps="true"
+        android:textColor="@color/light_gray_lighten"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@id/icHumidity"
+        app:layout_constraintTop_toTopOf="@id/dividerHorizontal" />
+
+    <TextView
+        android:id="@+id/tvHumidity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/add_info_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tvHumidityHeader"
+        tools:text="40%" />
+
+    <View
+        android:id="@+id/dividerVertical"
+        android:layout_width="1px"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <View
+        android:id="@+id/dividerHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

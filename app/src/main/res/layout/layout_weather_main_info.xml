@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/ivWeatherIcon"
+        android:layout_width="@dimen/icon_normal_size"
+        android:layout_height="@dimen/icon_normal_size"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_cloudy_1_day" />
+
+    <TextView
+        android:id="@+id/tvWeatherName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ivWeatherIcon"
+        tools:text="Clouds" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:textColor="@color/test_gray"
+        app:layout_constraintEnd_toEndOf="@id/tvWeatherName"
+        app:layout_constraintStart_toStartOf="@id/tvWeatherName"
+        app:layout_constraintTop_toBottomOf="@id/tvWeatherName"
+        tools:text="Wednesday, 31 May" />
+
+    <TextView
+        android:id="@+id/tvTemperature"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:textColor="@color/white"
+        android:textSize="70sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/tvDate"
+        app:layout_constraintStart_toStartOf="@id/tvDate"
+        app:layout_constraintTop_toBottomOf="@id/tvDate"
+        tools:text="24°" />
+
+    <View
+        android:id="@+id/dividerHorizontal1"
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginTop="28dp"
+        android:background="@color/white"
+        app:layout_constraintTop_toBottomOf="@id/tvTemperature" />
+
+    <include
+        android:id="@+id/cardWeatherAdditionalInfo"
+        layout="@layout/layout_weather_addition_info"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/card_addition_info_height"
+        app:layout_constraintTop_toTopOf="@id/dividerHorizontal1" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

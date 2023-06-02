@@ -7,6 +7,9 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
 object Utils {
+    /**
+     * Returns the resource id of the [weather] icon depending on the [forecast time][time]
+     */
     fun getWeatherIcon(
         weather: WeatherType,
         time: Int = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH")).toInt()
@@ -18,11 +21,14 @@ object Utils {
         }
     }
 
-    fun convertEpochToLocalDate(epochTime: Long): String {
-        val instant =
-            Instant.ofEpochMilli(epochTime * 1000) // Multiply by 1000 to convert to milliseconds
-        val localDateTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
-        val formatter = DateTimeFormatter.ofPattern("EEEE, d MMM")
-        return localDateTime.format(formatter)
+    /**
+     * Returns the local date in the specified [format] from the given [epoch][epochTime]
+     */
+    fun convertEpochToLocalDate(
+        epochTime: Long,
+        format: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d MMM")
+    ): String {
+        val instant = Instant.ofEpochMilli(epochTime * 1000) // Multiply by 1000 to convert to milliseconds
+        return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(format)
     }
 }
