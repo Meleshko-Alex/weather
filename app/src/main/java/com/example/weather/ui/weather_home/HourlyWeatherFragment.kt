@@ -26,7 +26,7 @@ class HourlyWeatherFragment : Fragment() {
     private var _binding: FragmentHourlyWeatherFlatBinding? = null
     private val binding: FragmentHourlyWeatherFlatBinding get() = _binding!!
     private val viewModel: HourlyWeatherViewModel by viewModels()
-    private val epoxyController = HourlyWeatherEpoxyController()
+    private lateinit var epoxyController: HourlyWeatherEpoxyController
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,10 +89,20 @@ class HourlyWeatherFragment : Fragment() {
 
             // change  text color
             WindowInsetsControllerCompat(this, this.decorView).isAppearanceLightStatusBars = true
+
+            // change navigation bar background color
+            navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
         }
     }
 
     private fun setUpEpoxyRecyclerView() {
+        epoxyController = HourlyWeatherEpoxyController(
+            onItemClicked = {
+                bindWeatherData(it)
+                epoxyController.selectedItem = it
+            },
+            context = requireContext()
+        )
         binding.rvWeatherHourly.setController(epoxyController)
     }
 

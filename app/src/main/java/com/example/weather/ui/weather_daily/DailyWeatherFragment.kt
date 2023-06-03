@@ -96,6 +96,9 @@ class DailyWeatherFragment : Fragment() {
 
             // change text color
             WindowInsetsControllerCompat(this, this.decorView).isAppearanceLightStatusBars = false
+
+            // change navigation bar background color
+            navigationBarColor = ContextCompat.getColor(requireContext(), R.color.blue)
         }
     }
 

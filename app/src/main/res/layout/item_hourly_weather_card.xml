@@ -6,7 +6,8 @@
     android:layout_height="120dp"
     app:cardCornerRadius="@dimen/item_card_corner_radius"
     app:cardElevation="0dp"
-    app:strokeWidth="1dp"
+    app:strokeWidth="3px"
+    android:clickable="true"
     app:strokeColor="@color/white_smoke">
 
     <androidx.constraintlayout.widget.ConstraintLayout

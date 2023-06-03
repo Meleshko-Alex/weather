@@ -19,7 +19,6 @@ class HourlyWeatherViewModel @Inject constructor(
 ) : ViewModel() {
     private var _state = MutableLiveData<State<HourlyWeather>>()
     val state: LiveData<State<HourlyWeather>> = _state
-
     private var functionExecuted = false
 
     fun getWeatherData(

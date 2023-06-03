@@ -36,15 +36,16 @@ class CitiesListFragment : Fragment() {
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Success -> {
+                    hideLoading()
                     epoxyController.cities = state.data!!.cities
                 }
 
                 is State.Loading -> {
-
+                    showLoading()
                 }
 
                 is State.Error -> {
-
+                    hideLoading()
                 }
             }
         }
@@ -52,6 +53,14 @@ class CitiesListFragment : Fragment() {
 
     private fun setUpEpoxyRecyclerView() {
         binding.rvCities.setController(epoxyController)
+    }
+
+    private fun showLoading() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
     override fun onDestroyView() {
