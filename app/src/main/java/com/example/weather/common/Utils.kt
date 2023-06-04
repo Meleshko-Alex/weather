@@ -1,10 +1,19 @@
 package com.example.weather.common
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
+import androidx.fragment.app.Fragment
+import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.models.weather.WeatherType
+import com.google.gson.Gson
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import java.util.prefs.Preferences
 
 object Utils {
     /**

@@ -22,6 +22,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etSearch"
+            android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -35,9 +36,22 @@
         android:paddingVertical="8dp"
         android:clipToPadding="false"
         app:itemSpacing="16dp"
-        tools:listitem="@layout/item_search_result"
+        tools:listitem="@layout/item_city"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilSearch" />
+
+    <TextView
+        android:id="@+id/tvMessageNoResults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_results_found"
+        android:textSize="20sp"
+        android:visibility="invisible"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tilSearch"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <FrameLayout
         android:id="@+id/progress_bar"

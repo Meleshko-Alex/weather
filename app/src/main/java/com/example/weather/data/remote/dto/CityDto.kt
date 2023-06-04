@@ -3,8 +3,6 @@ package com.example.weather.data.remote.dto
 import com.squareup.moshi.Json
 
 data class CityDto(
-
-
     @Json(name = "Version") val version: Int = 0,
     @Json(name = "Key") val key: String = "",
     @Json(name = "Type") val type: String = "",

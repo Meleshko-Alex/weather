@@ -3,7 +3,9 @@ package com.example.weather.ui.weather_daily
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.weather.common.DataStoreManager
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.repository.OpenWeatherRepository
@@ -14,11 +16,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DailyWeatherViewModel @Inject constructor(
-    private val repository: OpenWeatherRepository
+    private val repository: OpenWeatherRepository,
+    private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
     private var _state = MutableLiveData<State<DailyWeather>>()
     val state: LiveData<State<DailyWeather>> = _state
+    val currentCity = dataStoreManager.getCurrentCity().asLiveData()
 
     fun getWeatherData(
         latitude: Double,

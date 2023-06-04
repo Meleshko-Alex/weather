@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.databinding.FragmentDailyWeatherBinding
+import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.ui.State
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +24,7 @@ class DailyWeatherFragment : Fragment() {
     private val binding: FragmentDailyWeatherBinding get() = _binding!!
     private val viewModel: DailyWeatherViewModel by viewModels()
     private val epoxyController = DailyWeatherEpoxyController()
+    private lateinit var currentCity: TopCities.City
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,10 +37,26 @@ class DailyWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
         setUpActionBar()
         setUpStatusBar()
         setUpEpoxyRecyclerView()
-        getWeatherData()
+
+        binding.swipeRefreshLayout.apply {
+            setOnRefreshListener {
+                getWeatherData(currentCity)
+                isRefreshing = false
+            }
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.currentCity.observe(viewLifecycleOwner) {
+            currentCity = it
+            setActionBarTitle()
+            getWeatherData(currentCity)
+        }
+
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Success -> {
@@ -52,23 +70,16 @@ class DailyWeatherFragment : Fragment() {
                 }
 
                 is State.Loading -> {
-                    showLoading()
+                    displayLoading()
                 }
-            }
-        }
-        binding.swipeRefreshLayout.apply {
-            setOnRefreshListener {
-                getWeatherData()
-                isRefreshing = false
             }
         }
     }
 
-    private fun setUpActionBar() {
+    private fun setActionBarTitle() {
         (requireActivity() as MainActivity).supportActionBar?.apply {
-            // change title color
             val actionBarTitleColor = ContextCompat.getColor(requireContext(), R.color.white)
-            val titleSpannable = SpannableString("Zaporizhzhia")
+            val titleSpannable = SpannableString(currentCity.name)
             titleSpannable.setSpan(
                 ForegroundColorSpan(actionBarTitleColor),
                 0,
@@ -76,7 +87,11 @@ class DailyWeatherFragment : Fragment() {
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE
             )
             title = titleSpannable
+        }
+    }
 
+    private fun setUpActionBar() {
+        (requireActivity() as MainActivity).supportActionBar?.apply {
             // change background color
             setBackgroundDrawable(
                 ColorDrawable(
@@ -102,15 +117,15 @@ class DailyWeatherFragment : Fragment() {
         }
     }
 
-    private fun getWeatherData() {
-        viewModel.getWeatherData(latitude = 47.8378, longitude = 35.1383)
+    private fun getWeatherData(city: TopCities.City) {
+        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude)
     }
 
     private fun setUpEpoxyRecyclerView() {
         binding.rvDailyWeather.setController(epoxyController)
     }
 
-    private fun showLoading() {
+    private fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
 

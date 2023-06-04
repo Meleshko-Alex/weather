@@ -69,6 +69,17 @@ dependencies {
     // Swipe to refresh
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:$swiperefresh_version"
 
+    // Room
+    implementation "androidx.room:room-ktx:$room_version"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // DataStore
+    implementation "androidx.datastore:datastore-preferences:$datastore_version"
+
+    // Gson
+    implementation "com.google.code.gson:gson:$gson_version"
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'

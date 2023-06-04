@@ -12,4 +12,6 @@
     <string name="cities">Cities</string>
     <string name="tip_message">Use search if the city you are looking for is not on the list</string>
     <string name="search">Search</string>
+    <string name="found_city_format">%s, %s, %s</string>
+    <string name="no_results_found">No results found</string>
 </resources>

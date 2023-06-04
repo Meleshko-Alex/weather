@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.weather.common.DataStoreManager
 import com.example.weather.data.remote.NetworkResult
+import com.example.weather.domain.models.cities.SearchCity
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.repository.AccuWeatherRepository
+import com.example.weather.domain.repository.WeatherDatabaseRepository
 import com.example.weather.ui.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -14,25 +17,41 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CitiesListViewModel @Inject constructor(
-    private val repository: AccuWeatherRepository
+    private val networkRepository: AccuWeatherRepository,
+    private val databaseRepository: WeatherDatabaseRepository,
+    private val dataStoreManager: DataStoreManager
 ): ViewModel() {
-
-    private var _state = MutableLiveData<State<TopCities>>()
-    val state: LiveData<State<TopCities>> = _state
+    private var _citiesState = MutableLiveData<State<TopCities>>()
+    val citiesState: LiveData<State<TopCities>> = _citiesState
+    private var _searchCityState = MutableLiveData<State<SearchCity>>()
+    val searchCityState: LiveData<State<SearchCity>> = _searchCityState
+    var searchQuery: String? = null
 
     fun getTopCities() {
-        _state.value = State.Loading()
+        viewModelScope.launch {
+            _citiesState.postValue(State.Success(databaseRepository.getTopCities()))
+        }
+    }
+
+    fun searchCity(query: String) {
+        _searchCityState.value = State.Loading()
 
         viewModelScope.launch {
-            when (val result = repository.getTopCities()) {
+            when (val result = networkRepository.searchCity(query)) {
                 is NetworkResult.Success -> {
-                    _state.value = State.Success(result.data!!)
+                    _searchCityState.postValue( State.Success(result.data!!))
                 }
 
                 is NetworkResult.Error -> {
-                    _state.value = State.Error(result.message!!)
+                    _searchCityState.postValue(State.Error(result.message!!))
                 }
             }
+        }
+    }
+
+    fun setCurrentCity(city: TopCities.City) {
+        viewModelScope.launch {
+            dataStoreManager.setCurrentCity(city)
         }
     }
 }

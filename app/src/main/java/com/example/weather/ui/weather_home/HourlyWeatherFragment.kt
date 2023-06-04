@@ -2,7 +2,13 @@ package com.example.weather.ui.weather_home
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsControllerCompat
@@ -15,18 +21,18 @@ import com.example.weather.R
 import com.example.weather.common.Utils.convertEpochToLocalDate
 import com.example.weather.common.Utils.getWeatherIcon
 import com.example.weather.databinding.FragmentHourlyWeatherFlatBinding
+import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.ui.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HourlyWeatherFragment : Fragment() {
-    //    private var _binding: FragmentHourlyWeatherBinding? = null
-//    private val binding: FragmentHourlyWeatherBinding get() = _binding!!
     private var _binding: FragmentHourlyWeatherFlatBinding? = null
     private val binding: FragmentHourlyWeatherFlatBinding get() = _binding!!
     private val viewModel: HourlyWeatherViewModel by viewModels()
     private lateinit var epoxyController: HourlyWeatherEpoxyController
+    private lateinit var currentCity: TopCities.City
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,11 +45,36 @@ class HourlyWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeViewModel()
         setUpActionBar()
         setUpStatusBar()
         setUpEpoxyRecyclerView()
         setUpMenu()
-        getWeatherData()
+        binding.swipeRefreshLayout.apply {
+            setOnRefreshListener {
+                getWeatherData(currentCity, true)
+                isRefreshing = false
+            }
+        }
+    }
+
+    private fun setUpActionBar() {
+        (requireActivity() as MainActivity).supportActionBar?.apply {
+            setBackgroundDrawable(
+                ColorDrawable(
+                    ContextCompat.getColor(requireContext(), R.color.white)
+                )
+            )
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.currentCity.observe(viewLifecycleOwner) {
+            currentCity = it
+            setActionBarTitle()
+            getWeatherData(currentCity, true)
+        }
+
         viewModel.state.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Success -> {
@@ -58,27 +89,14 @@ class HourlyWeatherFragment : Fragment() {
                 }
 
                 is State.Loading -> {
-                    showLoading()
+                    displayLoading()
                 }
-            }
-        }
-        binding.swipeRefreshLayout.apply {
-            setOnRefreshListener {
-                getWeatherData(true)
-                isRefreshing = false
             }
         }
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as MainActivity).supportActionBar?.apply {
-            title = "Zaporizhzhia"
-            setBackgroundDrawable(
-                ColorDrawable(
-                    ContextCompat.getColor(requireContext(), R.color.white)
-                )
-            )
-        }
+    private fun setActionBarTitle() {
+        (requireActivity() as MainActivity).supportActionBar?.title = currentCity.name
     }
 
     private fun setUpStatusBar() {
@@ -106,8 +124,8 @@ class HourlyWeatherFragment : Fragment() {
         binding.rvWeatherHourly.setController(epoxyController)
     }
 
-    private fun getWeatherData(onRefresh: Boolean = false) {
-        viewModel.getWeatherData(latitude = 47.8378, longitude = 35.1383, onRefresh = onRefresh)
+    private fun getWeatherData(city: TopCities.City, onRefresh: Boolean = false) {
+        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude, onRefresh = onRefresh)
     }
 
     private fun bindWeatherData(currentWeather: HourlyWeather.CurrentWeather) {
@@ -153,7 +171,7 @@ class HourlyWeatherFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun showLoading() {
+    private fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
