@@ -1,4 +1,4 @@
-package com.example.weather.ui.cities_list
+package com.example.weather.ui.manage_cities
 
 import ViewBindingKotlinModel
 import android.content.Context
@@ -8,7 +8,7 @@ import com.example.weather.databinding.ItemCityBinding
 import com.example.weather.domain.models.cities.SearchCity
 import com.example.weather.domain.models.cities.TopCities
 
-class CitiesListEpoxyController(
+class CitiesEpoxyController(
     private val context: Context,
     private val onItemClicked: (TopCities.City) -> Unit
 ) : EpoxyController() {
@@ -31,7 +31,7 @@ class CitiesListEpoxyController(
                 it.name
             }.forEach {
                 ItemCityEpoxyModel(city = it, onItemClicked).id(it.name)
-                    .addTo(this@CitiesListEpoxyController)
+                    .addTo(this@CitiesEpoxyController)
             }
         }
 
@@ -41,7 +41,7 @@ class CitiesListEpoxyController(
                 context,
                 onItemClicked
             ).id(it.cityName + it.adminAreaName + it.countryName)
-                .addTo(this@CitiesListEpoxyController)
+                .addTo(this@CitiesEpoxyController)
         }
     }
 

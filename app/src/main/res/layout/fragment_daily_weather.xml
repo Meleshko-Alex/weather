@@ -33,7 +33,7 @@
             app:itemSpacing="8dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/tvNext7Days"
-            tools:listitem="@layout/item_daily_weather_card" />
+            tools:listitem="@layout/item_daily_weather" />
 
         <FrameLayout
             android:id="@+id/progress_bar"

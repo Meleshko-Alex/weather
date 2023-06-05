@@ -1,4 +1,4 @@
-package com.example.weather.ui.cities_list
+package com.example.weather.ui.manage_cities
 
 import android.content.Context
 import android.os.Bundle
@@ -14,8 +14,9 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.example.weather.databinding.FragmentCitiesListBinding
+import com.example.weather.MainActivity
+import com.example.weather.R
+import com.example.weather.databinding.FragmentManageCitiesBinding
 import com.example.weather.ui.State
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
@@ -23,24 +24,25 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class CitiesListFragment : Fragment() {
-    private var _binding: FragmentCitiesListBinding? = null
-    private val binding: FragmentCitiesListBinding get() = _binding!!
-    private val viewModel: CitiesListViewModel by viewModels()
-    private lateinit var epoxyController: CitiesListEpoxyController
+class ManageCitiesFragment : Fragment() {
+    private var _binding: FragmentManageCitiesBinding? = null
+    private val binding: FragmentManageCitiesBinding get() = _binding!!
+    private val viewModel: ManageCitiesViewModel by viewModels()
+    private lateinit var epoxyController: CitiesEpoxyController
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentCitiesListBinding.inflate(inflater, container, false)
+        _binding = FragmentManageCitiesBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
+        setUpActionBar()
         setUpEpoxyRecyclerView()
         getTopCities()
         searchCity()
@@ -59,6 +61,10 @@ class CitiesListFragment : Fragment() {
 
     private fun getTopCities() {
         viewModel.getTopCities()
+    }
+
+    private fun setUpActionBar() {
+        (requireActivity() as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_black)
     }
 
     private fun observeViewModel() {
@@ -122,16 +128,16 @@ class CitiesListFragment : Fragment() {
     }
 
     private fun setUpEpoxyRecyclerView() {
-        epoxyController = CitiesListEpoxyController(
+        epoxyController = CitiesEpoxyController(
             context = requireContext(),
             onItemClicked = {
                 viewModel.setCurrentCity(it)
                 Toast.makeText(
-                    requireActivity(),
+                    requireContext(),
                     "You will get weather data for the selected city",
                     Toast.LENGTH_SHORT
                 ).show()
-                findNavController().navigateUp()
+//                findNavController().navigateUp()
             }
         )
         binding.rvCities.setController(epoxyController)

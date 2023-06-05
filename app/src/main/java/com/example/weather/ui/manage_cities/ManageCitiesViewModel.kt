@@ -1,4 +1,4 @@
-package com.example.weather.ui.cities_list
+package com.example.weather.ui.manage_cities
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CitiesListViewModel @Inject constructor(
+class ManageCitiesViewModel @Inject constructor(
     private val networkRepository: AccuWeatherRepository,
     private val databaseRepository: WeatherDatabaseRepository,
     private val dataStoreManager: DataStoreManager

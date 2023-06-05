@@ -6,7 +6,7 @@ import androidx.core.content.ContextCompat
 import com.airbnb.epoxy.EpoxyController
 import com.example.weather.R
 import com.example.weather.common.Utils
-import com.example.weather.databinding.ItemHourlyWeatherCardBinding
+import com.example.weather.databinding.ItemHourlyWeatherBinding
 import com.example.weather.domain.models.weather.HourlyWeather
 import java.time.Instant
 import java.time.LocalDateTime
@@ -44,9 +44,9 @@ class HourlyWeatherEpoxyController(
         val onItemClicked: (HourlyWeather.CurrentWeather) -> Unit,
         val context: Context,
         val selectedItem: HourlyWeather.CurrentWeather?
-    ) : ViewBindingKotlinModel<ItemHourlyWeatherCardBinding>(R.layout.item_hourly_weather_card) {
+    ) : ViewBindingKotlinModel<ItemHourlyWeatherBinding>(R.layout.item_hourly_weather) {
 
-        override fun ItemHourlyWeatherCardBinding.bind() {
+        override fun ItemHourlyWeatherBinding.bind() {
             val time = convertEpochToLocalTime(weather.timeDate)
             tvTime.text = time
             tvTemperature.text = weather.temp.toString()

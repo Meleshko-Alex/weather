@@ -20,17 +20,17 @@ import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.common.Utils.convertEpochToLocalDate
 import com.example.weather.common.Utils.getWeatherIcon
-import com.example.weather.databinding.FragmentHourlyWeatherFlatBinding
+import com.example.weather.databinding.FragmentHomeWeatherFlatBinding
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.ui.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HourlyWeatherFragment : Fragment() {
-    private var _binding: FragmentHourlyWeatherFlatBinding? = null
-    private val binding: FragmentHourlyWeatherFlatBinding get() = _binding!!
-    private val viewModel: HourlyWeatherViewModel by viewModels()
+class HomeWeatherFragment : Fragment() {
+    private var _binding: FragmentHomeWeatherFlatBinding? = null
+    private val binding: FragmentHomeWeatherFlatBinding get() = _binding!!
+    private val viewModel: HomeWeatherViewModel by viewModels()
     private lateinit var epoxyController: HourlyWeatherEpoxyController
     private lateinit var currentCity: TopCities.City
 
@@ -39,7 +39,7 @@ class HourlyWeatherFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHourlyWeatherFlatBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeWeatherFlatBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -71,7 +71,7 @@ class HourlyWeatherFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.currentCity.observe(viewLifecycleOwner) {
             currentCity = it
-            setActionBarTitle()
+            setCityName()
             getWeatherData(currentCity, true)
         }
 
@@ -95,7 +95,7 @@ class HourlyWeatherFragment : Fragment() {
         }
     }
 
-    private fun setActionBarTitle() {
+    private fun setCityName() {
         (requireActivity() as MainActivity).supportActionBar?.title = currentCity.name
     }
 

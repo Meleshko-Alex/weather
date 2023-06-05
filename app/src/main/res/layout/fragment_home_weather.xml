@@ -302,7 +302,7 @@
         app:itemSpacing="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:listitem="@layout/item_hourly_weather_card" />
+        tools:listitem="@layout/item_hourly_weather" />
 
     <FrameLayout
         android:id="@+id/progress_bar"

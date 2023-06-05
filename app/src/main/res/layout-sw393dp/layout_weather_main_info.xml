@@ -9,7 +9,7 @@
         android:id="@+id/ivWeatherIcon"
         android:layout_width="@dimen/icon_normal_size"
         android:layout_height="@dimen/icon_normal_size"
-        android:layout_marginTop="36dp"
+        android:layout_marginTop="46dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -19,7 +19,7 @@
         android:id="@+id/tvWeatherName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:textColor="@color/white"
         android:textSize="22sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,9 +42,9 @@
         android:id="@+id/tvTemperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:textColor="@color/white"
-        android:textSize="70sp"
+        android:textSize="74sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@id/tvDate"
         app:layout_constraintStart_toStartOf="@id/tvDate"
@@ -55,7 +55,7 @@
         android:id="@+id/dividerHorizontal1"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="28dp"
         android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@id/tvTemperature" />
 
@@ -63,7 +63,7 @@
         android:id="@+id/cardWeatherAdditionalInfo"
         layout="@layout/layout_weather_addition_info"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/card_addition_info_height_360dp"
+        android:layout_height="@dimen/card_addition_info_height_393dp"
         app:layout_constraintTop_toTopOf="@id/dividerHorizontal1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

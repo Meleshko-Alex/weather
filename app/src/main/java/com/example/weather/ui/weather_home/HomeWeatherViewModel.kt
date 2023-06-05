@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HourlyWeatherViewModel @Inject constructor(
+class HomeWeatherViewModel @Inject constructor(
     private val repository: OpenWeatherRepository,
     private val dataStoreManager: DataStoreManager
 ) : ViewModel() {

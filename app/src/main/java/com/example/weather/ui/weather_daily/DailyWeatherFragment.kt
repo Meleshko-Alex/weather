@@ -37,11 +37,10 @@ class DailyWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeViewModel()
         setUpActionBar()
         setUpStatusBar()
+        observeViewModel()
         setUpEpoxyRecyclerView()
-
         binding.swipeRefreshLayout.apply {
             setOnRefreshListener {
                 getWeatherData(currentCity)
@@ -99,7 +98,7 @@ class DailyWeatherFragment : Fragment() {
                 )
             )
 
-            setHomeAsUpIndicator(R.drawable.ic_arrow_left)
+            setHomeAsUpIndicator(R.drawable.ic_arrow_left_white)
         }
     }
 
