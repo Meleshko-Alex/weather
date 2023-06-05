@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/weatherFragment">
+    app:startDestination="@id/homeWeatherFragment">
 
     <fragment
         android:id="@+id/initialSetupFragment"
@@ -10,7 +10,7 @@
         android:label="InitialSetupFragment">
         <action
             android:id="@+id/action_initialSetupFragment_to_weatherFragment"
-            app:destination="@id/weatherFragment" />
+            app:destination="@id/homeWeatherFragment" />
     </fragment>
     <fragment
         android:id="@+id/registrationFragment"
@@ -21,22 +21,34 @@
             app:destination="@id/initialSetupFragment" />
     </fragment>
     <fragment
-        android:id="@+id/weatherFragment"
+        android:id="@+id/homeWeatherFragment"
         android:name="com.example.weather.ui.weather_home.HomeWeatherFragment"
         android:label="">
         <action
-            android:id="@+id/action_weatherFragment_to_dailyWeatherFragment"
+            android:id="@+id/action_homeWeatherFragment_to_dailyWeatherFragment"
             app:destination="@id/dailyWeatherFragment" />
         <action
-            android:id="@+id/action_weatherFragment_to_citiesListFragment"
-            app:destination="@id/citiesListFragment" />
+            android:id="@+id/action_homeWeatherFragment_to_citiesListFragment"
+            app:destination="@id/manageCitiesFragment" />
     </fragment>
     <fragment
         android:id="@+id/dailyWeatherFragment"
         android:name="com.example.weather.ui.weather_daily.DailyWeatherFragment"
         android:label="DailyWeatherFragment" />
     <fragment
-        android:id="@+id/citiesListFragment"
+        android:id="@+id/manageCitiesFragment"
         android:name="com.example.weather.ui.manage_cities.ManageCitiesFragment"
-        android:label="Manage cities" />
+        android:label="Manage cities">
+        <action
+            android:id="@+id/action_manageCitiesFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.example.weather.ui.map.MapFragment"
+        android:label="MapFragment" >
+        <argument
+            android:name="currentCity"
+            app:argType="string" />
+    </fragment>
 </navigation>

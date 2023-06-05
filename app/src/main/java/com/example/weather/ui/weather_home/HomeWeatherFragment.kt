@@ -149,7 +149,7 @@ class HomeWeatherFragment : Fragment() {
         }
 
         binding.tvNext7Days.setOnClickListener {
-            findNavController().navigate(R.id.action_weatherFragment_to_dailyWeatherFragment)
+            findNavController().navigate(R.id.action_homeWeatherFragment_to_dailyWeatherFragment)
         }
     }
 
@@ -162,7 +162,7 @@ class HomeWeatherFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_item_cities -> {
-                        findNavController().navigate(R.id.action_weatherFragment_to_citiesListFragment)
+                        findNavController().navigate(R.id.action_homeWeatherFragment_to_citiesListFragment)
                         true
                     }
                     else -> false

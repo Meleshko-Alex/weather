@@ -3,6 +3,7 @@ package com.example.weather.ui.manage_cities
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.common.DataStoreManager
 import com.example.weather.data.remote.NetworkResult
@@ -26,6 +27,7 @@ class ManageCitiesViewModel @Inject constructor(
     private var _searchCityState = MutableLiveData<State<SearchCity>>()
     val searchCityState: LiveData<State<SearchCity>> = _searchCityState
     var searchQuery: String? = null
+    val currentCity = dataStoreManager.getCurrentCity().asLiveData()
 
     fun getTopCities() {
         viewModelScope.launch {

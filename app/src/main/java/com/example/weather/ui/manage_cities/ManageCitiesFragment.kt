@@ -14,10 +14,13 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.databinding.FragmentManageCitiesBinding
+import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.ui.State
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
@@ -29,6 +32,7 @@ class ManageCitiesFragment : Fragment() {
     private val binding: FragmentManageCitiesBinding get() = _binding!!
     private val viewModel: ManageCitiesViewModel by viewModels()
     private lateinit var epoxyController: CitiesEpoxyController
+    private var currentCity: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +61,9 @@ class ManageCitiesFragment : Fragment() {
             return@setOnEditorActionListener false
         }
         binding.etSearch.imeOptions = EditorInfo.IME_ACTION_SEARCH
+        binding.fabOpenMapFragment.setOnClickListener {
+            findNavController().navigate(ManageCitiesFragmentDirections.actionManageCitiesFragmentToMapFragment(currentCity))
+        }
     }
 
     private fun getTopCities() {
@@ -68,6 +75,10 @@ class ManageCitiesFragment : Fragment() {
     }
 
     private fun observeViewModel() {
+        viewModel.currentCity.observe(viewLifecycleOwner) {
+            currentCity = Gson().toJson(it, TopCities.City::class.java)
+        }
+
         viewModel.citiesState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Success -> {
