@@ -13,26 +13,30 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.databinding.FragmentMapBinding
 import com.example.weather.domain.models.cities.TopCities
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
 @AndroidEntryPoint
-class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
+class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarkerClickListener {
     private var _binding: FragmentMapBinding? = null
     private val binding: FragmentMapBinding get() = _binding!!
     private val args: MapFragmentArgs by navArgs()
@@ -41,6 +45,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
     private val viewModel: MapViewModel by viewModels()
     private var selectedCity: TopCities.City? = null
     private var actionMode: ActionMode? = null
+    private var actionBar: ActionBar? = null
+    private var lastSelectedMarker: Marker? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,9 +59,15 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpActionBar()
         currentCity = Gson().fromJson(args.currentCity, TopCities.City::class.java)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+    }
+
+    private fun setUpActionBar() {
+        actionBar = (requireActivity() as MainActivity).supportActionBar
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_black)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -64,36 +76,52 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
         val markedPosition = googleMap.addMarker(
             MarkerOptions()
                 .position(position)
-                .title("Marker")
-
+                .title(currentCity.name)
         )
+        lastSelectedMarker = markedPosition
+        markedPosition?.showInfoWindow()
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10f))
         googleMap.setOnMapClickListener(this)
-//        markedPosition?.showInfoWindow()
+        googleMap.setOnMarkerClickListener(this)
     }
 
     override fun onMapClick(positionClicked: LatLng) {
         checkReadyThen {
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(positionClicked, 10f)
             val city = getPositionClickedCity(positionClicked)
-            city?.let {
-                Log.d(this.javaClass.simpleName, "$it")
-                selectedCity = it
-                val marker = map.addMarker(
+            if (city != null) {
+                Log.d(this.javaClass.simpleName, "$city")
+                selectedCity = city
+                lastSelectedMarker?.remove()
+                lastSelectedMarker = map.addMarker(
                     MarkerOptions()
                         .position(positionClicked)
-                        .title(it.name)
+                        .title(selectedCity?.name)
                 )
-                marker?.showInfoWindow()
+                lastSelectedMarker?.showInfoWindow()
                 map.moveCamera(cameraUpdate)
 
                 if (actionMode == null) {
                     actionMode = requireActivity().startActionMode(actionModelCallback)
                 }
+            } else {
+                actionMode?.finish()
             }
         }
     }
 
+    override fun onMarkerClick(marker: Marker): Boolean {
+        val city = getPositionClickedCity(marker.position)
+        city?.let {
+            Log.d(this.javaClass.simpleName, "$it")
+            selectedCity = it
+            if (actionMode == null) {
+                actionMode = requireActivity().startActionMode(actionModelCallback)
+            }
+        }
+
+        return false
+    }
 
     private fun getPositionClickedCity(positionClicked: LatLng): TopCities.City? {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
@@ -102,7 +130,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
         Log.d(this.javaClass.simpleName, "$addresses")
         if (!addresses.isNullOrEmpty()) {
             if (addresses[0].locality == null) {
-                Toast.makeText(requireContext(), "No city name detected", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    "No city detected. Pick another place or zoom in and try again",
+                    Toast.LENGTH_LONG
+                ).show()
             } else {
                 return TopCities.City(
                     name = addresses[0].locality ?: "",
@@ -132,6 +164,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
     private val actionModelCallback = object : ActionMode.Callback {
         override fun onCreateActionMode(mode: ActionMode?, menu: Menu?): Boolean {
             mode?.menuInflater?.inflate(R.menu.contextual_menu_map_fragment, menu)
+            mode?.title = "Save selected city?"
+            actionBar?.hide()
             return true
         }
 
@@ -146,11 +180,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
                         return false
                     }
                     viewModel.saveSelectedCity(selectedCity!!)
-                    Toast.makeText(requireActivity(), "Selected city is saved", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity(), "Selected city is saved", Toast.LENGTH_LONG)
+                        .show()
                     mode.finish()
-                    Handler(Looper.getMainLooper()).postDelayed({
-                        findNavController().navigateUp()
-                    }, 500L)
                     true
                 }
 
@@ -164,7 +196,11 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener {
         }
 
         override fun onDestroyActionMode(mode: ActionMode?) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                actionBar?.show()
+            }, 300L)
             actionMode = null
+//            actionBar?.show()
         }
 
     }

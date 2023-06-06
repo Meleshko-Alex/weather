@@ -46,7 +46,7 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.example.weather.ui.map.MapFragment"
-        android:label="MapFragment" >
+        android:label="Map selection" >
         <argument
             android:name="currentCity"
             app:argType="string" />
