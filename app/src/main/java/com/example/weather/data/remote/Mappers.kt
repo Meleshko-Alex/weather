@@ -8,6 +8,7 @@ import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.cities.SearchCity
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.HourlyWeather
+import com.example.weather.domain.models.weather.OneDayWeather
 import com.example.weather.domain.models.weather.OneHourWeather
 import com.example.weather.domain.models.weather.WeatherType
 
@@ -52,7 +53,8 @@ fun HourlyWeatherDto.toCurrentAndHourlyWeather(): HourlyWeather {
 fun DailyWeatherDto.toDailyWeather(): DailyWeather {
     return DailyWeather(
         daily = daily.map {
-            DailyWeather.OneDayWeather(
+            OneDayWeather(
+                weatherId = it.weather[0].id,
                 timeDate = it.forecastedTime,
                 minTemp = it.temp.min.toInt(),
                 maxTemp = it.temp.max.toInt(),

@@ -6,10 +6,11 @@ import com.example.weather.R
 import com.example.weather.common.Utils
 import com.example.weather.databinding.ItemDailyWeatherBinding
 import com.example.weather.domain.models.weather.DailyWeather
+import com.example.weather.domain.models.weather.OneDayWeather
 
 class DailyWeatherEpoxyController : EpoxyController() {
 
-    var items: List<DailyWeather.OneDayWeather> = emptyList()
+    var items: List<OneDayWeather> = emptyList()
         set(value) {
             field = value
             requestModelBuild()
@@ -22,7 +23,7 @@ class DailyWeatherEpoxyController : EpoxyController() {
     }
 
     data class ItemWeatherCardEpoxyModel(
-        val weather: DailyWeather.OneDayWeather
+        val weather: OneDayWeather
     ) :
         ViewBindingKotlinModel<ItemDailyWeatherBinding>(R.layout.item_daily_weather) {
 

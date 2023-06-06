@@ -9,4 +9,5 @@ object Constants {
     val DEFAULT_CITY = City("Zaporizhzhia", 47.8378, 35.1383)
     const val CITIES_TABLENAME = "cities"
     const val HOURLYWEATHERCACHE_TABLENAME = "hourly_weather_cache"
+    const val DAILYWEATHERCACHE_TABLENAME = "daily_weather_cache"
 }

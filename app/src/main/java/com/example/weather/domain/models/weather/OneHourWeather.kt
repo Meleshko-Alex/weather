@@ -1,8 +1,5 @@
 package com.example.weather.domain.models.weather
 
-import androidx.room.ColumnInfo
-import androidx.room.PrimaryKey
-
 data class OneHourWeather(
     val weatherId: Int,
     val timeDate: Long,
