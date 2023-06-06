@@ -1,5 +1,6 @@
 package com.example.weather.ui.weather_daily
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.text.Spannable
@@ -39,6 +40,7 @@ class DailyWeatherFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setUpActionBar()
         setUpStatusBar()
+        setProgressBarColor()
         observeViewModel()
         setUpEpoxyRecyclerView()
         binding.swipeRefreshLayout.apply {
@@ -113,6 +115,14 @@ class DailyWeatherFragment : Fragment() {
 
             // change navigation bar background color
             navigationBarColor = ContextCompat.getColor(requireContext(), R.color.blue)
+        }
+    }
+
+    private fun setProgressBarColor() {
+        val colorStateList = ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.white))
+        binding.loadingIndicator.progressCircular.apply {
+            progressTintList = colorStateList
+            indeterminateTintList = colorStateList
         }
     }
 
