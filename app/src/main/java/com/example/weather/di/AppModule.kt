@@ -3,6 +3,7 @@ package com.example.weather.di
 import android.content.Context
 import com.example.weather.common.DataStoreManager
 import com.example.weather.data.local.dao.CitiesDao
+import com.example.weather.data.local.dao.HourlyWeatherDao
 import com.example.weather.data.local.database.WeatherDatabase
 import com.example.weather.data.remote.api.AccuWeatherService
 import com.example.weather.data.remote.retrofit.OpenWeatherRetrofitClient
@@ -34,6 +35,11 @@ class AppModule {
     @Provides
     fun provideCitiesDao(database: WeatherDatabase): CitiesDao {
         return database.citiesDao()
+    }
+
+    @Provides
+    fun provideHourlyWeatherDao(database: WeatherDatabase): HourlyWeatherDao {
+        return database.hourlyWeatherDao()
     }
 
     @Provides
