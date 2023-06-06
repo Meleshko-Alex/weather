@@ -1,10 +1,10 @@
-package com.example.weather.data.remote.repository
+package com.example.weather.data.repository
 
 import android.util.Log
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.data.remote.api.AccuWeatherService
-import com.example.weather.data.remote.mappers.toCity
-import com.example.weather.data.remote.mappers.toFoundCity
+import com.example.weather.data.remote.toCity
+import com.example.weather.data.remote.toFoundCity
 import com.example.weather.domain.models.cities.SearchCity
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.repository.AccuWeatherRepository

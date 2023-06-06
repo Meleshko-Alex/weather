@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.weather.data.local.dao.CitiesDao
 import com.example.weather.data.local.entities.CityEntity
+import com.example.weather.domain.models.cities.City
 
 @Database(entities = [CityEntity::class], version = 1, exportSchema = true)
 abstract class WeatherDatabase : RoomDatabase() {

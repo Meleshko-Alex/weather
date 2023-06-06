@@ -3,7 +3,7 @@ package com.example.weather.ui.map
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.weather.common.DataStoreManager
-import com.example.weather.domain.models.cities.TopCities
+import com.example.weather.domain.models.cities.City
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class MapViewModel @Inject constructor(
     private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
-    fun saveSelectedCity(city: TopCities.City) {
+    fun saveSelectedCity(city: City) {
         viewModelScope.launch {
             dataStoreManager.setCurrentCity(city)
         }

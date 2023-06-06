@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.common.DataStoreManager
+import com.example.weather.domain.models.cities.City
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.cities.SearchCity
 import com.example.weather.domain.models.cities.TopCities
@@ -51,7 +52,7 @@ class ManageCitiesViewModel @Inject constructor(
         }
     }
 
-    fun setCurrentCity(city: TopCities.City) {
+    fun setCurrentCity(city: City) {
         viewModelScope.launch {
             dataStoreManager.setCurrentCity(city)
         }

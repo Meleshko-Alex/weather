@@ -4,16 +4,16 @@ import ViewBindingKotlinModel
 import android.content.Context
 import com.airbnb.epoxy.EpoxyController
 import com.example.weather.R
+import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.ItemCityBinding
 import com.example.weather.domain.models.cities.SearchCity
-import com.example.weather.domain.models.cities.TopCities
 
 class CitiesEpoxyController(
     private val context: Context,
-    private val onItemClicked: (TopCities.City) -> Unit
+    private val onItemClicked: (City) -> Unit
 ) : EpoxyController() {
 
-    var topCities: List<TopCities.City> = emptyList()
+    var topCities: List<City> = emptyList()
         set(value) {
             field = value
             requestModelBuild()
@@ -46,8 +46,8 @@ class CitiesEpoxyController(
     }
 
     data class ItemCityEpoxyModel(
-        val city: TopCities.City,
-        val onItemClicked: (TopCities.City) -> Unit
+        val city: City,
+        val onItemClicked: (City) -> Unit
     ) : ViewBindingKotlinModel<ItemCityBinding>(R.layout.item_city) {
 
         override fun ItemCityBinding.bind() {
@@ -61,7 +61,7 @@ class CitiesEpoxyController(
     data class ItemFoundCityEpoxyModel(
         val city: SearchCity.FoundCity,
         val context: Context,
-        val onItemClicked: (TopCities.City) -> Unit
+        val onItemClicked: (City) -> Unit
     ) : ViewBindingKotlinModel<ItemCityBinding>(R.layout.item_city) {
 
         override fun ItemCityBinding.bind() {
@@ -73,7 +73,7 @@ class CitiesEpoxyController(
             )
             root.setOnClickListener {
                 onItemClicked(
-                    TopCities.City(
+                    City(
                         name = city.cityName,
                         latitude = city.latitude,
                         longitude = city.longitude

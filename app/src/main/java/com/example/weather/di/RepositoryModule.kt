@@ -1,8 +1,8 @@
 package com.example.weather.di
 
-import com.example.weather.data.remote.repository.AccuWeatherRepositoryImpl
-import com.example.weather.data.remote.repository.OpenWeatherRepositoryImpl
-import com.example.weather.data.remote.repository.WeatherDatabaseRepositoryImpl
+import com.example.weather.data.repository.AccuWeatherRepositoryImpl
+import com.example.weather.data.repository.OpenWeatherRepositoryImpl
+import com.example.weather.data.repository.WeatherDatabaseRepositoryImpl
 import com.example.weather.domain.repository.AccuWeatherRepository
 import com.example.weather.domain.repository.OpenWeatherRepository
 import com.example.weather.domain.repository.WeatherDatabaseRepository

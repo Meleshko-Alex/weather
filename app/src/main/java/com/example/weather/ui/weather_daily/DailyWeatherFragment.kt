@@ -12,8 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.weather.MainActivity
 import com.example.weather.R
+import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentDailyWeatherBinding
-import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.ui.State
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,7 +24,7 @@ class DailyWeatherFragment : Fragment() {
     private val binding: FragmentDailyWeatherBinding get() = _binding!!
     private val viewModel: DailyWeatherViewModel by viewModels()
     private val epoxyController = DailyWeatherEpoxyController()
-    private lateinit var currentCity: TopCities.City
+    private lateinit var currentCity: City
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,7 +116,7 @@ class DailyWeatherFragment : Fragment() {
         }
     }
 
-    private fun getWeatherData(city: TopCities.City) {
+    private fun getWeatherData(city: City) {
         viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude)
     }
 

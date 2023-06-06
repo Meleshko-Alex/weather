@@ -20,9 +20,9 @@ import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.common.Utils.convertEpochToLocalDate
 import com.example.weather.common.Utils.getWeatherIcon
+import com.example.weather.domain.models.cities.City
+import com.example.weather.domain.models.weather.OneHourWeather
 import com.example.weather.databinding.FragmentHomeWeatherFlatBinding
-import com.example.weather.domain.models.cities.TopCities
-import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.ui.State
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -32,7 +32,7 @@ class HomeWeatherFragment : Fragment() {
     private val binding: FragmentHomeWeatherFlatBinding get() = _binding!!
     private val viewModel: HomeWeatherViewModel by viewModels()
     private lateinit var epoxyController: HourlyWeatherEpoxyController
-    private lateinit var currentCity: TopCities.City
+    private lateinit var currentCity: City
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,7 +52,7 @@ class HomeWeatherFragment : Fragment() {
         setUpMenu()
         binding.swipeRefreshLayout.apply {
             setOnRefreshListener {
-                getWeatherData(currentCity, true)
+                getWeatherData(currentCity)
                 isRefreshing = false
             }
         }
@@ -71,8 +71,8 @@ class HomeWeatherFragment : Fragment() {
     private fun observeViewModel() {
         viewModel.currentCity.observe(viewLifecycleOwner) {
             currentCity = it
-            setCityName()
-            getWeatherData(currentCity, true)
+            setActionBarTitle()
+            getWeatherData(currentCity)
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -95,7 +95,7 @@ class HomeWeatherFragment : Fragment() {
         }
     }
 
-    private fun setCityName() {
+    private fun setActionBarTitle() {
         (requireActivity() as MainActivity).supportActionBar?.title = currentCity.name
     }
 
@@ -124,11 +124,11 @@ class HomeWeatherFragment : Fragment() {
         binding.rvWeatherHourly.setController(epoxyController)
     }
 
-    private fun getWeatherData(city: TopCities.City, onRefresh: Boolean = false) {
-        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude, onRefresh = onRefresh)
+    private fun getWeatherData(city: City) {
+        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude)
     }
 
-    private fun bindWeatherData(currentWeather: HourlyWeather.CurrentWeather) {
+    private fun bindWeatherData(currentWeather: OneHourWeather) {
         binding.layoutWeatherInfoMain.apply {
             tvWeatherName.text = currentWeather.weather.weather.weatherName
             tvDate.text = convertEpochToLocalDate(currentWeather.timeDate)

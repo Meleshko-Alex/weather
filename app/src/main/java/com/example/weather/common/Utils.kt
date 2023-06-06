@@ -1,19 +1,16 @@
 package com.example.weather.common
 
 import android.content.Context
-import androidx.datastore.core.DataStore
-import androidx.datastore.dataStore
-import androidx.fragment.app.Fragment
-import com.example.weather.domain.models.cities.TopCities
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import com.example.weather.WeatherApplication
 import com.example.weather.domain.models.weather.WeatherType
-import com.google.gson.Gson
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
-import java.util.prefs.Preferences
 
 object Utils {
     /**
@@ -37,7 +34,21 @@ object Utils {
         epochTime: Long,
         format: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d MMM")
     ): String {
-        val instant = Instant.ofEpochMilli(epochTime * 1000) // Multiply by 1000 to convert to milliseconds
+        val instant =
+            Instant.ofEpochMilli(epochTime * 1000) // Multiply by 1000 to convert to milliseconds
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(format)
+    }
+}
+
+fun AndroidViewModel.hasInternetConnection(): Boolean {
+    val connectivityManager =
+        getApplication<WeatherApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val activeNetwork = connectivityManager.activeNetwork ?: return false
+    val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+    return when {
+        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+        else -> false
     }
 }

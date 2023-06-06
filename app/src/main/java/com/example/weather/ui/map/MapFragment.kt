@@ -6,7 +6,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.ActionMode
-import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
@@ -16,12 +15,11 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.weather.MainActivity
 import com.example.weather.R
+import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentMapBinding
-import com.example.weather.domain.models.cities.TopCities
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener
@@ -40,10 +38,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
     private var _binding: FragmentMapBinding? = null
     private val binding: FragmentMapBinding get() = _binding!!
     private val args: MapFragmentArgs by navArgs()
-    private lateinit var currentCity: TopCities.City
+    private lateinit var currentCity: City
     private lateinit var map: GoogleMap
     private val viewModel: MapViewModel by viewModels()
-    private var selectedCity: TopCities.City? = null
+    private var selectedCity: City? = null
     private var actionMode: ActionMode? = null
     private var actionBar: ActionBar? = null
     private var lastSelectedMarker: Marker? = null
@@ -60,7 +58,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpActionBar()
-        currentCity = Gson().fromJson(args.currentCity, TopCities.City::class.java)
+        currentCity = Gson().fromJson(args.currentCity, City::class.java)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
@@ -106,6 +104,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
                 }
             } else {
                 actionMode?.finish()
+                lastSelectedMarker?.remove()
             }
         }
     }
@@ -123,7 +122,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
         return false
     }
 
-    private fun getPositionClickedCity(positionClicked: LatLng): TopCities.City? {
+    private fun getPositionClickedCity(positionClicked: LatLng): City? {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         val addresses =
             geocoder.getFromLocation(positionClicked.latitude, positionClicked.longitude, 1)
@@ -136,7 +135,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
                     Toast.LENGTH_LONG
                 ).show()
             } else {
-                return TopCities.City(
+                return City(
                     name = addresses[0].locality ?: "",
                     latitude = addresses[0].latitude,
                     longitude = addresses[0].longitude

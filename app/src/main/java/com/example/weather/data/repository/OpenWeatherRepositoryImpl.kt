@@ -1,9 +1,9 @@
-package com.example.weather.data.remote.repository
+package com.example.weather.data.repository
 
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.data.remote.api.OpenWeatherService
-import com.example.weather.data.remote.mappers.toCurrentAndHourlyWeather
-import com.example.weather.data.remote.mappers.toDailyWeather
+import com.example.weather.data.remote.toCurrentAndHourlyWeather
+import com.example.weather.data.remote.toDailyWeather
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.domain.repository.OpenWeatherRepository

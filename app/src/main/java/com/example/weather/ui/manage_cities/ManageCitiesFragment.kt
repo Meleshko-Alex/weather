@@ -17,8 +17,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
+import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentManageCitiesBinding
-import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.ui.State
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,7 +76,7 @@ class ManageCitiesFragment : Fragment() {
 
     private fun observeViewModel() {
         viewModel.currentCity.observe(viewLifecycleOwner) {
-            currentCity = Gson().toJson(it, TopCities.City::class.java)
+            currentCity = Gson().toJson(it, City::class.java)
         }
 
         viewModel.citiesState.observe(viewLifecycleOwner) { state ->
