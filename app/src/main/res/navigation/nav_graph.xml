@@ -5,50 +5,60 @@
     app:startDestination="@id/homeWeatherFragment">
 
     <fragment
-        android:id="@+id/initialSetupFragment"
-        android:name="com.example.weather.ui.initial_setup.InitialSetupFragment"
-        android:label="InitialSetupFragment">
-        <action
-            android:id="@+id/action_initialSetupFragment_to_weatherFragment"
-            app:destination="@id/homeWeatherFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/registrationFragment"
-        android:name="com.example.weather.ui.registration.RegistrationFragment"
+        android:name="com.example.weather.presentation.registration.RegistrationFragment"
         android:label="RegistrationFragment">
         <action
-            android:id="@+id/action_registrationFragment_to_initialSetupFragment"
-            app:destination="@id/initialSetupFragment" />
+            android:id="@+id/action_registrationFragment_to_homeWeatherFragment"
+            app:destination="@id/homeWeatherFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/homeWeatherFragment"
-        android:name="com.example.weather.ui.weather_home.HomeWeatherFragment"
+        android:name="com.example.weather.presentation.weather_home.HomeWeatherFragment"
         android:label="">
+
         <action
             android:id="@+id/action_homeWeatherFragment_to_dailyWeatherFragment"
             app:destination="@id/dailyWeatherFragment" />
+
         <action
             android:id="@+id/action_homeWeatherFragment_to_citiesListFragment"
             app:destination="@id/manageCitiesFragment" />
+        <action
+            android:id="@+id/action_homeWeatherFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+        <action
+            android:id="@+id/action_homeWeatherFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/dailyWeatherFragment"
-        android:name="com.example.weather.ui.weather_daily.DailyWeatherFragment"
+        android:name="com.example.weather.presentation.weather_daily.DailyWeatherFragment"
         android:label="DailyWeatherFragment" />
+
     <fragment
         android:id="@+id/manageCitiesFragment"
-        android:name="com.example.weather.ui.manage_cities.ManageCitiesFragment"
+        android:name="com.example.weather.presentation.manage_cities.ManageCitiesFragment"
         android:label="Manage cities">
+
         <action
             android:id="@+id/action_manageCitiesFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
     </fragment>
+
     <fragment
         android:id="@+id/mapFragment"
-        android:name="com.example.weather.ui.map.MapFragment"
+        android:name="com.example.weather.presentation.map.MapFragment"
         android:label="Map selection" >
+
         <argument
             android:name="currentCity"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.example.weather.presentation.user_profile.UserProfileFragment"
+        android:label="UserProfileFragment" />
 </navigation>

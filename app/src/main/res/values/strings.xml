@@ -14,4 +14,7 @@
     <string name="search">Search</string>
     <string name="found_city_format">%s, %s, %s</string>
     <string name="no_results_found">No results found</string>
+    <string name="web_client_id">138818576515-647ojkmpbo4pd9mbsbdl3r5i593kgobt.apps.googleusercontent.com</string>
+    <string name="successful_authentication">Signed in successfully!</string>
+    <string name="user_profile">User profile</string>
 </resources>

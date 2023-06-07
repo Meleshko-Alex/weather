@@ -1,4 +1,4 @@
-package com.example.weather.ui
+package com.example.weather.presentation
 
 sealed class State<T>(
     val data: T? = null,

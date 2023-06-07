@@ -1,4 +1,4 @@
-package com.example.weather.ui.manage_cities
+package com.example.weather.presentation.manage_cities
 
 import android.content.Context
 import android.os.Bundle
@@ -19,7 +19,7 @@ import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentManageCitiesBinding
-import com.example.weather.ui.State
+import com.example.weather.presentation.State
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job

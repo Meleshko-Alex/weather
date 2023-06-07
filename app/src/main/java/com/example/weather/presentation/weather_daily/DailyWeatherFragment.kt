@@ -1,4 +1,4 @@
-package com.example.weather.ui.weather_daily
+package com.example.weather.presentation.weather_daily
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
@@ -15,7 +15,7 @@ import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentDailyWeatherBinding
-import com.example.weather.ui.State
+import com.example.weather.presentation.State
 import dagger.hilt.android.AndroidEntryPoint
 
 

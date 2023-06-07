@@ -1,4 +1,4 @@
-package com.example.weather.ui.weather_home
+package com.example.weather.presentation.weather_home
 
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -23,7 +23,8 @@ import com.example.weather.common.Utils.getWeatherIcon
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.weather.OneHourWeather
 import com.example.weather.databinding.FragmentHomeWeatherFlatBinding
-import com.example.weather.ui.State
+import com.example.weather.presentation.State
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -39,6 +40,9 @@ class HomeWeatherFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (FirebaseAuth.getInstance().currentUser == null) {
+            findNavController().navigate(R.id.action_homeWeatherFragment_to_registrationFragment)
+        }
         _binding = FragmentHomeWeatherFlatBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -133,19 +137,19 @@ class HomeWeatherFragment : Fragment() {
             tvWeatherName.text = currentWeather.weather.weather.weatherName
             tvDate.text = convertEpochToLocalDate(currentWeather.timeDate)
             tvTemperature.text =
-                resources.getString(R.string.temperature, currentWeather.temp.toString())
+                getString(R.string.temperature, currentWeather.temp.toString())
             ivWeatherIcon.setImageResource(getWeatherIcon(currentWeather.weather))
         }
 
         binding.layoutWeatherInfoMain.cardWeatherAdditionalInfo.apply {
-            tvWind.text = resources.getString(R.string.wind, currentWeather.windSpeed.toString())
-            tvFeelsLike.text = resources.getString(
+            tvWind.text = getString(R.string.wind, currentWeather.windSpeed.toString())
+            tvFeelsLike.text = getString(
                 R.string.temperature,
                 currentWeather.feelsLikeTemperature.toString()
             )
             tvIndexUv.text = currentWeather.uvi.toString()
             tvHumidity.text =
-                resources.getString(R.string.humidity, currentWeather.humidity.toString())
+                getString(R.string.humidity, currentWeather.humidity.toString())
         }
 
         binding.tvNext7Days.setOnClickListener {
@@ -163,6 +167,10 @@ class HomeWeatherFragment : Fragment() {
                 return when (menuItem.itemId) {
                     R.id.menu_item_cities -> {
                         findNavController().navigate(R.id.action_homeWeatherFragment_to_citiesListFragment)
+                        true
+                    }
+                    R.id.menu_item_user_profile -> {
+                        findNavController().navigate(R.id.action_homeWeatherFragment_to_userProfileFragment)
                         true
                     }
                     else -> false

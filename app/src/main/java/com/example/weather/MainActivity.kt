@@ -23,11 +23,12 @@ class MainActivity : AppCompatActivity() {
             (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment)
         navController = navHostFragment.navController
 
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.homeWeatherFragment, R.id.registrationFragment))
         val actionBar = findViewById<Toolbar>(R.id.actionBar)
         findViewById<AppBarLayout>(R.id.appBarLayout).bringToFront()
         setSupportActionBar(actionBar)
 
-        setupActionBarWithNavController(navController)
+        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
     override fun onSupportNavigateUp(): Boolean {

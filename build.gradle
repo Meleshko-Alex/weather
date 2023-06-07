@@ -3,6 +3,7 @@ buildscript {
     dependencies {
         def nav_version = "2.5.3"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
+        classpath 'com.google.gms:google-services:4.3.15'
     }
     ext {
         nav_version = "2.5.3"
@@ -16,6 +17,8 @@ buildscript {
         datastore_version = "1.0.0"
         gson_version = "2.9.0"
         googlemaps_version = "18.1.0"
+        googleauth_version = "22.0.0"
+        googleanalytics_version = "21.3.0"
     }
 }
 

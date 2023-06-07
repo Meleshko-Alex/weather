@@ -1,4 +1,4 @@
-package com.example.weather.ui.map
+package com.example.weather.presentation.map
 
 import android.location.Geocoder
 import android.os.Bundle

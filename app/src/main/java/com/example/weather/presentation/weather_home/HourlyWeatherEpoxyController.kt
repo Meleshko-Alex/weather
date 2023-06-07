@@ -1,4 +1,4 @@
-package com.example.weather.ui.weather_home
+package com.example.weather.presentation.weather_home
 
 import ViewBindingKotlinModel
 import android.content.Context

@@ -1,4 +1,4 @@
-package com.example.weather.ui.manage_cities
+package com.example.weather.presentation.manage_cities
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -12,7 +12,7 @@ import com.example.weather.domain.models.cities.SearchCity
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.repository.AccuWeatherRepository
 import com.example.weather.domain.repository.WeatherDatabaseRepository
-import com.example.weather.ui.State
+import com.example.weather.presentation.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

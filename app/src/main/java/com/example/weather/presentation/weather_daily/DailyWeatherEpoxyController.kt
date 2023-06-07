@@ -1,11 +1,10 @@
-package com.example.weather.ui.weather_daily
+package com.example.weather.presentation.weather_daily
 
 import ViewBindingKotlinModel
 import com.airbnb.epoxy.EpoxyController
 import com.example.weather.R
 import com.example.weather.common.Utils
 import com.example.weather.databinding.ItemDailyWeatherBinding
-import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.OneDayWeather
 
 class DailyWeatherEpoxyController : EpoxyController() {
