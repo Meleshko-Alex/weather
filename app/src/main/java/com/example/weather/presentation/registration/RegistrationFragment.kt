@@ -30,8 +30,10 @@ class RegistrationFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            requireActivity().finish()
+        requireActivity().apply {
+            onBackPressedDispatcher.addCallback(this) {
+                finish()
+            }
         }
     }
 
@@ -40,6 +42,9 @@ class RegistrationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
+        }
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -85,25 +90,35 @@ class RegistrationFragment : Fragment() {
 
     }
 
-    private val intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            handleResult(GoogleSignIn.getSignedInAccountFromIntent(result.data))
+    private val intentLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                handleResult(GoogleSignIn.getSignedInAccountFromIntent(result.data))
+            }
         }
-    }
 
     private fun handleResult(task: Task<GoogleSignInAccount>) {
         if (task.isSuccessful) {
             val account = task.result
             if (account != null) {
                 val authCredential = GoogleAuthProvider.getCredential(account.idToken, null)
-                FirebaseAuth.getInstance().signInWithCredential(authCredential).addOnCompleteListener { result ->
-                    if (result.isSuccessful) {
-                        Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
-                        findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
-                    } else {
-                        Toast.makeText(requireContext(), result.exception.toString(), Toast.LENGTH_LONG).show()
+                FirebaseAuth.getInstance().signInWithCredential(authCredential)
+                    .addOnCompleteListener { result ->
+                        if (result.isSuccessful) {
+                            Toast.makeText(
+                                requireActivity(),
+                                getString(R.string.successful_authentication),
+                                Toast.LENGTH_LONG
+                            ).show()
+                            findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                result.exception.toString(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                }
             }
         } else {
             Toast.makeText(requireContext(), task.exception.toString(), Toast.LENGTH_LONG).show()

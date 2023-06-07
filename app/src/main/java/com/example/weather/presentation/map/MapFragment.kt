@@ -12,9 +12,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.weather.MainActivity
 import com.example.weather.R
@@ -45,6 +47,13 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
     private var actionMode: ActionMode? = null
     private var actionBar: ActionBar? = null
     private var lastSelectedMarker: Marker? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigateUp()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -33,6 +34,13 @@ class ManageCitiesFragment : Fragment() {
     private val viewModel: ManageCitiesViewModel by viewModels()
     private lateinit var epoxyController: CitiesEpoxyController
     private var currentCity: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigateUp()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -7,10 +7,13 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.*
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.domain.models.cities.City
@@ -26,6 +29,13 @@ class DailyWeatherFragment : Fragment() {
     private val viewModel: DailyWeatherViewModel by viewModels()
     private val epoxyController = DailyWeatherEpoxyController()
     private lateinit var currentCity: City
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigateUp()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

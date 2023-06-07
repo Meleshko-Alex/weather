@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.weather.R
@@ -17,6 +18,13 @@ class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding: FragmentUserProfileBinding get() = _binding!!
     private val auth = FirebaseAuth.getInstance()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this) {
+            findNavController().navigateUp()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +56,7 @@ class UserProfileFragment : Fragment() {
 
 
             Toast.makeText(requireContext(), "Successfully signed out", Toast.LENGTH_SHORT).show()
-            findNavController().navigateUp()
+            findNavController().navigate(R.id.action_userProfileFragment_to_registrationFragment)
         } else {
             Toast.makeText(requireContext(), "Sign in first", Toast.LENGTH_LONG).show()
         }

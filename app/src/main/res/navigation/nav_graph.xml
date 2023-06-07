@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeWeatherFragment">
+    app:startDestination="@id/registrationFragment">
 
     <fragment
         android:id="@+id/registrationFragment"
@@ -25,9 +25,6 @@
         <action
             android:id="@+id/action_homeWeatherFragment_to_citiesListFragment"
             app:destination="@id/manageCitiesFragment" />
-        <action
-            android:id="@+id/action_homeWeatherFragment_to_registrationFragment"
-            app:destination="@id/registrationFragment" />
         <action
             android:id="@+id/action_homeWeatherFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
@@ -57,8 +54,13 @@
             android:name="currentCity"
             app:argType="string" />
     </fragment>
+
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.weather.presentation.user_profile.UserProfileFragment"
-        android:label="UserProfileFragment" />
+        android:label="UserProfileFragment" >
+        <action
+            android:id="@+id/action_userProfileFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
+    </fragment>
 </navigation>

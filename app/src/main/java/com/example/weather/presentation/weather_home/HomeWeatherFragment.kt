@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsControllerCompat
@@ -35,14 +36,20 @@ class HomeWeatherFragment : Fragment() {
     private lateinit var epoxyController: HourlyWeatherEpoxyController
     private lateinit var currentCity: City
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().apply {
+            onBackPressedDispatcher.addCallback(this) {
+                finish()
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (FirebaseAuth.getInstance().currentUser == null) {
-            findNavController().navigate(R.id.action_homeWeatherFragment_to_registrationFragment)
-        }
         _binding = FragmentHomeWeatherFlatBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -170,10 +177,12 @@ class HomeWeatherFragment : Fragment() {
                         findNavController().navigate(R.id.action_homeWeatherFragment_to_citiesListFragment)
                         true
                     }
+
                     R.id.menu_item_user_profile -> {
                         findNavController().navigate(R.id.action_homeWeatherFragment_to_userProfileFragment)
                         true
                     }
+
                     else -> false
                 }
             }
