@@ -69,6 +69,7 @@ class HomeWeatherFragment : Fragment() {
                     ContextCompat.getColor(requireContext(), R.color.white)
                 )
             )
+            show()
         }
     }
 
@@ -160,7 +161,7 @@ class HomeWeatherFragment : Fragment() {
     private fun setUpMenu() {
         (requireActivity() as MainActivity).addMenuProvider(object : MenuProvider {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_weather_toolbar, menu)
+                menuInflater.inflate(R.menu.menu_home_weather, menu)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

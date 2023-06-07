@@ -4,4 +4,8 @@
         <item name="backgroundTint">@color/white</item>
         <item name="backgroundColor">@color/white</item>
     </style>
+
+    <style name="ButtonRoundCorners" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">30dp</item>
+    </style>
 </resources>

@@ -5,11 +5,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.databinding.FragmentRegistrationBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -42,7 +46,28 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUpActionBar()
+        setUpStatusBar()
         signInWithGoogle()
+
+    }
+
+    private fun setUpActionBar() {
+        (requireActivity() as MainActivity).supportActionBar?.hide()
+    }
+
+    private fun setUpStatusBar() {
+        requireActivity().window.apply {
+            // change background color
+            addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+            statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+
+            // change  text color
+            WindowInsetsControllerCompat(this, this.decorView).isAppearanceLightStatusBars = true
+
+            // change navigation bar background color
+            navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        }
     }
 
     private fun signInWithGoogle() {
@@ -54,6 +79,10 @@ class RegistrationFragment : Fragment() {
             val signInClient = GoogleSignIn.getClient(requireActivity(), options)
             intentLauncher.launch(signInClient.signInIntent)
         }
+    }
+
+    private fun signInWithFacebook() {
+
     }
 
     private val intentLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

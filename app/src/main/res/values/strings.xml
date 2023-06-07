@@ -17,4 +17,6 @@
     <string name="web_client_id">138818576515-647ojkmpbo4pd9mbsbdl3r5i593kgobt.apps.googleusercontent.com</string>
     <string name="successful_authentication">Signed in successfully!</string>
     <string name="user_profile">User profile</string>
+    <string name="greeting">Discover the Weather\nin Your City</string>
+    <string name="greeting_description">Get to know your hourly and\ndaily weather forecast</string>
 </resources>
