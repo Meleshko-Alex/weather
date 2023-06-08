@@ -28,20 +28,14 @@ class RegistrationFragment : Fragment() {
     private var _binding: FragmentRegistrationBinding? = null
     private val binding: FragmentRegistrationBinding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().apply {
-            onBackPressedDispatcher.addCallback(this) {
-                finish()
-            }
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        if (FirebaseAuth.getInstance().currentUser != null) {
+            findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
+        }
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -102,18 +96,10 @@ class RegistrationFragment : Fragment() {
                 FirebaseAuth.getInstance().signInWithCredential(authCredential)
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
-                            Toast.makeText(
-                                requireActivity(),
-                                getString(R.string.successful_authentication),
-                                Toast.LENGTH_LONG
-                            ).show()
-                            findNavController().navigateUp()
+                            Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
+                            findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                result.exception.toString(),
-                                Toast.LENGTH_LONG
-                            ).show()
+                            Toast.makeText(requireContext(), result.exception.toString(), Toast.LENGTH_LONG).show()
                         }
                     }
             }

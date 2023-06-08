@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
@@ -36,15 +37,21 @@ class HomeWeatherFragment : Fragment() {
     private lateinit var epoxyController: HourlyWeatherEpoxyController
     private lateinit var currentCity: City
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finish()
+            }
+        })
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (FirebaseAuth.getInstance().currentUser == null) {
-            findNavController().navigate(R.id.action_homeWeatherFragment_to_registrationFragment)
-        }
+
         _binding = FragmentHomeWeatherFlatBinding.inflate(inflater, container, false)
         return binding.root
     }
