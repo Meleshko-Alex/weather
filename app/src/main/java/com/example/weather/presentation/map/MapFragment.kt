@@ -12,11 +12,9 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.weather.MainActivity
 import com.example.weather.R
@@ -67,7 +65,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
 
     private fun setUpActionBar() {
         actionBar = (requireActivity() as MainActivity).supportActionBar
-        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_black)
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {

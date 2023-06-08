@@ -21,7 +21,7 @@ class OpenWeatherRepositoryImpl @Inject constructor(private val weatherService: 
             val response = weatherService.getHourlyWeather(
                 latitude = latitude,
                 longitude = longitude,
-                units = units
+                units = units.lowercase()
             )
             if (response.isSuccessful && response.body() != null) {
                 NetworkResult.Success(response.body()!!.toCurrentAndHourlyWeather())

@@ -5,6 +5,5 @@ import com.squareup.moshi.Moshi
 
 object PreferencesKeys {
     val CURRENT_CITY = stringPreferencesKey("current_city")
-    val HOURLY_WEATHER = stringPreferencesKey("hourly_weather_cache")
-    val DAILY_WEATHER = stringPreferencesKey("daily_weather_cache")
+    val MEASUREMENT_UNITS = stringPreferencesKey("measurement_units")
 }

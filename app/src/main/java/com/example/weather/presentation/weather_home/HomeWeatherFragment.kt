@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsControllerCompat
@@ -20,13 +19,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
+import com.example.weather.common.Constants
 import com.example.weather.common.Utils.convertEpochToLocalDate
 import com.example.weather.common.Utils.getWeatherIcon
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.weather.OneHourWeather
 import com.example.weather.databinding.FragmentHomeWeatherFlatBinding
 import com.example.weather.presentation.State
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,14 +35,17 @@ class HomeWeatherFragment : Fragment() {
     private val viewModel: HomeWeatherViewModel by viewModels()
     private lateinit var epoxyController: HourlyWeatherEpoxyController
     private lateinit var currentCity: City
+    private lateinit var measurementUnit: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().finish()
-            }
-        })
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
+            })
     }
 
     override fun onCreateView(
@@ -65,7 +67,8 @@ class HomeWeatherFragment : Fragment() {
         setUpMenu()
         binding.swipeRefreshLayout.apply {
             setOnRefreshListener {
-                getWeatherData(currentCity)
+                viewModel.fetchData()
+                getWeatherData(currentCity, measurementUnit)
                 isRefreshing = false
             }
         }
@@ -83,10 +86,12 @@ class HomeWeatherFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.currentCity.observe(viewLifecycleOwner) {
-            currentCity = it
+
+        viewModel.userPref.observe(viewLifecycleOwner) {
+            currentCity = it.city
+            measurementUnit = it.measurementUnit
             setActionBarTitle()
-            getWeatherData(currentCity)
+            getWeatherData(currentCity, measurementUnit)
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -138,25 +143,29 @@ class HomeWeatherFragment : Fragment() {
         binding.rvWeatherHourly.setController(epoxyController)
     }
 
-    private fun getWeatherData(city: City) {
-        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude)
+    private fun getWeatherData(city: City, measurementUnit: String) {
+        viewModel.getWeatherData(
+            latitude = city.latitude,
+            longitude = city.longitude,
+            measurementUnit = measurementUnit
+        )
     }
 
     private fun bindWeatherData(currentWeather: OneHourWeather) {
         binding.layoutWeatherInfoMain.apply {
             tvWeatherName.text = currentWeather.weather.weather.weatherName
             tvDate.text = convertEpochToLocalDate(currentWeather.timeDate)
-            tvTemperature.text =
-                getString(R.string.temperature, currentWeather.temp.toString())
+            tvTemperature.text = getString(R.string.temperature, currentWeather.temp.toString())
             ivWeatherIcon.setImageResource(getWeatherIcon(currentWeather.weather))
         }
 
         binding.layoutWeatherInfoMain.cardWeatherAdditionalInfo.apply {
-            tvWind.text = getString(R.string.wind, currentWeather.windSpeed.toString())
-            tvFeelsLike.text = getString(
-                R.string.temperature,
-                currentWeather.feelsLikeTemperature.toString()
-            )
+            tvWind.text = if (measurementUnit == Constants.MEASURE_UNIT_METRIC) {
+                getString(R.string.wind_metric, currentWeather.windSpeed.toString())
+            } else {
+                getString(R.string.wind_imperial, currentWeather.windSpeed.toString())
+            }
+            tvFeelsLike.text = getString(R.string.temperature, currentWeather.temp.toString())
             tvIndexUv.text = currentWeather.uvi.toString()
             tvHumidity.text =
                 getString(R.string.humidity, currentWeather.humidity.toString())

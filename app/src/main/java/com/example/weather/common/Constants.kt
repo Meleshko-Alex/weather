@@ -8,7 +8,10 @@ object Constants {
     const val DATASTORE_PREFERENCES_NAME = "settings"
     val DEFAULT_CITY = City("Zaporizhzhia", 47.8378, 35.1383)
     const val CITIES_TABLENAME = "cities"
+    const val MEASURE_UNIT_METRIC = "Metric"
+    const val MEASURE_UNIT_IMPERIAL = "Imperial"
     const val HOURLYWEATHERCACHE_TABLENAME = "hourly_weather_cache"
     const val DAILYWEATHERCACHE_TABLENAME = "daily_weather_cache"
     const val SPLAHSCREEN_DISPLAYING_TIME = 1500L
+    const val SOURCE_URL = "https://openweathermap.org/"
 }

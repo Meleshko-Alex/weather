@@ -30,7 +30,7 @@ class DailyWeatherEpoxyController : EpoxyController() {
             val date = Utils.convertEpochToLocalDate(weather.timeDate)
             tvDayName.text = date.substringBeforeLast(",") + ","
             tvDate.text = date.substringAfterLast(",")
-            tvMaxTemp.text = weather.maxTemp.toString() + "°"
+            tvMaxTemp.text = weather.maxTemp.toString()
             tvMinTemp.text = " / " + weather.minTemp.toString() + "°"
             ivWeatherIcon.setImageResource(weather.weather.icon.iconNeutral)
         }

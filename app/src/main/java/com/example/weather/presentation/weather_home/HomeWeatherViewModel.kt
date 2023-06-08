@@ -1,6 +1,7 @@
 package com.example.weather.presentation.weather_home
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -26,26 +27,30 @@ class HomeWeatherViewModel @Inject constructor(
 ) : AndroidViewModel(app) {
     private var _state = MutableLiveData<State<HourlyWeather>>()
     val state: LiveData<State<HourlyWeather>> = _state
-    val currentCity = dataStoreManager.getCurrentCity().asLiveData()
+    val userPref = dataStoreManager.getUserPref().asLiveData()
+    private var isFetched = false
 
     fun getWeatherData(
         latitude: Double,
         longitude: Double,
+        measurementUnit: String
     ) {
+        Log.d(this.javaClass.simpleName, "unit: $measurementUnit")
         _state.value = State.Loading()
 
         // get cached data from db if not Internet connection detected, make an api call otherwise
-        if (!hasInternetConnection()) {
+        if (!hasInternetConnection() || isFetched) {
             viewModelScope.launch {
                 _state.postValue(State.Success(databaseRepository.getHourlyWeatherData()))
             }
         } else {
             viewModelScope.launch {
-                when (val result = repository.getHourlyWeather(latitude, longitude)) {
+                when (val result = repository.getHourlyWeather(latitude, longitude, measurementUnit)) {
                     is NetworkResult.Success -> {
                         _state.postValue(State.Success(result.data!!))
                         // save data to db
                         databaseRepository.saveHourlyWeatherData(result.data)
+                        isFetched = true
                     }
 
                     is NetworkResult.Error -> {
@@ -54,5 +59,9 @@ class HomeWeatherViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun fetchData() {
+        isFetched = false
     }
 }

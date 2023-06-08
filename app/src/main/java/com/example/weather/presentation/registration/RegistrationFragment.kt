@@ -71,6 +71,7 @@ class RegistrationFragment : Fragment() {
             val options = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.web_client_id))
                 .requestProfile()
+                .requestEmail()
                 .build()
             val signInClient = GoogleSignIn.getClient(requireActivity(), options)
             intentLauncher.launch(signInClient.signInIntent)

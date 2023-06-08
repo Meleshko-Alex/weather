@@ -6,6 +6,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.example.weather.domain.models.cities.City
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class DataStoreManager(context: Context) {
@@ -31,4 +32,31 @@ class DataStoreManager(context: Context) {
         }
     }
 
+    fun getUserPref(): Flow<UserPref> {
+        return dataStore.data.map { preferences ->
+            val currentCity = preferences[PreferencesKeys.CURRENT_CITY]
+                ?: gson.toJson(
+                    Constants.DEFAULT_CITY,
+                    City::class.java
+                )
+            val unit =
+                preferences[PreferencesKeys.MEASUREMENT_UNITS] ?: Constants.MEASURE_UNIT_METRIC
+            UserPref(
+                city = gson.fromJson(currentCity, City::class.java),
+                measurementUnit = unit
+            )
+        }
+    }
+
+    suspend fun setMeasurementUnit(unit: String) {
+        dataStore.edit { preferences ->
+            preferences[PreferencesKeys.MEASUREMENT_UNITS] = unit
+        }
+    }
+
+    fun getMeasurementUnit(): Flow<String> {
+        return dataStore.data.map { preferences ->
+            preferences[PreferencesKeys.MEASUREMENT_UNITS] ?: Constants.MEASURE_UNIT_METRIC
+        }
+    }
 }

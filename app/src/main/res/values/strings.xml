@@ -8,7 +8,8 @@
     <string name="next_7_days">Next 7 Days</string>
     <string name="temperature">%s°</string>
     <string name="humidity">%s%%</string>
-    <string name="wind">%sm/s</string>
+    <string name="wind_metric">%s m/s</string>
+    <string name="wind_imperial">%s m/h</string>
     <string name="cities">Cities</string>
     <string name="tip_message">Use search if the city you are looking for is not on the list</string>
     <string name="search">Search</string>
@@ -19,4 +20,8 @@
     <string name="user_profile">User profile</string>
     <string name="greeting">Discover the Weather\nin Your City</string>
     <string name="greeting_description">Get to know your hourly and\ndaily weather forecast</string>
+    <string name="units_of_measurement">Units of measurement</string>
+    <string name="source_header">Source</string>
+    <string name="source">openweathermap.com</string>
+    <string name="sign_out">Sign out</string>
 </resources>

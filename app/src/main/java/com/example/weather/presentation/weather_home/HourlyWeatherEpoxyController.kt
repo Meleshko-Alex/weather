@@ -49,7 +49,7 @@ class HourlyWeatherEpoxyController(
         override fun ItemHourlyWeatherBinding.bind() {
             val time = convertEpochToLocalTime(weather.timeDate)
             tvTime.text = time
-            tvTemperature.text = weather.temp.toString()
+            tvTemperature.text = context.getString(R.string.temperature, weather.temp.toString())
             ivWeatherIcon.setImageResource(
                 Utils.getWeatherIcon(
                     weather = weather.weather,
