@@ -2,16 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/registrationFragment">
+    app:startDestination="@id/homeWeatherFragment">
 
     <fragment
         android:id="@+id/registrationFragment"
         android:name="com.example.weather.presentation.registration.RegistrationFragment"
-        android:label="RegistrationFragment">
-        <action
-            android:id="@+id/action_registrationFragment_to_homeWeatherFragment"
-            app:destination="@id/homeWeatherFragment" />
-    </fragment>
+        android:label="RegistrationFragment"/>
 
     <fragment
         android:id="@+id/homeWeatherFragment"
@@ -28,6 +24,9 @@
         <action
             android:id="@+id/action_homeWeatherFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_homeWeatherFragment_to_registrationFragment"
+            app:destination="@id/registrationFragment" />
     </fragment>
 
     <fragment

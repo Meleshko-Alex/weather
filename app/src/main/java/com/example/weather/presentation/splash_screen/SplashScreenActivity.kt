@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.example.weather.MainActivity
 import com.example.weather.R
+import com.example.weather.common.Constants
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {
@@ -23,7 +24,7 @@ class SplashScreenActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
             finish()
-        }, 2000L)
+        }, Constants.SPLAHSCREEN_DISPLAYING_TIME)
     }
 
     private fun setUpActionBar() {

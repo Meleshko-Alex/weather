@@ -35,13 +35,6 @@ class ManageCitiesFragment : Fragment() {
     private lateinit var epoxyController: CitiesEpoxyController
     private var currentCity: String = ""
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigateUp()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

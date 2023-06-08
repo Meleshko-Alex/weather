@@ -30,13 +30,6 @@ class DailyWeatherFragment : Fragment() {
     private val epoxyController = DailyWeatherEpoxyController()
     private lateinit var currentCity: City
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigateUp()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

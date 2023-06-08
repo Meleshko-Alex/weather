@@ -10,4 +10,5 @@ object Constants {
     const val CITIES_TABLENAME = "cities"
     const val HOURLYWEATHERCACHE_TABLENAME = "hourly_weather_cache"
     const val DAILYWEATHERCACHE_TABLENAME = "daily_weather_cache"
+    const val SPLAHSCREEN_DISPLAYING_TIME = 1500L
 }

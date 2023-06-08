@@ -42,9 +42,6 @@ class RegistrationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (FirebaseAuth.getInstance().currentUser != null) {
-            findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
-        }
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -110,7 +107,7 @@ class RegistrationFragment : Fragment() {
                                 getString(R.string.successful_authentication),
                                 Toast.LENGTH_LONG
                             ).show()
-                            findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
+                            findNavController().navigateUp()
                         } else {
                             Toast.makeText(
                                 requireContext(),

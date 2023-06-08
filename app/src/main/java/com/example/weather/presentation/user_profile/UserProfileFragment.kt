@@ -19,13 +19,6 @@ class UserProfileFragment : Fragment() {
     private val binding: FragmentUserProfileBinding get() = _binding!!
     private val auth = FirebaseAuth.getInstance()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigateUp()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,

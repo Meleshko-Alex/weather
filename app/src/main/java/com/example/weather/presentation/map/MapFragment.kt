@@ -48,13 +48,6 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
     private var actionBar: ActionBar? = null
     private var lastSelectedMarker: Marker? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this) {
-            findNavController().navigateUp()
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
