@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Weather</string>
+    <string name="app_name">Weather.io</string>
     <string name="wind_header">Wind</string>
     <string name="today">Today</string>
     <string name="index_uv_header">Index UV</string>
@@ -26,4 +26,6 @@
     <string name="sign_out">Sign out</string>
     <string name="fab_open_map_description">Open map selection</string>
     <string name="logout">Logout</string>
+    <string name="continue_with_twitter">Continue with Twitter</string>
+    <string name="continue_with_google">Continue with Google</string>
 </resources>

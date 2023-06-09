@@ -47,7 +47,7 @@
         android:layout_width="0dp"
         android:layout_height="54dp"
         android:layout_marginTop="66dp"
-        android:text="Continue with Google"
+        android:text="@string/continue_with_google"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/tvHeader"
@@ -55,11 +55,11 @@
         app:layout_constraintTop_toBottomOf="@id/tvDescription" />
 
     <Button
-        android:id="@+id/btnSignInFacebook"
+        android:id="@+id/btnSignInTwitter"
         style="@style/ButtonRoundCorners"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:text="Continue with Facebook"
+        android:text="@string/continue_with_twitter"
         android:textAllCaps="false"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@id/tvHeader"

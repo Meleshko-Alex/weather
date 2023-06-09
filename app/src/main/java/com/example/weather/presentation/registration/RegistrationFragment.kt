@@ -21,19 +21,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 
 class RegistrationFragment : Fragment() {
     private val TAG = this.javaClass.simpleName
     private var _binding: FragmentRegistrationBinding? = null
     private val binding: FragmentRegistrationBinding get() = _binding!!
+    private val auth = FirebaseAuth.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (FirebaseAuth.getInstance().currentUser != null) {
+        if (auth.currentUser != null) {
             findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
         }
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
@@ -45,7 +48,7 @@ class RegistrationFragment : Fragment() {
         setUpActionBar()
         setUpStatusBar()
         signInWithGoogle()
-
+        signInWithTwitter()
     }
 
     private fun setUpActionBar() {
@@ -78,8 +81,31 @@ class RegistrationFragment : Fragment() {
         }
     }
 
-    private fun signInWithFacebook() {
-
+    private fun signInWithTwitter() {
+        binding.btnSignInTwitter.setOnClickListener {
+            val provider = OAuthProvider.newBuilder("twitter.com")
+            val pendingResultTask = auth.pendingAuthResult
+            if (pendingResultTask != null) {
+                pendingResultTask
+                    .addOnSuccessListener {
+                        Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
+                        findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
+            } else {
+                auth
+                    .startActivityForSignInWithProvider(requireActivity(), provider.build())
+                    .addOnSuccessListener {
+                        Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
+                        findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
+                    }
+                    .addOnFailureListener {
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
+                    }
+            }
+        }
     }
 
     private val intentLauncher =
@@ -94,18 +120,18 @@ class RegistrationFragment : Fragment() {
             val account = task.result
             if (account != null) {
                 val authCredential = GoogleAuthProvider.getCredential(account.idToken, null)
-                FirebaseAuth.getInstance().signInWithCredential(authCredential)
+                auth.signInWithCredential(authCredential)
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
                             Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
                             findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
                         } else {
-                            Toast.makeText(requireContext(), result.exception.toString(), Toast.LENGTH_LONG).show()
+                            Toast.makeText(requireContext(), result.exception?.message, Toast.LENGTH_LONG).show()
                         }
                     }
             }
         } else {
-            Toast.makeText(requireContext(), task.exception.toString(), Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), task.exception?.message, Toast.LENGTH_LONG).show()
         }
     }
 
