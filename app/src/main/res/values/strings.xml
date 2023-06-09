@@ -25,4 +25,5 @@
     <string name="source">openweathermap.com</string>
     <string name="sign_out">Sign out</string>
     <string name="fab_open_map_description">Open map selection</string>
+    <string name="logout">Logout</string>
 </resources>

@@ -48,7 +48,7 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpActionBar()
-        setUpMenu()
+//        setUpMenu()
         bindUserData()
         observeViewModel()
 
@@ -57,6 +57,9 @@ class UserProfileFragment : Fragment() {
         }
         binding.cardMeasurementUnit.setOnClickListener {
             setUpMeasurementUnitSelectionDialog().show()
+        }
+        binding.cardLogout.setOnClickListener {
+            logout()
         }
     }
 
@@ -99,7 +102,7 @@ class UserProfileFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_item_sign_out -> {
-                        signOut()
+                        logout()
                         true
                     }
                     else -> false
@@ -108,7 +111,7 @@ class UserProfileFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun signOut() {
+    private fun logout() {
         if (auth.currentUser != null) {
             // check sign in method i.e. google or facebook
             //sign out from google

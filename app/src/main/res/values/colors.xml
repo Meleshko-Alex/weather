@@ -18,4 +18,5 @@
     <color name="test_gray">#e0e0e0</color>
     <color name="white_smoke">#F5F5F5</color>
     <color name="lavender_blush">#FFF0F5</color>
+    <color name="red">#FF0000</color>
 </resources>
