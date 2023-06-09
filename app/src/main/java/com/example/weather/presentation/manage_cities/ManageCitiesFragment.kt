@@ -1,5 +1,6 @@
 package com.example.weather.presentation.manage_cities
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -50,7 +51,6 @@ class ManageCitiesFragment : Fragment() {
         setUpEpoxyRecyclerView()
         getTopCities()
         searchCity()
-
         binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 Log.d("CitiesListFragment", "viewModel.searchQuery: ${viewModel.searchQuery}")
@@ -62,7 +62,11 @@ class ManageCitiesFragment : Fragment() {
         }
         binding.etSearch.imeOptions = EditorInfo.IME_ACTION_SEARCH
         binding.fabOpenMapFragment.setOnClickListener {
-            findNavController().navigate(ManageCitiesFragmentDirections.actionManageCitiesFragmentToMapFragment(currentCity))
+            findNavController().navigate(
+                ManageCitiesFragmentDirections.actionManageCitiesFragmentToMapFragment(
+                    currentCity
+                )
+            )
         }
     }
 
@@ -142,16 +146,26 @@ class ManageCitiesFragment : Fragment() {
         epoxyController = CitiesEpoxyController(
             context = requireContext(),
             onItemClicked = {
-                viewModel.setCurrentCity(it)
-                Toast.makeText(
-                    requireContext(),
-                    "You will get weather data for the selected city",
-                    Toast.LENGTH_SHORT
-                ).show()
-//                findNavController().navigateUp()
+                setUpConfirmationAlertDialog(it)
             }
         )
         binding.rvCities.setController(epoxyController)
+    }
+
+    private fun setUpConfirmationAlertDialog(city: City) {
+        AlertDialog.Builder(requireContext())
+            .setTitle("Save selection?")
+            .setMessage("You will receive weather updates for the selected city")
+            .setPositiveButton("Yes") { dialog, _ ->
+                viewModel.setCurrentCity(city)
+                dialog.dismiss()
+                findNavController().popBackStack(R.id.homeWeatherFragment, true)
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 
     private fun displayError() {

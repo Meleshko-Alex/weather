@@ -54,6 +54,11 @@
         <argument
             android:name="currentCity"
             app:argType="string" />
+        <action
+            android:id="@+id/action_mapFragment_to_homeWeatherFragment"
+            app:destination="@id/homeWeatherFragment"
+            app:popUpTo="@id/homeWeatherFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

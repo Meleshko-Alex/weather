@@ -35,7 +35,6 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:paddingVertical="8dp"
-        app:itemSpacing="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tilSearch"
         tools:listitem="@layout/item_city" />
@@ -77,5 +76,6 @@
         app:tint="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_outline_map_24" />
+        app:srcCompat="@drawable/ic_outline_map_24"
+        android:contentDescription="@string/fab_open_map_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>

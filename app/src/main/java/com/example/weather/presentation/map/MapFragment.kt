@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.weather.MainActivity
 import com.example.weather.R
@@ -131,7 +132,7 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
             if (addresses[0].locality == null) {
                 Toast.makeText(
                     requireContext(),
-                    "No city detected. Pick another place or zoom in and try again",
+                    "No city detected. Pick another place or zoom in more and try again",
                     Toast.LENGTH_LONG
                 ).show()
             } else {
@@ -179,8 +180,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
                         return false
                     }
                     viewModel.saveSelectedCity(selectedCity!!)
-                    Toast.makeText(requireActivity(), "Selected city is saved", Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(requireActivity(), "Saved selected city", Toast.LENGTH_LONG).show()
+                    findNavController().navigate(R.id.action_mapFragment_to_homeWeatherFragment)
                     mode.finish()
                     true
                 }

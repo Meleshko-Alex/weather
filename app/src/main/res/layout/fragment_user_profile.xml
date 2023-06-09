@@ -81,9 +81,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/main_horizontal_indent"
                 android:drawablePadding="16dp"
-                android:textColorHighlight="@color/gray"
+                android:textColor="@color/light_blue"
                 android:textSize="16sp"
-                app:drawableEndCompat="@drawable/ic_arrow_right"
+                app:drawableEndCompat="@drawable/ic_arrow_right_blue"
                 app:layout_constraintBaseline_toBaselineOf="@id/tvMeasurementUnitsHeader"
                 app:layout_constraintEnd_toEndOf="parent"
                 tools:text="Metric" />
@@ -121,9 +121,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/main_horizontal_indent"
                 android:drawablePadding="16dp"
-                android:textColorHighlight="@color/gray"
+                android:textColor="@color/light_blue"
                 android:textSize="14sp"
-                app:drawableEndCompat="@drawable/ic_arrow_right"
+                app:drawableEndCompat="@drawable/ic_arrow_right_blue"
                 app:layout_constraintBaseline_toBaselineOf="@id/tvSourceHeader"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:text="@string/source" />
