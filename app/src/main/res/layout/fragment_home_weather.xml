@@ -267,27 +267,39 @@
         app:layout_constraintBottom_toTopOf="@id/rvWeatherHourly"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <TextView
-        android:id="@+id/tvNext7Days"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardNext7Days"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:text="@string/next_7_days"
-        android:textColor="@color/gray"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBaseline_toBaselineOf="@id/tvToday"
-        app:layout_constraintEnd_toStartOf="@id/icArrow" />
-
-    <ImageView
-        android:id="@+id/icArrow"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/main_horizontal_indent"
-        app:layout_constraintBottom_toBottomOf="@id/tvNext7Days"
+        android:clickable="true"
+        app:layout_constraintTop_toTopOf="@id/tvToday"
+        app:layout_constraintBottom_toBottomOf="@id/tvToday"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tvNext7Days"
-        app:srcCompat="@drawable/ic_arrow_right" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvNext7Days"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="@string/next_7_days"
+            android:drawablePadding="16dp"
+            app:drawableEndCompat="@drawable/ic_arrow_right"
+            android:textColor="@color/gray"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+<!--    <ImageView-->
+<!--        android:id="@+id/icArrow"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="@dimen/main_horizontal_indent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/tvNext7Days"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="@id/tvNext7Days"-->
+<!--        app:srcCompat="@drawable/ic_arrow_right" />-->
 
     <com.airbnb.epoxy.EpoxyRecyclerView
         android:id="@+id/rvWeatherHourly"

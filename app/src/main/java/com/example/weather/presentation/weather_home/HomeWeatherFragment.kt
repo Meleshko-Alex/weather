@@ -171,7 +171,7 @@ class HomeWeatherFragment : Fragment() {
                 getString(R.string.humidity, currentWeather.humidity.toString())
         }
 
-        binding.tvNext7Days.setOnClickListener {
+        binding.cardNext7Days?.setOnClickListener {
             findNavController().navigate(R.id.action_homeWeatherFragment_to_dailyWeatherFragment)
         }
     }
