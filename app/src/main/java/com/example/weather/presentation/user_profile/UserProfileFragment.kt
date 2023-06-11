@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -20,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.common.Constants
+import com.example.weather.common.SharedPref
 import com.example.weather.databinding.FragmentUserProfileBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -53,7 +55,12 @@ class UserProfileFragment : Fragment() {
         observeViewModel()
 
         binding.cardWeatherSource.setOnClickListener {
-            requireActivity().startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.SOURCE_URL)))
+            requireActivity().startActivity(
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(Constants.SOURCE_URL)
+                )
+            )
         }
         binding.cardMeasurementUnit.setOnClickListener {
             setUpMeasurementUnitSelectionDialog().show()
@@ -61,13 +68,25 @@ class UserProfileFragment : Fragment() {
         binding.cardLogout.setOnClickListener {
             logout()
         }
+        binding.cardSignIn.setOnClickListener {
+           goToRegistrationFragment()
+        }
     }
 
     private fun bindUserData() {
-        auth.currentUser.apply {
-            binding.tvUserName.text = this?.displayName
-            binding.tvUserEmail.text = this?.email
-            Glide.with(requireContext()).load(this?.photoUrl).into(binding.ivUserProfilePicture)
+        if (auth.currentUser == null) {
+            binding.userInfo.visibility = View.GONE
+            binding.cardLogout.visibility = View.GONE
+            binding.cardSignIn.visibility = View.VISIBLE
+        } else {
+            binding.userInfo.visibility = View.VISIBLE
+            binding.cardLogout.visibility = View.VISIBLE
+            binding.cardSignIn.visibility = View.GONE
+            auth.currentUser.apply {
+                binding.tvUserName.text = this?.displayName
+                binding.tvUserEmail.text = this?.email
+                Glide.with(requireContext()).load(this?.photoUrl).into(binding.ivUserProfilePicture)
+            }
         }
     }
 
@@ -105,6 +124,7 @@ class UserProfileFragment : Fragment() {
                         logout()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -113,9 +133,9 @@ class UserProfileFragment : Fragment() {
 
     private fun logout() {
         if (auth.currentUser != null) {
-            // check sign in method i.e. google or facebook
-            //sign out from google
             auth.signOut()
+
+            // to be able to choose from different accounts and not automatically log in in previously selected
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -123,12 +143,17 @@ class UserProfileFragment : Fragment() {
             val googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
             googleSignInClient.signOut()
 
-
             Toast.makeText(requireContext(), "Successfully signed out", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_userProfileFragment_to_registrationFragment)
         } else {
             Toast.makeText(requireContext(), "Sign in first", Toast.LENGTH_LONG).show()
         }
+        SharedPref(requireActivity()).setIsGuest(false)
+        findNavController().navigate(R.id.action_userProfileFragment_to_registrationFragment)
+    }
+
+    private fun goToRegistrationFragment() {
+        SharedPref(requireActivity()).setIsGuest(false)
+        findNavController().navigate(R.id.action_userProfileFragment_to_registrationFragment)
     }
 
     override fun onDestroyView() {

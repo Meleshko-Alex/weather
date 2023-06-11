@@ -7,13 +7,10 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.*
-import androidx.activity.addCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.domain.models.cities.City
@@ -28,7 +25,8 @@ class DailyWeatherFragment : Fragment() {
     private val binding: FragmentDailyWeatherBinding get() = _binding!!
     private val viewModel: DailyWeatherViewModel by viewModels()
     private val epoxyController = DailyWeatherEpoxyController()
-    private lateinit var currentCity: City
+    private lateinit var city: City
+    private lateinit var measurementUnit: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,17 +46,19 @@ class DailyWeatherFragment : Fragment() {
         setUpEpoxyRecyclerView()
         binding.swipeRefreshLayout.apply {
             setOnRefreshListener {
-                getWeatherData(currentCity)
+                viewModel.fetchData()
+                getWeatherData()
                 isRefreshing = false
             }
         }
     }
 
     private fun observeViewModel() {
-        viewModel.currentCity.observe(viewLifecycleOwner) {
-            currentCity = it
+        viewModel.userPref.observe(viewLifecycleOwner) {
+            city = it.city
+            measurementUnit = it.measurementUnit
             setActionBarTitle()
-            getWeatherData(currentCity)
+            getWeatherData()
         }
 
         viewModel.state.observe(viewLifecycleOwner) { state ->
@@ -83,7 +83,7 @@ class DailyWeatherFragment : Fragment() {
     private fun setActionBarTitle() {
         (requireActivity() as MainActivity).supportActionBar?.apply {
             val actionBarTitleColor = ContextCompat.getColor(requireContext(), R.color.white)
-            val titleSpannable = SpannableString(currentCity.name)
+            val titleSpannable = SpannableString(city.name)
             titleSpannable.setSpan(
                 ForegroundColorSpan(actionBarTitleColor),
                 0,
@@ -129,8 +129,8 @@ class DailyWeatherFragment : Fragment() {
         }
     }
 
-    private fun getWeatherData(city: City) {
-        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude)
+    private fun getWeatherData() {
+        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude, measurementUnit = measurementUnit)
     }
 
     private fun setUpEpoxyRecyclerView() {

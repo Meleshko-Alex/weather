@@ -23,6 +23,7 @@ fun OneDayWeather.toOneDayWeatherEntity(): OneDayWeatherEntity {
         weatherId = weatherId,
         timeDate = timeDate,
         minTemp = minTemp,
-        maxTemp = maxTemp
+        maxTemp = maxTemp,
+        summary = summary
     )
 }

@@ -5,5 +5,6 @@ data class OneDayWeather(
     val timeDate: Long,
     val minTemp: Int,
     val maxTemp: Int,
-    val weather: WeatherType
+    val weather: WeatherType,
+    val summary: String
 )

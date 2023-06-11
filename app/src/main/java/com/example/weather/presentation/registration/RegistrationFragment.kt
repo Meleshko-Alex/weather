@@ -2,6 +2,7 @@ package com.example.weather.presentation.registration
 
 import android.app.Activity
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
+import com.example.weather.common.SharedPref
 import com.example.weather.databinding.FragmentRegistrationBinding
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -36,7 +38,8 @@ class RegistrationFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        if (auth.currentUser != null) {
+        if (auth.currentUser != null || SharedPref(requireContext()).getIsGuest()) {
+            Log.d(this.javaClass.simpleName, "onCreateView: " + SharedPref(requireActivity()).getIsGuest().toString())
             findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
         }
         _binding = FragmentRegistrationBinding.inflate(inflater, container, false)
@@ -49,6 +52,7 @@ class RegistrationFragment : Fragment() {
         setUpStatusBar()
         signInWithGoogle()
         signInWithTwitter()
+        continueWithoutAccount()
     }
 
     private fun setUpActionBar() {
@@ -89,6 +93,7 @@ class RegistrationFragment : Fragment() {
                 pendingResultTask
                     .addOnSuccessListener {
                         Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
+                        SharedPref(requireActivity()).setIsGuest(false)
                         findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
                     }
                     .addOnFailureListener {
@@ -99,12 +104,20 @@ class RegistrationFragment : Fragment() {
                     .startActivityForSignInWithProvider(requireActivity(), provider.build())
                     .addOnSuccessListener {
                         Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
+                        SharedPref(requireActivity()).setIsGuest(false)
                         findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
                     }
                     .addOnFailureListener {
                         Toast.makeText(requireContext(), it.message, Toast.LENGTH_LONG).show()
                     }
             }
+        }
+    }
+
+    private fun continueWithoutAccount() {
+        binding.btnNoAccount.setOnClickListener {
+            SharedPref(requireActivity()).setIsGuest(true)
+            findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
         }
     }
 
@@ -124,6 +137,7 @@ class RegistrationFragment : Fragment() {
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
                             Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
+                            SharedPref(requireActivity()).setIsGuest(false)
                             findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
                         } else {
                             Toast.makeText(requireContext(), result.exception?.message, Toast.LENGTH_LONG).show()

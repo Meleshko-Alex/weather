@@ -13,4 +13,5 @@ data class OneDayWeatherEntity(
     @ColumnInfo(name = "time_date") val timeDate: Long,
     @ColumnInfo(name = "min_temp") val minTemp: Int,
     @ColumnInfo(name = "max_temp") val maxTemp: Int,
+    val summary: String,
 )

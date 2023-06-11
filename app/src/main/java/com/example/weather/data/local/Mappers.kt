@@ -35,6 +35,7 @@ fun OneDayWeatherEntity.toOneDayWeather(): OneDayWeather {
         timeDate = timeDate,
         minTemp = minTemp,
         maxTemp = maxTemp,
-        weather = WeatherType.toWeatherType(weatherId)
+        weather = WeatherType.toWeatherType(weatherId),
+        summary = summary
     )
 }

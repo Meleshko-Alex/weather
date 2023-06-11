@@ -3,6 +3,7 @@ package com.example.weather.data.repository
 import com.example.weather.data.local.dao.CitiesDao
 import com.example.weather.data.local.dao.DailyWeatherDao
 import com.example.weather.data.local.dao.HourlyWeatherDao
+import com.example.weather.data.local.database.WeatherDatabase
 import com.example.weather.data.local.entities.OneHourWeatherEntity
 import com.example.weather.data.local.toCity
 import com.example.weather.data.local.toOneDayWeather
@@ -16,26 +17,24 @@ import com.example.weather.domain.toOneHourWeatherEntity
 import javax.inject.Inject
 
 class WeatherDatabaseRepositoryImpl @Inject constructor(
-    private val citiesDao: CitiesDao,
-    private val hourlyWeatherDao: HourlyWeatherDao,
-    private val dailyWeatherDao: DailyWeatherDao
+    private val database: WeatherDatabase
 ) : WeatherDatabaseRepository {
 
     override suspend fun getTopCities(): TopCities {
-        return TopCities(citiesDao.getAll().map {
+        return TopCities(database.citiesDao().getAll().map {
             it.toCity()
         })
     }
 
     override suspend fun saveHourlyWeatherData(hourlyWeather: HourlyWeather) {
-        hourlyWeatherDao.deleteAllHourlyWeather()
-        hourlyWeatherDao.insertHourlyWeather(hourlyWeather.hourly.map {
+        database.hourlyWeatherDao().deleteAllHourlyWeather()
+        database.hourlyWeatherDao().insertHourlyWeather(hourlyWeather.hourly.map {
             it.toOneHourWeatherEntity()
         })
     }
 
     override suspend fun getHourlyWeatherData(): HourlyWeather {
-        val data = hourlyWeatherDao.getAllHourlyWeather().map {
+        val data = database.hourlyWeatherDao().getAllHourlyWeather().map {
             it.toOneHourWeather()
         }
         return HourlyWeather(
@@ -45,15 +44,15 @@ class WeatherDatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun saveDailyWeatherData(dailyWeather: DailyWeather) {
-        dailyWeatherDao.deleteAllDailyWeather()
-        dailyWeatherDao.insertDailyWeather(dailyWeather.daily.map {
+        database.dailyWeatherDao().deleteAllDailyWeather()
+        database.dailyWeatherDao().insertDailyWeather(dailyWeather.daily.map {
             it.toOneDayWeatherEntity()
         })
     }
 
     override suspend fun getDailyWeatherData(): DailyWeather {
         return DailyWeather(
-            daily = dailyWeatherDao.getAllDailyWeather().map {
+            daily = database.dailyWeatherDao().getAllDailyWeather().map {
                 it.toOneDayWeather()
             }
         )

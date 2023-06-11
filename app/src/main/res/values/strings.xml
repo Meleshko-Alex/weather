@@ -25,7 +25,12 @@
     <string name="source">openweathermap.com</string>
     <string name="sign_out">Sign out</string>
     <string name="fab_open_map_description">Open map selection</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Log out</string>
     <string name="continue_with_twitter">Continue with Twitter</string>
     <string name="continue_with_google">Continue with Google</string>
+    <string name="weather_report">Today: %d↑ %d↓ %s. Wind speed: %f m/s Pressure: %d hPa Precipitation prob. %d%%</string>
+    <string name="notification_title">Daily Weather Report</string>
+    <string name="notification_text">Today:  %d°↑ %d°↓ %s.\n\nTap to discover hourly forecast, precipitation probability and much more!</string>
+    <string name="use_without_an_account">Use without an account</string>
+    <string name="sign_in">Sign in</string>
 </resources>

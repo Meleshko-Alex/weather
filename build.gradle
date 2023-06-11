@@ -20,6 +20,7 @@ buildscript {
         googleauth_version = "22.0.0"
         googleanalytics_version = "21.3.0"
         glide_version = "4.15.1"
+        work_version = "2.8.1"
     }
 }
 

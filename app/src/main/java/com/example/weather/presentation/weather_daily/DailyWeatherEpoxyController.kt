@@ -16,6 +16,7 @@ class DailyWeatherEpoxyController : EpoxyController() {
         }
 
     override fun buildModels() {
+        // display weather for the next 7 days
         items.forEach {
             ItemWeatherCardEpoxyModel(it).id(it.timeDate).addTo(this@DailyWeatherEpoxyController)
         }

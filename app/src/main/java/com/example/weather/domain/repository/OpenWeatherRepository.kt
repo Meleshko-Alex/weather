@@ -2,6 +2,7 @@ package com.example.weather.domain.repository
 
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.weather.DailyWeather
+import com.example.weather.domain.models.weather.DailyWeatherReport
 import com.example.weather.domain.models.weather.HourlyWeather
 
 interface OpenWeatherRepository {
@@ -17,6 +18,12 @@ interface OpenWeatherRepository {
         longitude: Double,
         units: String = Units.METRIC.value
     ): NetworkResult<DailyWeather>
+
+    suspend fun getDailyWeatherReport(
+        latitude: Double,
+        longitude: Double,
+        units: String = Units.METRIC.value
+    ): NetworkResult<DailyWeatherReport>
 
     companion object {
 

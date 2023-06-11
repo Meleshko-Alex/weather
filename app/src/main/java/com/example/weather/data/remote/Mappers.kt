@@ -7,6 +7,7 @@ import com.example.weather.data.remote.dto.SearchCityResultDto
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.cities.SearchCity
 import com.example.weather.domain.models.weather.DailyWeather
+import com.example.weather.domain.models.weather.DailyWeatherReport
 import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.domain.models.weather.OneDayWeather
 import com.example.weather.domain.models.weather.OneHourWeather
@@ -58,8 +59,21 @@ fun DailyWeatherDto.toDailyWeather(): DailyWeather {
                 timeDate = it.forecastedTime,
                 minTemp = it.temp.min.toInt(),
                 maxTemp = it.temp.max.toInt(),
-                weather = WeatherType.toWeatherType(it.weather[0].id)
+                weather = WeatherType.toWeatherType(it.weather[0].id),
+                summary = it.summary,
             )
         }.subList(1, daily.size)
+    )
+}
+
+fun DailyWeatherDto.toDailyWeatherReport(): DailyWeatherReport {
+    val weather = daily[0]
+    return DailyWeatherReport(
+        summary = weather.summary,
+        minTemp = weather.temp.min.toInt(),
+        maxTemp = weather.temp.max.toInt(),
+        windSpeed = weather.windSpeed,
+        pressure = weather.pressure,
+        precipitationProbability = (weather.precipitationProbability * 100).toInt()
     )
 }

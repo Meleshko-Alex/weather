@@ -28,32 +28,51 @@ class DailyWeatherViewModel @Inject constructor(
 
     private var _state = MutableLiveData<State<DailyWeather>>()
     val state: LiveData<State<DailyWeather>> = _state
-    val currentCity = dataStoreManager.getCurrentCity().asLiveData()
+    val userPref = dataStoreManager.getUserPref().asLiveData()
+    private var isFetched = true // true by default since we get data in HomeWeatherViewModel
 
     fun getWeatherData(
         latitude: Double,
         longitude: Double,
+        measurementUnit: String
     ) {
         _state.value = State.Loading()
 
         // get cached data from db if not Internet connection detected, make an api call otherwise
-        if (!hasInternetConnection()) {
-            viewModelScope.launch(Dispatchers.IO) {
-                _state.postValue(State.Success(databaseRepository.getDailyWeatherData()))
-            }
+        if (!hasInternetConnection() || isFetched) {
+            getCachedData()
         } else {
-            viewModelScope.launch(Dispatchers.IO) {
-                when (val result = repository.getDailyWeather(latitude, longitude)) {
-                    is NetworkResult.Success -> {
-                        _state.postValue(State.Success(result.data!!))
-                        databaseRepository.saveDailyWeatherData(result.data)
-                    }
+            getDailyWeatherData(latitude, longitude, measurementUnit)
+        }
+    }
 
-                    is NetworkResult.Error -> {
-                        _state.postValue(State.Error(result.message!!))
-                    }
+    private fun getCachedData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _state.postValue(State.Success(databaseRepository.getDailyWeatherData()))
+        }
+    }
+
+    private fun getDailyWeatherData(
+        latitude: Double,
+        longitude: Double,
+        measurementUnit: String
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val result = repository.getDailyWeather(latitude, longitude, measurementUnit)) {
+                is NetworkResult.Success -> {
+                    _state.postValue(State.Success(result.data!!))
+                    databaseRepository.saveDailyWeatherData(result.data)
+                    isFetched = true
+                }
+
+                is NetworkResult.Error -> {
+                    _state.postValue(State.Error(result.message!!))
                 }
             }
         }
+    }
+
+    fun fetchData() {
+        isFetched = false
     }
 }
