@@ -2,16 +2,16 @@ package com.example.weather.di
 
 import android.content.Context
 import com.example.weather.common.DataStoreManager
+import com.example.weather.data.local.EntityMapper
 import com.example.weather.data.local.dao.CitiesDao
 import com.example.weather.data.local.dao.DailyWeatherDao
 import com.example.weather.data.local.dao.HourlyWeatherDao
 import com.example.weather.data.local.database.WeatherDatabase
+import com.example.weather.data.remote.DtoMapper
 import com.example.weather.data.remote.api.AccuWeatherService
-import com.example.weather.data.remote.retrofit.OpenWeatherRetrofitClient
 import com.example.weather.data.remote.api.OpenWeatherService
 import com.example.weather.data.remote.retrofit.AccuWeatherRetrofitClient
-import com.example.weather.domain.repository.WeatherDatabaseRepository
-import com.google.gson.Gson
+import com.example.weather.data.remote.retrofit.OpenWeatherRetrofitClient
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -59,4 +59,16 @@ class AppModule {
     @Singleton
     fun provideDataStoreManager(@ApplicationContext context: Context): DataStoreManager =
         DataStoreManager(context)
+
+    @Provides
+    @Singleton
+    fun provideDtoMapper(): DtoMapper {
+        return DtoMapper()
+    }
+
+    @Provides
+    @Singleton
+    fun provideEntityMapper(): EntityMapper {
+        return EntityMapper()
+    }
 }

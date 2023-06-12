@@ -1,6 +1,6 @@
 package com.example.weather.domain.models.cities
 
-data class SearchCity(
+data class SearchCityResult(
     val foundCities: List<FoundCity>
 ) {
     data class FoundCity(

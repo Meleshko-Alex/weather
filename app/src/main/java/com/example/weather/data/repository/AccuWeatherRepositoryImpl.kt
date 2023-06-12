@@ -1,30 +1,24 @@
 package com.example.weather.data.repository
 
 import android.util.Log
+import com.example.weather.data.remote.DtoMapper
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.data.remote.api.AccuWeatherService
-import com.example.weather.data.remote.toCity
-import com.example.weather.data.remote.toFoundCity
-import com.example.weather.domain.models.cities.SearchCity
+import com.example.weather.domain.models.cities.SearchCityResult
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.repository.AccuWeatherRepository
 import javax.inject.Inject
 
 class AccuWeatherRepositoryImpl @Inject constructor(
-    private val accuWeatherService: AccuWeatherService
+    private val accuWeatherService: AccuWeatherService,
+    private val mapper: DtoMapper
 ) : AccuWeatherRepository {
 
     override suspend fun getTopCities(): NetworkResult<TopCities> {
         return try {
             val response = accuWeatherService.getTopCities()
             if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(
-                    TopCities(
-                        cities = response.body()!!.map {
-                            it.toCity()
-                        }
-                    )
-                )
+                NetworkResult.Success(TopCities(response.body()!!.map { mapper.mapDtoToCity(it) }))
             } else {
                 throw RuntimeException("Request error: " + response.message())
             }
@@ -33,18 +27,13 @@ class AccuWeatherRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun searchCity(query: String): NetworkResult<SearchCity> {
+    override suspend fun searchCity(query: String): NetworkResult<SearchCityResult> {
         return try {
             val response = accuWeatherService.searchCity(query = query)
             if (response.isSuccessful && !response.body().isNullOrEmpty()) {
                 Log.d("AccuWeatherRepositoryImpl", "searchCity: successful response")
                 NetworkResult.Success(
-                    SearchCity(
-                        foundCities = response.body()!!.map {
-                            it.toFoundCity()
-                        }
-                    )
-                )
+                    SearchCityResult(response.body()!!.map { mapper.mapDtoToFoundCity(it) }))
             } else {
                 Log.d("AccuWeatherRepositoryImpl", "searchCity: unsuccessful response")
                 throw RuntimeException("Request error: " + response.message())

@@ -1,6 +1,9 @@
 package com.example.weather.presentation.weather_home
 
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -8,10 +11,10 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.NotificationWorker
 import com.example.weather.R
+import com.example.weather.WeatherApplication
 import com.example.weather.common.DataStoreManager
 import com.example.weather.common.SharedPref
 import com.example.weather.common.Utils
-import com.example.weather.common.hasInternetConnection
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.HourlyWeather
@@ -107,5 +110,18 @@ class HomeWeatherViewModel @Inject constructor(
 
     private fun scheduleWeatherNotification() {
         NotificationWorker.schedule(app)
+    }
+
+    private fun hasInternetConnection(): Boolean {
+        val connectivityManager =
+            getApplication<WeatherApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetwork = connectivityManager.activeNetwork ?: return false
+        val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+        return when {
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+            else -> false
+        }
     }
 }

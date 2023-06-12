@@ -6,7 +6,7 @@ import com.airbnb.epoxy.EpoxyController
 import com.example.weather.R
 import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.ItemCityBinding
-import com.example.weather.domain.models.cities.SearchCity
+import com.example.weather.domain.models.cities.SearchCityResult
 
 class CitiesEpoxyController(
     private val context: Context,
@@ -19,7 +19,7 @@ class CitiesEpoxyController(
             requestModelBuild()
         }
 
-    var searchResultCities: List<SearchCity.FoundCity> = emptyList()
+    var searchResultCities: List<SearchCityResult.FoundCity> = emptyList()
         set(value) {
             field = value
             requestModelBuild()
@@ -59,7 +59,7 @@ class CitiesEpoxyController(
     }
 
     data class ItemFoundCityEpoxyModel(
-        val city: SearchCity.FoundCity,
+        val city: SearchCityResult.FoundCity,
         val context: Context,
         val onItemClicked: (City) -> Unit
     ) : ViewBindingKotlinModel<ItemCityBinding>(R.layout.item_city) {

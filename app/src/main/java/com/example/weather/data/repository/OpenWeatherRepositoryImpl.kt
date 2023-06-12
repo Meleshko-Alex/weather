@@ -1,14 +1,16 @@
 package com.example.weather.data.repository
 
+import com.example.weather.data.remote.DtoMapper
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.data.remote.api.OpenWeatherService
-import com.example.weather.data.remote.toWeather
 import com.example.weather.domain.models.weather.Weather
 import com.example.weather.domain.repository.OpenWeatherRepository
 import javax.inject.Inject
 
-class OpenWeatherRepositoryImpl @Inject constructor(private val weatherService: OpenWeatherService) :
-    OpenWeatherRepository {
+class OpenWeatherRepositoryImpl @Inject constructor(
+    private val weatherService: OpenWeatherService,
+    private val mapper: DtoMapper
+) : OpenWeatherRepository {
 
     override suspend fun getWeather(
         latitude: Double,
@@ -22,7 +24,7 @@ class OpenWeatherRepositoryImpl @Inject constructor(private val weatherService: 
                 units = units.lowercase()
             )
             if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(response.body()!!.toWeather())
+                NetworkResult.Success(mapper.mapDtoToWeather(response.body()!!))
             } else {
                 throw RuntimeException("Request error: ${response.message()}")
             }

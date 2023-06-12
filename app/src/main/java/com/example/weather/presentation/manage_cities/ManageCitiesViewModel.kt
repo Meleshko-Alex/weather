@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.weather.common.DataStoreManager
 import com.example.weather.domain.models.cities.City
 import com.example.weather.data.remote.NetworkResult
-import com.example.weather.domain.models.cities.SearchCity
+import com.example.weather.domain.models.cities.SearchCityResult
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.repository.AccuWeatherRepository
 import com.example.weather.domain.repository.WeatherDatabaseRepository
@@ -25,8 +25,8 @@ class ManageCitiesViewModel @Inject constructor(
 ): ViewModel() {
     private var _citiesState = MutableLiveData<State<TopCities>>()
     val citiesState: LiveData<State<TopCities>> = _citiesState
-    private var _searchCityState = MutableLiveData<State<SearchCity>>()
-    val searchCityState: LiveData<State<SearchCity>> = _searchCityState
+    private var _searchCityState = MutableLiveData<State<SearchCityResult>>()
+    val searchCityState: LiveData<State<SearchCityResult>> = _searchCityState
     var searchQuery: String? = null
     val currentCity = dataStoreManager.getCurrentCity().asLiveData()
 

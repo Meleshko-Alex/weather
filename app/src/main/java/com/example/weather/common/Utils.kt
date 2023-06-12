@@ -39,16 +39,3 @@ object Utils {
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(format)
     }
 }
-
-fun AndroidViewModel.hasInternetConnection(): Boolean {
-    val connectivityManager =
-        getApplication<WeatherApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    val activeNetwork = connectivityManager.activeNetwork ?: return false
-    val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-    return when {
-        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-        else -> false
-    }
-}
