@@ -4,26 +4,15 @@ import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.DailyWeatherReport
 import com.example.weather.domain.models.weather.HourlyWeather
+import com.example.weather.domain.models.weather.Weather
 
 interface OpenWeatherRepository {
 
-    suspend fun getHourlyWeather(
+    suspend fun getWeather(
         latitude: Double,
         longitude: Double,
         units: String = Units.METRIC.value
-    ): NetworkResult<HourlyWeather>
-
-    suspend fun getDailyWeather(
-        latitude: Double,
-        longitude: Double,
-        units: String = Units.METRIC.value
-    ): NetworkResult<DailyWeather>
-
-    suspend fun getDailyWeatherReport(
-        latitude: Double,
-        longitude: Double,
-        units: String = Units.METRIC.value
-    ): NetworkResult<DailyWeatherReport>
+    ): NetworkResult<Weather>
 
     companion object {
 

@@ -1,17 +1,54 @@
 package com.example.weather.data.remote
 
 import com.example.weather.data.remote.dto.CityDto
-import com.example.weather.data.remote.dto.DailyWeatherDto
-import com.example.weather.data.remote.dto.HourlyWeatherDto
+import com.example.weather.data.remote.dto.OneDayWeatherDto
+import com.example.weather.data.remote.dto.OneHourWeatherDto
 import com.example.weather.data.remote.dto.SearchCityResultDto
+import com.example.weather.data.remote.dto.WeatherDto
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.cities.SearchCity
-import com.example.weather.domain.models.weather.DailyWeather
-import com.example.weather.domain.models.weather.DailyWeatherReport
-import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.domain.models.weather.OneDayWeather
 import com.example.weather.domain.models.weather.OneHourWeather
+import com.example.weather.domain.models.weather.Weather
 import com.example.weather.domain.models.weather.WeatherType
+
+fun WeatherDto.toWeather(): Weather {
+    val hourly = hourly.map {
+        it.toOneHourWeather()
+    }
+    val daily = daily.map{
+        it.toOneDayWeather()
+    }
+    return Weather(
+        current = hourly[0],
+        hourly = hourly.subList(0, 24),
+        daily = daily.subList(1, daily.size)
+    )
+}
+
+fun OneHourWeatherDto.toOneHourWeather(): OneHourWeather {
+    return OneHourWeather(
+        weatherId = weather[0].id,
+        timeDate = forecastedTime,
+        temp = temp.toInt(),
+        feelsLikeTemperature = feelsLikeTemperature.toInt(),
+        humidity = humidity,
+        uvi = uvi.toInt(),
+        windSpeed = windSpeed,
+        weather = WeatherType.toWeatherType(weather[0].id)
+    )
+}
+
+fun OneDayWeatherDto.toOneDayWeather(): OneDayWeather {
+    return OneDayWeather(
+        weatherId = weather[0].id,
+        timeDate = forecastedTime,
+        minTemp = temp.min.toInt(),
+        maxTemp = temp.max.toInt(),
+        weather = WeatherType.toWeatherType(weather[0].id),
+        summary = summary,
+    )
+}
 
 fun CityDto.toCity(): City {
     return City(
@@ -28,52 +65,5 @@ fun SearchCityResultDto.toFoundCity(): SearchCity.FoundCity {
         countryName = country.englishName,
         latitude = geoPosition.latitude,
         longitude = geoPosition.longitude
-    )
-}
-
-fun HourlyWeatherDto.toCurrentAndHourlyWeather(): HourlyWeather {
-    val hourlyWeather = hourly.map { currentWeatherDto ->
-        OneHourWeather(
-            weatherId = currentWeatherDto.weather[0].id,
-            timeDate = currentWeatherDto.forecastedTime,
-            temp = currentWeatherDto.temp.toInt(),
-            feelsLikeTemperature = currentWeatherDto.feelsLikeTemperature.toInt(),
-            humidity = currentWeatherDto.humidity,
-            uvi = currentWeatherDto.uvi.toInt(),
-            windSpeed = currentWeatherDto.windSpeed,
-            weather = WeatherType.toWeatherType(currentWeatherDto.weather[0].id)
-        )
-    }
-    val currentWeather = hourlyWeather[0]
-    return HourlyWeather(
-        current = currentWeather,
-        hourly = hourlyWeather.subList(0, 24) // 24hr range
-    )
-}
-
-fun DailyWeatherDto.toDailyWeather(): DailyWeather {
-    return DailyWeather(
-        daily = daily.map {
-            OneDayWeather(
-                weatherId = it.weather[0].id,
-                timeDate = it.forecastedTime,
-                minTemp = it.temp.min.toInt(),
-                maxTemp = it.temp.max.toInt(),
-                weather = WeatherType.toWeatherType(it.weather[0].id),
-                summary = it.summary,
-            )
-        }.subList(1, daily.size)
-    )
-}
-
-fun DailyWeatherDto.toDailyWeatherReport(): DailyWeatherReport {
-    val weather = daily[0]
-    return DailyWeatherReport(
-        summary = weather.summary,
-        minTemp = weather.temp.min.toInt(),
-        maxTemp = weather.temp.max.toInt(),
-        windSpeed = weather.windSpeed,
-        pressure = weather.pressure,
-        precipitationProbability = (weather.precipitationProbability * 100).toInt()
     )
 }

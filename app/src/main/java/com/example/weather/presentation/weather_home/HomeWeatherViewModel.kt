@@ -1,7 +1,6 @@
 package com.example.weather.presentation.weather_home
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,6 +13,7 @@ import com.example.weather.common.SharedPref
 import com.example.weather.common.Utils
 import com.example.weather.common.hasInternetConnection
 import com.example.weather.data.remote.NetworkResult
+import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.domain.models.weather.OneDayWeather
 import com.example.weather.domain.models.weather.WeatherToday
@@ -22,18 +22,16 @@ import com.example.weather.domain.repository.WeatherDatabaseRepository
 import com.example.weather.presentation.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import kotlin.math.log
-import kotlin.time.measureTimedValue
 
 @HiltViewModel
 class HomeWeatherViewModel @Inject constructor(
-    private val repository: OpenWeatherRepository,
+    private val remoteRepository: OpenWeatherRepository,
     private val databaseRepository: WeatherDatabaseRepository,
     private val app: Application,
     dataStoreManager: DataStoreManager
 ) : AndroidViewModel(app) {
+
     private var _state = MutableLiveData<State<HourlyWeather>>()
     val state: LiveData<State<HourlyWeather>> = _state
     val userPref = dataStoreManager.getUserPref().asLiveData()
@@ -55,11 +53,29 @@ class HomeWeatherViewModel @Inject constructor(
             getCachedData()
         } else {
             viewModelScope.launch {
-                // get hourly weather
-                getHourlyWeather(latitude, longitude, measurementUnit)
+                when (val result = remoteRepository.getWeather(latitude, longitude, measurementUnit)) {
+                    is NetworkResult.Success -> {
+                        isFetched = true
+                        val hourlyWeather = HourlyWeather(
+                            current = result.data!!.current,
+                            hourly = result.data.hourly
+                        )
 
-                // get and cache daily weather
-                getDailyWeather(latitude, longitude, measurementUnit)
+                        // send data to UI
+                        _state.postValue(State.Success(hourlyWeather))
+
+                        // cache data
+                        databaseRepository.saveHourlyWeatherData(hourlyWeather)
+                        databaseRepository.saveDailyWeatherData(DailyWeather(result.data.daily))
+
+                        // save weather data for the next day in Shared Preferences
+                        saveTomorrowWeather(result.data.daily[0])
+                    }
+
+                    is NetworkResult.Error -> {
+                        _state.postValue(State.Error(result.message!!))
+                    }
+                }
             }
         }
     }
@@ -70,50 +86,18 @@ class HomeWeatherViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getHourlyWeather(
-        latitude: Double,
-        longitude: Double,
-        measurementUnit: String
-    ) {
-        when (val result = repository.getHourlyWeather(latitude, longitude, measurementUnit)) {
-            is NetworkResult.Success -> {
-                _state.postValue(State.Success(result.data!!))
-                // save data to db
-                databaseRepository.saveHourlyWeatherData(result.data)
-                isFetched = true
-            }
-
-            is NetworkResult.Error -> {
-                _state.postValue(State.Error(result.message!!))
-            }
-        }
-    }
-
-    private suspend fun getDailyWeather(
-        latitude: Double,
-        longitude: Double,
-        measurementUnit: String
-    ) {
-        fun saveTomorrowWeather(weather: OneDayWeather) {
-            with(weather) {
-                val weatherToday = WeatherToday(
-                    date = Utils.convertEpochToLocalDate(this.timeDate, java.time.format.DateTimeFormatter.ofPattern("MM.dd.yyyy")),
-                    summary = app.applicationContext.getString(
-                        R.string.notification_text,
-                        this.maxTemp,
-                        this.minTemp,
-                        this.summary
-                    )
+    private fun saveTomorrowWeather(weather: OneDayWeather) {
+        with(weather) {
+            val weatherToday = WeatherToday(
+                date = Utils.convertEpochToLocalDate(this.timeDate, java.time.format.DateTimeFormatter.ofPattern("MM.dd.yyyy")),
+                summary = app.applicationContext.getString(
+                    R.string.notification_text,
+                    this.maxTemp,
+                    this.minTemp,
+                    this.summary
                 )
-                SharedPref(app).setWeatherToday(weatherToday)
-            }
-        }
-
-        val result = repository.getDailyWeather(latitude, longitude, measurementUnit)
-        if (result is NetworkResult.Success) {
-            // save tomorrows weather in shared pref for use in notification
-            saveTomorrowWeather(result.data!!.daily[0])
-            databaseRepository.saveDailyWeatherData(result.data)
+            )
+            SharedPref(app).setWeatherToday(weatherToday)
         }
     }
 

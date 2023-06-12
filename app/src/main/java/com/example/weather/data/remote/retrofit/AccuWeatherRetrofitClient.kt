@@ -17,10 +17,12 @@ class AccuWeatherRetrofitClient {
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build()
             Retrofit.Builder()
-                .baseUrl(AccuWeatherService.BASE_URL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .client(okHttp)
                 .build()
         }
+
+        private const val BASE_URL = "https://dataservice.accuweather.com/"
     }
 }

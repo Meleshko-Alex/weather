@@ -44,13 +44,6 @@ class DailyWeatherFragment : Fragment() {
         setProgressBarColor()
         observeViewModel()
         setUpEpoxyRecyclerView()
-        binding.swipeRefreshLayout.apply {
-            setOnRefreshListener {
-                viewModel.fetchData()
-                getWeatherData()
-                isRefreshing = false
-            }
-        }
     }
 
     private fun observeViewModel() {
@@ -130,7 +123,7 @@ class DailyWeatherFragment : Fragment() {
     }
 
     private fun getWeatherData() {
-        viewModel.getWeatherData(latitude = city.latitude, longitude = city.longitude, measurementUnit = measurementUnit)
+        viewModel.getDailyWeatherData()
     }
 
     private fun setUpEpoxyRecyclerView() {

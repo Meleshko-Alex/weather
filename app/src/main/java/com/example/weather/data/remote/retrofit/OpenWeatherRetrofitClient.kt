@@ -16,10 +16,12 @@ class OpenWeatherRetrofitClient {
                 .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
                 .build()
             Retrofit.Builder()
-                .baseUrl(OpenWeatherService.BASE_URL)
+                .baseUrl(BASE_URL)
                 .addConverterFactory(MoshiConverterFactory.create(moshi))
                 .client(okHttp)
                 .build()
         }
+
+        private const val BASE_URL = "https://api.openweathermap.org/data/3.0/"
     }
 }
