@@ -71,13 +71,19 @@
         app:layout_constraintStart_toStartOf="@id/tvFinishDateHeader"
         android:text="Generate" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="260dp" />
+
     <com.robinhood.spark.SparkView
         android:id="@+id/sparkGraph"
         android:layout_width="match_parent"
         android:layout_height="160dp"
-        android:layout_marginTop="22dp"
         android:layout_marginHorizontal="@dimen/main_horizontal_indent"
-        app:layout_constraintTop_toBottomOf="@id/btnGenerate"
+        app:layout_constraintTop_toBottomOf="@id/guideline"
         tools:layout_editor_absoluteX="20dp" />
 
     <TextView
@@ -89,4 +95,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/sparkGraph" />
 
+    <FrameLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/sparkGraph"
+        app:layout_constraintTop_toTopOf="@id/guideline">
+
+        <include
+            layout="@layout/loading_indicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

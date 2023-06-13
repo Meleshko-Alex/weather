@@ -7,11 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.room.util.wrapMappedColumns
+import com.example.weather.R
 import com.example.weather.databinding.FragmentTemperatureGraphBinding
 import com.example.weather.domain.models.cities.City
+import com.example.weather.domain.models.weather.HistoricalWeather
+import com.example.weather.presentation.State
 import dagger.hilt.android.AndroidEntryPoint
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -65,9 +69,31 @@ class TemperatureGraphFragment : Fragment() {
                 units = measurementUnit
             )
         }
-        viewModel.a.observe(viewLifecycleOwner) {
-            binding.tvScrubbedText.text = it
+
+        viewModel.historicalWeatherState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is State.Success -> {
+                    hideLoading()
+                    buildGraph(state.data!!)
+                }
+
+                is State.Loading -> {
+                    displayLoading()
+                }
+
+                is State.Error -> {
+                    hideLoading()
+                }
+            }
         }
+    }
+
+    private fun displayLoading() {
+        binding.progressBar.visibility = View.VISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.progressBar.visibility = View.INVISIBLE
     }
 
     private fun showStartDatePickerDialog() {
@@ -114,6 +140,20 @@ class TemperatureGraphFragment : Fragment() {
             if (inMillis > maxDate) maxDate else inMillis
         }
         dp.show()
+    }
+
+
+    private fun buildGraph(data: List<HistoricalWeather>) {
+        binding.sparkGraph.apply {
+            adapter = MySparkAdapter(data)
+            lineColor = ContextCompat.getColor(requireContext(), R.color.blue)
+            isScrubEnabled = true
+            setScrubListener {
+                if (it != null) {
+                    binding.tvScrubbedText.text = it.toString()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {

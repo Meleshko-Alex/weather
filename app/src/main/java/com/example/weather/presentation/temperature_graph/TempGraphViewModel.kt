@@ -11,6 +11,7 @@ import com.example.weather.common.DataStoreManager
 import com.example.weather.data.remote.NetworkResult
 import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.repository.OpenWeatherRepository
+import com.example.weather.presentation.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.job
@@ -34,7 +35,7 @@ class TempGraphViewModel @Inject constructor(
     private var _finishDate = MutableLiveData<Calendar>()
     val finishDate: LiveData<Calendar> = _finishDate
     val userPref = dataStoreManager.getUserPref().asLiveData()
-    val a = MutableLiveData<String>()
+    val historicalWeatherState = MutableLiveData<State<List<HistoricalWeather>>>()
 
     fun setStartDate(date: Calendar) {
         _startDate.value = date
@@ -78,8 +79,10 @@ class TempGraphViewModel @Inject constructor(
         }
 
         val map = TreeMap<Int, HistoricalWeather>()
-        val startDate = startDate.value!!
+        val startDate = startDate.value!!.clone() as Calendar
         var i = 0
+
+        historicalWeatherState.value = State.Loading()
 
         viewModelScope.launch {
             val job = viewModelScope.launch(Dispatchers.IO) {
@@ -98,7 +101,7 @@ class TempGraphViewModel @Inject constructor(
                 }
             }
             job.join()
-            a.postValue(map.toString())
+            historicalWeatherState.postValue(State.Success(map.values.toList()))
         }
 
 

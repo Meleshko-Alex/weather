@@ -207,21 +207,6 @@ class HomeWeatherFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-
-//    private fun buildGraphV2() {
-//        binding.sparkGraph?.apply {
-//            adapter = MySparkAdapter(hourlyWeather)
-//            lineColor = ContextCompat.getColor(requireContext(), R.color.blue)
-//            isScrubEnabled = true
-//            setScrubListener {
-//                if (it != null) {
-//                    binding.tvScrabText?.text = it.toString()
-//                }
-//            }
-//        }
-//    }
-
-
     private fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
