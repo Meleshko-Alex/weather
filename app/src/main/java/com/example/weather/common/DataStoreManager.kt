@@ -39,7 +39,7 @@ class DataStoreManager(context: Context) {
                     City::class.java
                 )
             val unit =
-                preferences[DataStorePreferencesKeys.MEASUREMENT_UNITS] ?: Constants.MEASURE_UNIT_METRIC
+                preferences[DataStorePreferencesKeys.MEASUREMENT_UNITS] ?: Constants.MeasurementsUnits.METRIC.value
             UserPref(
                 city = gson.fromJson(currentCity, City::class.java),
                 measurementUnit = unit
@@ -55,7 +55,7 @@ class DataStoreManager(context: Context) {
 
     fun getMeasurementUnit(): Flow<String> {
         return dataStore.data.map { preferences ->
-            preferences[DataStorePreferencesKeys.MEASUREMENT_UNITS] ?: Constants.MEASURE_UNIT_METRIC
+            preferences[DataStorePreferencesKeys.MEASUREMENT_UNITS] ?: Constants.MeasurementsUnits.METRIC.value
         }
     }
 }

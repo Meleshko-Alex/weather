@@ -1,11 +1,5 @@
 package com.example.weather.common
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
-import com.example.weather.WeatherApplication
 import com.example.weather.domain.models.weather.WeatherType
 import java.time.Instant
 import java.time.LocalDateTime
@@ -28,14 +22,14 @@ object Utils {
     }
 
     /**
-     * Returns the local date in the specified [format] from the given [epoch][epochTime]
+     * Returns the local date in the specified [format] from the given [epoch][epoch]
      */
     fun convertEpochToLocalDate(
-        epochTime: Long,
+        epoch: Long,
         format: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d MMM")
     ): String {
         val instant =
-            Instant.ofEpochMilli(epochTime * 1000) // Multiply by 1000 to convert to milliseconds
+            Instant.ofEpochMilli(epoch * 1000) // Multiply by 1000 to convert to milliseconds
         return LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).format(format)
     }
 }

@@ -4,9 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.weather.common.Constants
-import com.example.weather.domain.models.weather.WeatherType
 
-@Entity(tableName = Constants.HOURLYWEATHERCACHE_TABLENAME)
+@Entity(tableName = Constants.HOURLY_WEATHER_CACHE_TABLENAME)
 data class OneHourWeatherEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

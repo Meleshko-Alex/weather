@@ -1,9 +1,8 @@
 package com.example.weather.domain.repository
 
+import com.example.weather.common.Constants
 import com.example.weather.data.remote.NetworkResult
-import com.example.weather.domain.models.weather.DailyWeather
-import com.example.weather.domain.models.weather.DailyWeatherReport
-import com.example.weather.domain.models.weather.HourlyWeather
+import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.models.weather.Weather
 
 interface OpenWeatherRepository {
@@ -11,15 +10,13 @@ interface OpenWeatherRepository {
     suspend fun getWeather(
         latitude: Double,
         longitude: Double,
-        units: String = Units.METRIC.value
+        units: String
     ): NetworkResult<Weather>
 
-    companion object {
-
-        enum class Units(val value: String) {
-            KELVIN("standard"),
-            METRIC("metric"),
-            IMPERIAL("imperial")
-        }
-    }
+    suspend fun getHistoricalWeather(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        dateTime: Long
+    ): NetworkResult<HistoricalWeather>
 }

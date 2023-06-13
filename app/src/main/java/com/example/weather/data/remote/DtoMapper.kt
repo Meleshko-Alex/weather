@@ -1,14 +1,20 @@
 package com.example.weather.data.remote
 
+import com.example.weather.common.Utils
 import com.example.weather.data.remote.dto.CityDto
+import com.example.weather.data.remote.dto.HistoricalWeatherDto
+import com.example.weather.data.remote.dto.OneDayWeatherDto
+import com.example.weather.data.remote.dto.OneHourWeatherDto
 import com.example.weather.data.remote.dto.SearchCityResultDto
 import com.example.weather.data.remote.dto.WeatherDto
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.cities.SearchCityResult
+import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.models.weather.OneDayWeather
 import com.example.weather.domain.models.weather.OneHourWeather
 import com.example.weather.domain.models.weather.Weather
 import com.example.weather.domain.models.weather.WeatherType
+import java.time.format.DateTimeFormatter
 
 class DtoMapper {
     fun mapDtoToWeather(model: WeatherDto): Weather {
@@ -25,7 +31,7 @@ class DtoMapper {
         )
     }
 
-    private fun mapDtoToOneHourWeather(model: WeatherDto.OneHourWeatherDto): OneHourWeather {
+    fun mapDtoToOneHourWeather(model: OneHourWeatherDto): OneHourWeather {
         return OneHourWeather(
             weatherId = model.weather[0].id,
             timeDate = model.forecastedTime,
@@ -38,7 +44,7 @@ class DtoMapper {
         )
     }
 
-    private fun mapDtoToOneDayWeather(model: WeatherDto.OneDayWeatherDto): OneDayWeather {
+    fun mapDtoToOneDayWeather(model: OneDayWeatherDto): OneDayWeather {
         return OneDayWeather(
             weatherId = model.weather[0].id,
             timeDate = model.forecastedTime,
@@ -64,6 +70,16 @@ class DtoMapper {
             countryName = model.country.englishName,
             latitude = model.geoPosition.latitude,
             longitude = model.geoPosition.longitude
+        )
+    }
+
+    fun mapDtoToHistoricalWeather(model: HistoricalWeatherDto): HistoricalWeather {
+        return HistoricalWeather(
+            date = Utils.convertEpochToLocalDate(
+                epoch = model.data[0].forecastedTime,
+                format = DateTimeFormatter.ofPattern("dd.MM.yyyy")
+            ),
+            temp = model.data[0].temp.toInt()
         )
     }
 }

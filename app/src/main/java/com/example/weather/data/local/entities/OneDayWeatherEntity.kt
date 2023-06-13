@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.weather.common.Constants
 
-@Entity(tableName = Constants.DAILYWEATHERCACHE_TABLENAME)
+@Entity(tableName = Constants.DAILY_WEATHER_CACHE_TABLENAME)
 data class OneDayWeatherEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

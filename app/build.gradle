@@ -18,7 +18,6 @@ android {
         targetSdk 33
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildFeatures {
@@ -99,6 +98,12 @@ dependencies {
 
     // Work Manager
     implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    // GraphView
+    implementation "com.jjoe64:graphview:$graphview_version"
+
+    // Spark
+    implementation 'com.robinhood.spark:spark:1.2.0'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

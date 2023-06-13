@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuInflater
@@ -102,7 +101,7 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun setUpMeasurementUnitSelectionDialog(): AlertDialog {
-        val items = arrayOf(Constants.MEASURE_UNIT_METRIC, Constants.MEASURE_UNIT_IMPERIAL)
+        val items = arrayOf(Constants.MeasurementsUnits.METRIC.value, Constants.MeasurementsUnits.IMPERIAL.value)
         return AlertDialog.Builder(requireActivity())
             .setTitle("Select units of measurement")
             .setSingleChoiceItems(items, items.indexOf(checkedUnit)) { dialog, selectedItem ->

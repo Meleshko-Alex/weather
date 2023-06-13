@@ -36,6 +36,7 @@ class HomeWeatherFragment : Fragment() {
     private lateinit var epoxyController: HourlyWeatherEpoxyController
     private lateinit var currentCity: City
     private lateinit var measurementUnit: String
+    private lateinit var hourlyWeather: List<OneHourWeather>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +100,9 @@ class HomeWeatherFragment : Fragment() {
                 is State.Success -> {
                     hideLoading()
                     val weather = state.data!!
+                    hourlyWeather = weather.hourly
                     epoxyController.items = weather.hourly
+//                    buildGraphV2()
                     bindWeatherData(weather.current)
                 }
 
@@ -160,7 +163,7 @@ class HomeWeatherFragment : Fragment() {
         }
 
         binding.layoutWeatherInfoMain.cardWeatherAdditionalInfo.apply {
-            tvWind.text = if (measurementUnit == Constants.MEASURE_UNIT_METRIC) {
+            tvWind.text = if (measurementUnit == Constants.MeasurementsUnits.METRIC.value) {
                 getString(R.string.wind_metric, currentWeather.windSpeed.toString())
             } else {
                 getString(R.string.wind_imperial, currentWeather.windSpeed.toString())
@@ -194,11 +197,30 @@ class HomeWeatherFragment : Fragment() {
                         true
                     }
 
+                    R.id.menu_item_temp_graph -> {
+                        findNavController().navigate(R.id.action_homeWeatherFragment_to_temperatureGraphFragment)
+                        true
+                    }
                     else -> false
                 }
             }
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
+
+
+//    private fun buildGraphV2() {
+//        binding.sparkGraph?.apply {
+//            adapter = MySparkAdapter(hourlyWeather)
+//            lineColor = ContextCompat.getColor(requireContext(), R.color.blue)
+//            isScrubEnabled = true
+//            setScrubListener {
+//                if (it != null) {
+//                    binding.tvScrabText?.text = it.toString()
+//                }
+//            }
+//        }
+//    }
+
 
     private fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE

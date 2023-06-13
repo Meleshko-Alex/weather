@@ -13,4 +13,8 @@
         android:title="@string/user_profile"
         app:showAsAction="ifRoom" />
 
+    <item android:id="@+id/menu_item_temp_graph"
+        android:icon="@drawable/ic_graph"
+        android:title="Temperature graph"
+        app:showAsAction="ifRoom" />
 </menu>

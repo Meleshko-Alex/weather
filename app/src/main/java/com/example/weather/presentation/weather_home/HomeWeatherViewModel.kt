@@ -25,6 +25,9 @@ import com.example.weather.domain.repository.WeatherDatabaseRepository
 import com.example.weather.presentation.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.internal.wait
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
@@ -85,7 +88,12 @@ class HomeWeatherViewModel @Inject constructor(
 
     private fun getCachedData() {
         viewModelScope.launch {
-            _state.postValue(State.Success(databaseRepository.getHourlyWeatherData()))
+            try {
+                _state.postValue(State.Success(databaseRepository.getHourlyWeatherData()))
+            } catch (e: Exception) {
+                _state.postValue(State.Error(e.message ?: "Unknown error occurred during database call"))
+            }
+
         }
     }
 

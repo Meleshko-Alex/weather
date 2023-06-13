@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.os.PersistableBundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -24,7 +23,7 @@ class SplashScreenActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
             finish()
-        }, Constants.SPLAHSCREEN_DISPLAYING_TIME)
+        }, Constants.SPLASH_SCREEN_DISPLAYING_TIME)
     }
 
     private fun setUpActionBar() {
