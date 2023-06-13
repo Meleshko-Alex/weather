@@ -6,7 +6,8 @@
     <string name="feels_like_header">Feels like</string>
     <string name="humidity_header">Humidity</string>
     <string name="next_7_days">Next 7 Days</string>
-    <string name="temperature">%s°</string>
+    <string name="temperature">%d°</string>
+    <string name="temperature_header">Temperature</string>
     <string name="humidity">%s%%</string>
     <string name="wind_metric">%s m/s</string>
     <string name="wind_imperial">%s m/h</string>
@@ -33,4 +34,7 @@
     <string name="notification_text">Today:  %d°↑ %d°↓ %s.\n\nTap to discover hourly forecast, precipitation probability and much more!</string>
     <string name="use_without_an_account">Use without an account</string>
     <string name="sign_in">Sign in</string>
+    <string name="average_header">Average</string>
+    <string name="date_range">%s - %s</string>
+    <string name="user_guide">User guide</string>
 </resources>

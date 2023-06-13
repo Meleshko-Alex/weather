@@ -5,8 +5,12 @@
         <item name="backgroundColor">@color/white</item>
     </style>
 
-    <style name="ButtonRoundCorners" parent="Widget.MaterialComponents.Button">
+    <style name="SmallButtonRoundCorners" parent="Widget.MaterialComponents.Button">
         <item name="cornerRadius">30dp</item>
+    </style>
+
+    <style name="BigButtonRoundCorners" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">50dp</item>
     </style>
 
     <style name="ImageViewRound" parent="">

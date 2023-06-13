@@ -1,8 +1,6 @@
-package com.example.weather.presentation.temperature_graph
+package com.example.weather.presentation.historical_weather
 
 import com.example.weather.domain.models.weather.HistoricalWeather
-import com.example.weather.domain.models.weather.HourlyWeather
-import com.example.weather.domain.models.weather.OneHourWeather
 import com.robinhood.spark.SparkAdapter
 
 class MySparkAdapter(private val historicalWeather: List<HistoricalWeather>) : SparkAdapter() {
@@ -12,7 +10,7 @@ class MySparkAdapter(private val historicalWeather: List<HistoricalWeather>) : S
     }
 
     override fun getItem(index: Int): Any {
-        return "${historicalWeather[index].temp}\n${historicalWeather[index].date}"
+        return "${historicalWeather[index].date} - ${historicalWeather[index].temp}"
     }
 
     override fun getY(index: Int): Float {

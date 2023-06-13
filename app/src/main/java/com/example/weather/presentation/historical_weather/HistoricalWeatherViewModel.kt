@@ -1,6 +1,5 @@
-package com.example.weather.presentation.temperature_graph
+package com.example.weather.presentation.historical_weather
 
-import android.accounts.NetworkErrorException
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,7 +13,8 @@ import com.example.weather.domain.repository.OpenWeatherRepository
 import com.example.weather.presentation.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -25,24 +25,43 @@ import java.util.TreeMap
 import javax.inject.Inject
 
 @HiltViewModel
-class TempGraphViewModel @Inject constructor(
+class HistoricalWeatherViewModel @Inject constructor(
     private val remoteRepository: OpenWeatherRepository,
     dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
-    private var _startDate = MutableLiveData<Calendar>()
-    val startDate: LiveData<Calendar> = _startDate
-    private var _finishDate = MutableLiveData<Calendar>()
-    val finishDate: LiveData<Calendar> = _finishDate
     val userPref = dataStoreManager.getUserPref().asLiveData()
-    val historicalWeatherState = MutableLiveData<State<List<HistoricalWeather>>>()
+
+    private var _startDate = MutableStateFlow<Calendar>(Calendar.getInstance())
+    val startDate: StateFlow<Calendar> = _startDate
+
+    private var _endDate = MutableStateFlow<Calendar>(Calendar.getInstance())
+    val endDate: StateFlow<Calendar> = _endDate
+
+    private var _historicalWeatherState = MutableLiveData<State<List<HistoricalWeather>>>()
+    val historicalWeatherState: LiveData<State<List<HistoricalWeather>>> = _historicalWeatherState
+
+    private var _isEndDateTextInputLayoutEnabled = MutableStateFlow<Boolean>(false)
+    val isEndDateTextInputLayoutEnabled: StateFlow<Boolean> = _isEndDateTextInputLayoutEnabled
+
+    private var _isGenerateButtonEnabled = MutableStateFlow<Boolean>(false)
+    val isGenerateButtonEnabled: StateFlow<Boolean> = _isGenerateButtonEnabled
 
     fun setStartDate(date: Calendar) {
         _startDate.value = date
     }
 
-    fun setFinishDate(date: Calendar) {
-        _finishDate.value = date
+    fun setEndDate(date: Calendar) {
+        _endDate.value = date
+    }
+
+    fun setIsEndDateTextInputLayoutEnabled(value: Boolean) {
+        _isEndDateTextInputLayoutEnabled.value = value
+
+    }
+
+    fun setIsGenerateButtonEnabled(value: Boolean) {
+        _isGenerateButtonEnabled.value = value
     }
 
     fun getDateString(date: Calendar): String {
@@ -58,7 +77,7 @@ class TempGraphViewModel @Inject constructor(
                 this.get(Calendar.DAY_OF_MONTH)
             )
         }
-        val d2 = with(finishDate.value!!) {
+        val d2 = with(endDate.value!!) {
             LocalDate.of(
                 this.get(Calendar.YEAR),
                 this.get(Calendar.MONTH),
@@ -74,26 +93,22 @@ class TempGraphViewModel @Inject constructor(
         longitude: Double,
         units: String
     ) {
-        if (startDate.value == null || finishDate.value == null) {
-            return
-        }
-
         val map = TreeMap<Int, HistoricalWeather>()
-        val startDate = startDate.value!!.clone() as Calendar
+        val startDate = startDate.value.clone() as Calendar
         var i = 0
 
-        historicalWeatherState.value = State.Loading()
+        _historicalWeatherState.value = State.Loading()
 
         viewModelScope.launch {
             val job = viewModelScope.launch(Dispatchers.IO) {
-                while(startDate <= finishDate.value!!) {
+                while(startDate <= endDate.value) {
                     when (val result = remoteRepository.getHistoricalWeather(latitude, longitude, units, startDate.timeInMillis / 1000)) {
                         is NetworkResult.Success -> {
                             map[i] = result.data!!
                         }
 
                         is NetworkResult.Error -> {
-                            Log.e(this@TempGraphViewModel.javaClass.simpleName, result.message!!)
+                            Log.e(this@HistoricalWeatherViewModel.javaClass.simpleName, result.message!!)
                         }
                     }
                     i++
@@ -101,10 +116,15 @@ class TempGraphViewModel @Inject constructor(
                 }
             }
             job.join()
-            historicalWeatherState.postValue(State.Success(map.values.toList()))
+            _historicalWeatherState.postValue(State.Success(map.values.toList()))
         }
+    }
 
-
-
+    fun getAverageTemp(data: List<HistoricalWeather>): Int {
+        var sum = 0
+        data.forEach {
+            sum += it.temp
+        }
+        return sum / data.size
     }
 }

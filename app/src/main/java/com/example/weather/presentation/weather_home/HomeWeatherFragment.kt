@@ -158,7 +158,7 @@ class HomeWeatherFragment : Fragment() {
         binding.layoutWeatherInfoMain.apply {
             tvWeatherName.text = currentWeather.weather.weather.weatherName
             tvDate.text = convertEpochToLocalDate(currentWeather.timeDate)
-            tvTemperature.text = getString(R.string.temperature, currentWeather.temp.toString())
+            tvTemperature.text = getString(R.string.temperature, currentWeather.temp)
             ivWeatherIcon.setImageResource(getWeatherIcon(currentWeather.weather))
         }
 
@@ -168,13 +168,13 @@ class HomeWeatherFragment : Fragment() {
             } else {
                 getString(R.string.wind_imperial, currentWeather.windSpeed.toString())
             }
-            tvFeelsLike.text = getString(R.string.temperature, currentWeather.temp.toString())
+            tvFeelsLike.text = getString(R.string.temperature, currentWeather.temp)
             tvIndexUv.text = currentWeather.uvi.toString()
             tvHumidity.text =
                 getString(R.string.humidity, currentWeather.humidity.toString())
         }
 
-        binding.cardNext7Days?.setOnClickListener {
+        binding.cardNext7Days.setOnClickListener {
             findNavController().navigate(R.id.action_homeWeatherFragment_to_dailyWeatherFragment)
         }
     }
@@ -198,7 +198,7 @@ class HomeWeatherFragment : Fragment() {
                     }
 
                     R.id.menu_item_temp_graph -> {
-                        findNavController().navigate(R.id.action_homeWeatherFragment_to_temperatureGraphFragment)
+                        findNavController().navigate(R.id.action_homeWeatherFragment_to_historicalWeatherFragment)
                         true
                     }
                     else -> false

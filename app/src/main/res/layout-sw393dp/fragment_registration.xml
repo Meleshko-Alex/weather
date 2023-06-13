@@ -43,7 +43,7 @@
 
     <Button
         android:id="@+id/btnSignInGoogle"
-        style="@style/ButtonRoundCorners"
+        style="@style/SmallButtonRoundCorners"
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:layout_marginTop="66dp"
@@ -56,7 +56,7 @@
 
     <Button
         android:id="@+id/btnSignInTwitter"
-        style="@style/ButtonRoundCorners"
+        style="@style/SmallButtonRoundCorners"
         android:layout_width="0dp"
         android:layout_height="52dp"
         android:text="@string/continue_with_twitter"
