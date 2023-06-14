@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/menu_item_cities"
         android:icon="@drawable/ic_city_2"
         android:title="@string/cities"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/menu_item_user_profile"
-        android:icon="@drawable/ic_account_circle_2"
-        android:title="@string/user_profile"
-        app:showAsAction="ifRoom" />
-
-    <item android:id="@+id/menu_item_temp_graph"
-        android:icon="@drawable/ic_graph"
-        android:title="Temperature graph"
         app:showAsAction="ifRoom" />
 </menu>

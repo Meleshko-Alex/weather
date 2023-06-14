@@ -12,6 +12,7 @@ import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
@@ -28,7 +29,6 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 
 class RegistrationFragment : Fragment() {
-    private val TAG = this.javaClass.simpleName
     private var _binding: FragmentRegistrationBinding? = null
     private val binding: FragmentRegistrationBinding get() = _binding!!
     private val auth = FirebaseAuth.getInstance()
@@ -48,6 +48,8 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
+            .setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
         setUpStatusBar()
         signInWithGoogle()

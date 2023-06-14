@@ -9,6 +9,9 @@ import android.text.style.ForegroundColorSpan
 import android.view.*
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.weather.MainActivity
@@ -27,7 +30,6 @@ class DailyWeatherFragment : Fragment() {
     private val epoxyController = DailyWeatherEpoxyController()
     private lateinit var city: City
     private lateinit var measurementUnit: String
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,6 +41,8 @@ class DailyWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
+            .setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
         setUpStatusBar()
         setProgressBarColor()

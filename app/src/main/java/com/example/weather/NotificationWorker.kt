@@ -63,6 +63,24 @@ class NotificationWorker (
                 ExistingPeriodicWorkPolicy.KEEP,
                 notificationRequest
             )
+
+            // test
+            val target1 = Calendar.getInstance()
+            target1.set(Calendar.MINUTE, 0)
+            target1.add(Calendar.HOUR_OF_DAY, 1)
+
+            val notificationRequest1 = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.HOURS)
+                .addTag("TAG REMINDER WORKER 1H")
+                .setInitialDelay(target.timeInMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .setConstraints(constraints)
+                .build()
+
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+                "notifications_every_hour",
+                ExistingPeriodicWorkPolicy.KEEP,
+                notificationRequest1
+            )
+
             Log.d("NotificationWorker", "The work is scheduled")
         }
     }

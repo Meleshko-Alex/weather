@@ -13,6 +13,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -46,6 +48,8 @@ class ManageCitiesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
+            .setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         observeViewModel()
         setUpActionBar()
         setUpEpoxyRecyclerView()

@@ -12,6 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -51,6 +54,8 @@ class HistoricalWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
+            .setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
         observeViewModel()
         setUpMenu()

@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -61,6 +62,8 @@ class HomeWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
+            .setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         observeViewModel()
         setUpActionBar()
         setUpStatusBar()
@@ -192,15 +195,6 @@ class HomeWeatherFragment : Fragment() {
                         true
                     }
 
-                    R.id.menu_item_user_profile -> {
-                        findNavController().navigate(R.id.action_homeWeatherFragment_to_userProfileFragment)
-                        true
-                    }
-
-                    R.id.menu_item_temp_graph -> {
-                        findNavController().navigate(R.id.action_homeWeatherFragment_to_historicalWeatherFragment)
-                        true
-                    }
                     else -> false
                 }
             }

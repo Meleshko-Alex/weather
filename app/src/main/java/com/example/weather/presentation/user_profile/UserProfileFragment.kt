@@ -12,6 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.MenuProvider
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -34,8 +37,6 @@ class UserProfileFragment : Fragment() {
     private val auth = FirebaseAuth.getInstance()
     private val viewModel: UserProfileViewModel by viewModels()
     private lateinit var checkedUnit: String
-    private lateinit var alertDialog: AlertDialog
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,8 +49,9 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
+            .setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
-//        setUpMenu()
         bindUserData()
         observeViewModel()
 
@@ -109,25 +111,6 @@ class UserProfileFragment : Fragment() {
                 dialog.dismiss()
             }
             .create()
-    }
-
-    private fun setUpMenu() {
-        requireActivity().addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.menu_user_profile, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.menu_item_sign_out -> {
-                        logout()
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     private fun logout() {

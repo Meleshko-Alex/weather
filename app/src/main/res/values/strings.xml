@@ -11,7 +11,7 @@
     <string name="humidity">%s%%</string>
     <string name="wind_metric">%s m/s</string>
     <string name="wind_imperial">%s m/h</string>
-    <string name="cities">Cities</string>
+    <string name="cities">Manage cities</string>
     <string name="tip_message">Use search if the city you are looking for is not on the list</string>
     <string name="search">Search</string>
     <string name="found_city_format">%s, %s, %s</string>
@@ -37,4 +37,5 @@
     <string name="average_header">Average</string>
     <string name="date_range">%s - %s</string>
     <string name="user_guide">User guide</string>
+    <string name="historical_weather">Historical weather</string>
 </resources>
