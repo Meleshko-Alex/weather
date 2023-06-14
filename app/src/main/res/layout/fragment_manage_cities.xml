@@ -73,9 +73,9 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/main_horizontal_indent"
         android:layout_marginBottom="16dp"
-        app:tint="@color/white"
+        android:contentDescription="@string/fab_open_map_description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_outline_map_24"
-        android:contentDescription="@string/fab_open_map_description" />
+        app:tint="@color/white" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,6 +16,9 @@ import com.example.weather.domain.models.weather.Weather
 import com.example.weather.domain.models.weather.WeatherType
 import java.time.format.DateTimeFormatter
 
+/**
+ * Responsible for mapping between DTOs and domain models.
+ */
 class DtoMapper {
     fun mapDtoToWeather(model: WeatherDto): Weather {
         val hourly = model.hourly.map {

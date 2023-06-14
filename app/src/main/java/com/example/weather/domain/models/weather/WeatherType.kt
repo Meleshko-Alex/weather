@@ -3,6 +3,11 @@ package com.example.weather.domain.models.weather
 import androidx.annotation.DrawableRes
 import com.example.weather.R
 
+/**
+ * Represents different types of weather conditions, along with their corresponding icons.
+ * @property weather the weather associated with the weather type.
+ * @property icon the Icon object containing the drawable resource IDs for the weather type's icons.
+ */
 sealed class WeatherType(
     val weather: WeatherName,
     val icon: Icon
@@ -239,6 +244,12 @@ sealed class WeatherType(
     )
 
     companion object {
+
+        /**
+         * Mapps the given weather ID to the corresponding WeatherType.
+         * @param id the weather ID
+         * @return the WeatherType corresponding to the provided weather ID.
+         */
         fun toWeatherType(id: Int): WeatherType {
             return when (id) {
                 200 -> LightThunderstorm

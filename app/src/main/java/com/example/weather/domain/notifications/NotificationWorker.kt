@@ -1,7 +1,6 @@
-package com.example.weather
+package com.example.weather.domain.notifications
 
 import android.content.Context
-import android.icu.util.LocaleData
 import android.util.Log
 import androidx.work.Constraints
 import androidx.work.ExistingPeriodicWorkPolicy
@@ -45,7 +44,7 @@ class NotificationWorker (
                 target.add(Calendar.DAY_OF_YEAR, 1)
             }
 
-            // for testing purposes to receive a notification every 15 min use this
+//             for testing purposes to receive a notification every 15 min use this
 //            val notificationRequest = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
 //                .addTag("TAG REMINDER WORKER")
 //                .setInitialDelay(10_000L, TimeUnit.MILLISECONDS)
@@ -62,23 +61,6 @@ class NotificationWorker (
                 "notifications",
                 ExistingPeriodicWorkPolicy.KEEP,
                 notificationRequest
-            )
-
-            // test
-            val target1 = Calendar.getInstance()
-            target1.set(Calendar.MINUTE, 0)
-            target1.add(Calendar.HOUR_OF_DAY, 1)
-
-            val notificationRequest1 = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.HOURS)
-                .addTag("TAG REMINDER WORKER 1H")
-                .setInitialDelay(target.timeInMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .setConstraints(constraints)
-                .build()
-
-            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-                "notifications_every_hour",
-                ExistingPeriodicWorkPolicy.KEEP,
-                notificationRequest1
             )
 
             Log.d("NotificationWorker", "The work is scheduled")

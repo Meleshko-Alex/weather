@@ -8,8 +8,10 @@ import com.example.weather.domain.models.weather.OneDayWeather
 import com.example.weather.domain.models.weather.OneHourWeather
 import com.example.weather.domain.models.weather.WeatherType
 
+/**
+ * Responsible for mapping between data entities and domain models.
+ */
 class EntityMapper {
-
     fun mapEntityToCity(model: CityEntity): City {
         return City(
             name = model.city,

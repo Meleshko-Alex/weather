@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.common.DataStoreManager
-import com.example.weather.data.remote.NetworkResult
+import com.example.weather.common.Resource
 import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.repository.OpenWeatherRepository
 import com.example.weather.presentation.State
@@ -103,11 +103,11 @@ class HistoricalWeatherViewModel @Inject constructor(
             val job = viewModelScope.launch(Dispatchers.IO) {
                 while(startDate <= endDate.value) {
                     when (val result = remoteRepository.getHistoricalWeather(latitude, longitude, units, startDate.timeInMillis / 1000)) {
-                        is NetworkResult.Success -> {
+                        is Resource.Success -> {
                             map[i] = result.data!!
                         }
 
-                        is NetworkResult.Error -> {
+                        is Resource.Error -> {
                             Log.e(this@HistoricalWeatherViewModel.javaClass.simpleName, result.message!!)
                         }
                     }

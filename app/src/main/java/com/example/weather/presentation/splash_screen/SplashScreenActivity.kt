@@ -23,7 +23,7 @@ class SplashScreenActivity : AppCompatActivity() {
         Handler(Looper.getMainLooper()).postDelayed({
             startActivity(Intent(this@SplashScreenActivity, MainActivity::class.java))
             finish()
-        }, Constants.SPLASH_SCREEN_DISPLAYING_TIME)
+        }, SPLASH_SCREEN_DISPLAYING_TIME)
     }
 
     private fun setUpActionBar() {
@@ -42,5 +42,9 @@ class SplashScreenActivity : AppCompatActivity() {
             // change navigation bar background color
             navigationBarColor = ContextCompat.getColor(context, R.color.blue)
         }
+    }
+
+    companion object {
+        private const val SPLASH_SCREEN_DISPLAYING_TIME = 1500L
     }
 }

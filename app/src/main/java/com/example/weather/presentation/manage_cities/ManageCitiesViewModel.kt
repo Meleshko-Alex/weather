@@ -7,7 +7,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.common.DataStoreManager
 import com.example.weather.domain.models.cities.City
-import com.example.weather.data.remote.NetworkResult
+import com.example.weather.common.Resource
 import com.example.weather.domain.models.cities.SearchCityResult
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.repository.AccuWeatherRepository
@@ -31,8 +31,18 @@ class ManageCitiesViewModel @Inject constructor(
     val currentCity = dataStoreManager.getCurrentCity().asLiveData()
 
     fun getTopCities() {
+        _citiesState.value = State.Loading()
+
         viewModelScope.launch {
-            _citiesState.postValue(State.Success(databaseRepository.getTopCities()))
+            when (val resource = databaseRepository.getTopCities()) {
+                is Resource.Success -> {
+                    _citiesState.postValue(State.Success(resource.data!!))
+                }
+
+                is Resource.Error -> {
+                    _citiesState.postValue(State.Error(resource.message!!))
+                }
+            }
         }
     }
 
@@ -41,11 +51,11 @@ class ManageCitiesViewModel @Inject constructor(
 
         viewModelScope.launch {
             when (val result = networkRepository.searchCity(query)) {
-                is NetworkResult.Success -> {
+                is Resource.Success -> {
                     _searchCityState.postValue( State.Success(result.data!!))
                 }
 
-                is NetworkResult.Error -> {
+                is Resource.Error -> {
                     _searchCityState.postValue(State.Error(result.message!!))
                 }
             }

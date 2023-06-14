@@ -4,7 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.weather.common.Constants
 
-@Entity(tableName = Constants.CITIES_TABLENAME)
+/**
+ * Represents a city entity in the local database
+ */
+@Entity(tableName = Constants.CITIES_TABLE_NAME)
 data class CityEntity(
     @PrimaryKey val city: String,
     val latitude: Double,

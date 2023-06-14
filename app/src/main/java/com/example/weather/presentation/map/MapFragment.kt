@@ -12,16 +12,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.ActionBar
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentMapBinding
+import com.example.weather.presentation.BaseFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener
@@ -36,7 +33,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.util.Locale
 
 @AndroidEntryPoint
-class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarkerClickListener {
+class MapFragment : BaseFragment(), OnMapReadyCallback, OnMapClickListener, OnMarkerClickListener {
     private var _binding: FragmentMapBinding? = null
     private val binding: FragmentMapBinding get() = _binding!!
     private val args: MapFragmentArgs by navArgs()
@@ -45,8 +42,8 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
     private val viewModel: MapViewModel by viewModels()
     private var selectedCity: City? = null
     private var actionMode: ActionMode? = null
-    private var actionBar: ActionBar? = null
     private var lastSelectedMarker: Marker? = null
+    private val TAG = this.javaClass.simpleName
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,30 +56,33 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
-            .setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        setUpActionBar()
         currentCity = Gson().fromJson(args.currentCity, City::class.java)
+        setUpActionBar()
+        lockNavigationDrawer()
+        setUpMapFragment()
+    }
+
+    private fun setUpMapFragment() {
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
     }
 
-    private fun setUpActionBar() {
-        actionBar = (requireActivity() as MainActivity).supportActionBar
+    override fun setUpActionBar() {
+        // change Up button icon
         actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
         map = googleMap
-        val position = LatLng(currentCity.latitude, currentCity.longitude)
-        val markedPosition = googleMap.addMarker(
+        val currentPosition = LatLng(currentCity.latitude, currentCity.longitude)
+        val marker = googleMap.addMarker(
             MarkerOptions()
-                .position(position)
+                .position(currentPosition)
                 .title(currentCity.name)
         )
-        lastSelectedMarker = markedPosition
-        markedPosition?.showInfoWindow()
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 10f))
+        lastSelectedMarker = marker
+        marker?.showInfoWindow()
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 10f))
         googleMap.setOnMapClickListener(this)
         googleMap.setOnMarkerClickListener(this)
     }
@@ -90,10 +90,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
     override fun onMapClick(positionClicked: LatLng) {
         checkReadyThen {
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(positionClicked, 10f)
-            val city = getPositionClickedCity(positionClicked)
-            if (city != null) {
-                Log.d(this.javaClass.simpleName, "$city")
-                selectedCity = city
+            val clickedCity = getClickedCityPosition(positionClicked)
+            if (clickedCity != null) {
+                Log.d(TAG, "$clickedCity")
+                selectedCity = clickedCity
                 lastSelectedMarker?.remove()
                 lastSelectedMarker = map.addMarker(
                     MarkerOptions()
@@ -114,9 +114,9 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        val city = getPositionClickedCity(marker.position)
+        val city = getClickedCityPosition(marker.position)
         city?.let {
-            Log.d(this.javaClass.simpleName, "$it")
+            Log.d(TAG, "$it")
             selectedCity = it
             if (actionMode == null) {
                 actionMode = requireActivity().startActionMode(actionModelCallback)
@@ -126,21 +126,21 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
         return false
     }
 
-    private fun getPositionClickedCity(positionClicked: LatLng): City? {
+    private fun getClickedCityPosition(positionClicked: LatLng): City? {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
         val addresses =
             geocoder.getFromLocation(positionClicked.latitude, positionClicked.longitude, 1)
-        Log.d(this.javaClass.simpleName, "$addresses")
+        Log.d(TAG, "$addresses")
         if (!addresses.isNullOrEmpty()) {
             if (addresses[0].locality == null) {
-                Toast.makeText(
+                makeToast(
                     requireContext(),
                     "No city detected. Pick another place or zoom in more and try again",
                     Toast.LENGTH_LONG
-                ).show()
+                )
             } else {
                 return City(
-                    name = addresses[0].locality ?: "",
+                    name = addresses[0].locality,
                     latitude = addresses[0].latitude,
                     longitude = addresses[0].longitude
                 )
@@ -152,16 +152,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
 
     private fun checkReadyThen(stuffToDo: () -> Unit) {
         if (!::map.isInitialized) {
-            Toast.makeText(requireContext(), "The map is not ready", Toast.LENGTH_SHORT).show()
+            makeToast(requireContext(), "The map is not ready", Toast.LENGTH_SHORT)
         } else {
-            stuffToDo()
+            stuffToDo.invoke()
         }
-    }
-
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     private val actionModelCallback = object : ActionMode.Callback {
@@ -206,5 +200,10 @@ class MapFragment : Fragment(), OnMapReadyCallback, OnMapClickListener, OnMarker
 //            actionBar?.show()
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

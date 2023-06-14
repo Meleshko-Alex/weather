@@ -8,13 +8,23 @@ import com.example.weather.data.local.entities.OneDayWeatherEntity
 
 @Dao
 interface DailyWeatherDao {
-
+    /**
+     * Inserts a list of [OneDayWeatherEntity] objects into the database.
+     * @param dailyWeather The list of daily weather entities to be inserted.
+     */
     @Insert
     suspend fun insertDailyWeather(dailyWeather: List<OneDayWeatherEntity>)
 
-    @Query("SELECT * FROM ${Constants.DAILY_WEATHER_CACHE_TABLENAME}")
+    /**
+     * Retrieves all daily weather data from the database.
+     * @return A list of [OneDayWeatherEntity] objects representing all the daily weather data in the database.
+     */
+    @Query("SELECT * FROM ${Constants.DAILY_WEATHER_CACHE_TABLE_NAME}")
     suspend fun getAllDailyWeather(): List<OneDayWeatherEntity>
 
-    @Query("DELETE FROM ${Constants.DAILY_WEATHER_CACHE_TABLENAME}")
+    /**
+     * Deletes all daily weather data from the database.
+     */
+    @Query("DELETE FROM ${Constants.DAILY_WEATHER_CACHE_TABLE_NAME}")
     suspend fun deleteAllDailyWeather()
 }

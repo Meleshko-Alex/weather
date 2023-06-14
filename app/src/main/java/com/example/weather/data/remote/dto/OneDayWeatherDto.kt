@@ -2,6 +2,9 @@ package com.example.weather.data.remote.dto
 
 import com.squareup.moshi.Json
 
+/**
+ * Represents the DTO for the daily weather data received from the API
+ */
 data class OneDayWeatherDto(
     @Json(name = "dt") val forecastedTime: Long = 0,
     val sunrise: Int = 0,
@@ -25,6 +28,9 @@ data class OneDayWeatherDto(
     val snow: Double = 0.0,
     val weather: List<WeatherDataDto> = listOf(),
 ) {
+    /**
+     * Represents the DTO for the feels like temperature data.
+     */
     data class FeelsLike(
         val morn: Double = 0.0,
         val day: Double = 0.0,
@@ -32,6 +38,9 @@ data class OneDayWeatherDto(
         val night: Double = 0.0
     )
 
+    /**
+     * Represents the DTO for the temperature data.
+     */
     data class Temp(
         val morn: Double = 0.0,
         val day: Double = 0.0,

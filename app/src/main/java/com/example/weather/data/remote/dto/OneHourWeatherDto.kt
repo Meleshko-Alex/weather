@@ -2,6 +2,9 @@ package com.example.weather.data.remote.dto
 
 import com.squareup.moshi.Json
 
+/**
+ * Represents the DTO for the hourly weather data received from the API
+ */
 data class OneHourWeatherDto(
     @Json(name = "dt") val forecastedTime: Long = 0,
     val temp: Double = 0.0,
@@ -20,10 +23,16 @@ data class OneHourWeatherDto(
     val weather: List<WeatherDataDto> = listOf(),
     @Json(name = "pop") val precipitationProbability: Double = 0.0
 ) {
+    /**
+     * Represents the DTO for the rain data.
+     */
     data class RainDto(
         @Json(name = "1h") val rainVolume1Hour: Double = 0.0
     )
 
+    /**
+     * Represents the DTO for the snow data.
+     */
     data class SnowDto(
         @Json(name = "1h") val snowVolume1Hour: Double = 0.0
     )

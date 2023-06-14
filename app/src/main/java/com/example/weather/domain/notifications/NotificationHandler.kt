@@ -1,4 +1,4 @@
-package com.example.weather
+package com.example.weather.domain.notifications
 
 import android.Manifest
 import android.app.NotificationChannel
@@ -11,7 +11,7 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.example.weather.common.Constants
+import com.example.weather.R
 import com.example.weather.common.SharedPref
 import com.example.weather.presentation.splash_screen.SplashScreenActivity
 import java.time.LocalDateTime
@@ -32,7 +32,7 @@ class NotificationHandler {
         createNotificationChannel(context)
         val weatherReport = getNotificationData(context)
 
-        val notification = NotificationCompat.Builder(context, Constants.NOTIFICATION_CHANNEL_ID)
+        val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_weather_1)
             .setContentTitle("Weather Report")
             .setContentText("Here is your forecast")
@@ -58,10 +58,11 @@ class NotificationHandler {
         }
 
         NotificationManagerCompat.from(context).notify(1, notification)
+        Log.d(this.javaClass.simpleName, "Notification is created")
     }
 
     private fun getNotificationData(context: Context): String {
-        val weather = SharedPref(context).getWeatherToday()
+        val weather = SharedPref(context).getTomorrowWeather()
         val localDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("MM.dd.yyyy"))
         return if (localDate != weather.date) {
             "Tap to view today's weather forecast"
@@ -72,8 +73,8 @@ class NotificationHandler {
 
     private fun createNotificationChannel(context: Context) {
         val notificationChannel = NotificationChannel(
-            Constants.NOTIFICATION_CHANNEL_ID,
-            Constants.NOTIFICATION_CHANNEL_NAME,
+            NOTIFICATION_CHANNEL_ID,
+            NOTIFICATION_CHANNEL_NAME,
             NotificationManager.IMPORTANCE_DEFAULT
         ).apply {
             description = "This channel send weather reports every N\\A"
@@ -81,5 +82,10 @@ class NotificationHandler {
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
         Log.d(this.javaClass.simpleName, "Notification channel is created")
+    }
+
+    companion object {
+        private const val NOTIFICATION_CHANNEL_ID = "weather_report"
+        private const val NOTIFICATION_CHANNEL_NAME = "Weather reports"
     }
 }

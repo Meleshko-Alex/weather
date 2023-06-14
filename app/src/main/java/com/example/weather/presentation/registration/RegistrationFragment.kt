@@ -19,6 +19,7 @@ import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.common.SharedPref
 import com.example.weather.databinding.FragmentRegistrationBinding
+import com.example.weather.presentation.BaseFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -28,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 
-class RegistrationFragment : Fragment() {
+class RegistrationFragment : BaseFragment() {
     private var _binding: FragmentRegistrationBinding? = null
     private val binding: FragmentRegistrationBinding get() = _binding!!
     private val auth = FirebaseAuth.getInstance()
@@ -48,20 +49,19 @@ class RegistrationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
-            .setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
         setUpStatusBar()
+        lockNavigationDrawer()
         signInWithGoogle()
         signInWithTwitter()
         continueWithoutAccount()
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as MainActivity).supportActionBar?.hide()
+    override fun setUpActionBar() {
+        actionBar?.hide()
     }
 
-    private fun setUpStatusBar() {
+    override fun setUpStatusBar() {
         requireActivity().window.apply {
             // change background color
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)

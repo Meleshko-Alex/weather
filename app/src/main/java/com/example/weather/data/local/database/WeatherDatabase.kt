@@ -10,23 +10,29 @@ import com.example.weather.data.local.dao.HourlyWeatherDao
 import com.example.weather.data.local.entities.CityEntity
 import com.example.weather.data.local.entities.OneDayWeatherEntity
 import com.example.weather.data.local.entities.OneHourWeatherEntity
-import com.example.weather.domain.models.cities.City
 
+/**
+ * The main entry point for accessing the local database.
+ */
 @Database(
     entities = [CityEntity::class, OneHourWeatherEntity::class, OneDayWeatherEntity::class],
     version = 1
 )
 abstract class WeatherDatabase : RoomDatabase() {
-
     abstract fun citiesDao(): CitiesDao
     abstract fun hourlyWeatherDao(): HourlyWeatherDao
     abstract fun dailyWeatherDao(): DailyWeatherDao
 
     companion object {
-
         @Volatile
         private var instance: WeatherDatabase? = null
 
+        /**
+         * Creates a new instance of the WeatherDatabase or returns the existing instance if it already exists.
+         *
+         * @param context the application context.
+         * @return the WeatherDatabase instance.
+         */
         fun createDatabase(context: Context): WeatherDatabase {
             return instance ?: synchronized(this) {
                 instance ?: buildDatabase(context).also { instance = it }

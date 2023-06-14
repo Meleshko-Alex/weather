@@ -10,7 +10,7 @@ import com.example.weather.data.local.database.WeatherDatabase
 import com.example.weather.data.remote.DtoMapper
 import com.example.weather.data.remote.api.AccuWeatherService
 import com.example.weather.data.remote.api.OpenWeatherService
-import com.example.weather.data.remote.retrofit.AccuWeatherRetrofitClient
+import com.example.weather.data.remote.retrofit.AccuWeatherClient
 import com.example.weather.data.remote.retrofit.OpenWeatherRetrofitClient
 import dagger.Module
 import dagger.Provides
@@ -31,7 +31,7 @@ class AppModule {
     @Provides
     @Singleton
     fun provideAccuWeatherService(): AccuWeatherService =
-        AccuWeatherRetrofitClient.instance.create(AccuWeatherService::class.java)
+        AccuWeatherClient.instance.create(AccuWeatherService::class.java)
 
     @Provides
     fun provideCitiesDao(database: WeatherDatabase): CitiesDao {

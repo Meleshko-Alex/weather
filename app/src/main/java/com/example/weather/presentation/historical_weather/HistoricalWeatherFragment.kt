@@ -26,6 +26,8 @@ import com.example.weather.R
 import com.example.weather.databinding.FragmentHistoricalWeatherBinding
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.weather.HistoricalWeather
+import com.example.weather.presentation.BaseFragment
+import com.example.weather.presentation.LoadingView
 import com.example.weather.presentation.State
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -33,7 +35,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @AndroidEntryPoint
-class HistoricalWeatherFragment : Fragment() {
+class HistoricalWeatherFragment : BaseFragment(), LoadingView {
     private var _binding: FragmentHistoricalWeatherBinding? = null
     private val binding: FragmentHistoricalWeatherBinding get() = _binding!!
     private val viewModel: HistoricalWeatherViewModel by viewModels()
@@ -54,11 +56,23 @@ class HistoricalWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
-            .setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
+        lockNavigationDrawer()
         observeViewModel()
         setUpMenu()
+        setUpStartDateField()
+        setUpEndDateField()
+
+        binding.btnGenerate.setOnClickListener {
+            viewModel.getHistoricalData(
+                latitude = city.latitude,
+                longitude = city.longitude,
+                units = measurementUnit
+            )
+        }
+    }
+
+    private fun setUpStartDateField() {
         binding.atvStartDate.apply {
             setOnClickListener {
                 if (viewModel.isEndDateTextInputLayoutEnabled.value) {
@@ -69,18 +83,13 @@ class HistoricalWeatherFragment : Fragment() {
             }
             inputType = InputType.TYPE_NULL
         }
+    }
+
+    private fun setUpEndDateField() {
         binding.atvEndDate.apply {
             setOnClickListener { showEndDatePickerDialog() }
             inputType = InputType.TYPE_NULL
         }
-        binding.btnGenerate.setOnClickListener {
-            viewModel.getHistoricalData(
-                latitude = city.latitude,
-                longitude = city.longitude,
-                units = measurementUnit
-            )
-        }
-
     }
 
     private fun observeViewModel() {
@@ -214,7 +223,8 @@ class HistoricalWeatherFragment : Fragment() {
     private fun showInfoAlertDialog() {
         AlertDialog.Builder(requireContext())
             .setTitle("Info")
-            .setMessage("""
+            .setMessage(
+                """
                 Build a graph that shows temperature change in the specified date range.
                  
                 Select a start date. It can be any day starting from 1st January 1979 ('min date') till the day before today ('max date').
@@ -229,7 +239,8 @@ class HistoricalWeatherFragment : Fragment() {
                     - Max temp (pivot's upper value): the maximum temperature in the date range.
                     - Min temp (pivot's lower value): the minimum temperature in the date range.
                     - Date range: the specified date range.
-            """.trimIndent())
+            """.trimIndent()
+            )
             .setPositiveButton("Ok") { dialog, _ ->
                 dialog.dismiss()
             }
@@ -265,16 +276,17 @@ class HistoricalWeatherFragment : Fragment() {
         }
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
+    override fun setUpActionBar() {
+        // change Up button icon
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
     }
 
-    private fun displayLoading() {
+    override fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
         binding.cardSparkInfo.visibility = View.INVISIBLE
     }
 
-    private fun hideLoading() {
+    override fun hideLoading() {
         binding.progressBar.visibility = View.INVISIBLE
         binding.cardSparkInfo.visibility = View.VISIBLE
     }

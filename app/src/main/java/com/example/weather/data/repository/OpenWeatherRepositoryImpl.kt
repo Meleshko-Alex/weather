@@ -1,7 +1,7 @@
 package com.example.weather.data.repository
 
 import com.example.weather.data.remote.DtoMapper
-import com.example.weather.data.remote.NetworkResult
+import com.example.weather.common.Resource
 import com.example.weather.data.remote.api.OpenWeatherService
 import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.models.weather.Weather
@@ -17,7 +17,7 @@ class OpenWeatherRepositoryImpl @Inject constructor(
         latitude: Double,
         longitude: Double,
         units: String
-    ): NetworkResult<Weather> {
+    ): Resource<Weather> {
         return try {
             val response = weatherService.getWeather(
                 latitude = latitude,
@@ -25,12 +25,12 @@ class OpenWeatherRepositoryImpl @Inject constructor(
                 units = units.lowercase()
             )
             if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(mapper.mapDtoToWeather(response.body()!!))
+                Resource.Success(mapper.mapDtoToWeather(response.body()!!))
             } else {
                 throw RuntimeException("Request error: ${response.message()}")
             }
         } catch (exception: Exception) {
-            NetworkResult.Error(exception.message!!)
+            Resource.Error(exception.message!!)
         }
     }
 
@@ -39,7 +39,7 @@ class OpenWeatherRepositoryImpl @Inject constructor(
         longitude: Double,
         units: String,
         dateTime: Long
-    ): NetworkResult<HistoricalWeather> {
+    ): Resource<HistoricalWeather> {
         return try {
             val response = weatherService.getHistoricalWeather(
                 latitude = latitude,
@@ -48,12 +48,12 @@ class OpenWeatherRepositoryImpl @Inject constructor(
                 dateTime = dateTime
             )
             if (response.isSuccessful && response.body() != null) {
-                NetworkResult.Success(mapper.mapDtoToHistoricalWeather(response.body()!!))
+                Resource.Success(mapper.mapDtoToHistoricalWeather(response.body()!!))
             } else {
                 throw RuntimeException("Request error: ${response.message()}")
             }
         } catch (exception: Exception) {
-            NetworkResult.Error(exception.message!!)
+            Resource.Error(exception.message!!)
         }
     }
 }

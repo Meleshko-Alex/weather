@@ -1,7 +1,5 @@
 package com.example.weather.data.remote.retrofit
 
-import com.example.weather.data.remote.api.AccuWeatherService
-import com.example.weather.data.remote.api.OpenWeatherService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.OkHttpClient
@@ -9,8 +7,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class AccuWeatherRetrofitClient {
+/**
+ * Singleton class for creating and configuring the Retrofit client for AccuWeather API.
+ */
+class AccuWeatherClient {
     companion object {
+        // get an instance of the RetrofitClient
         val instance: Retrofit by lazy {
             val moshi = Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
             val okHttp = OkHttpClient.Builder()

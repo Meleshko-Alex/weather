@@ -7,23 +7,22 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
 import android.view.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentDailyWeatherBinding
+import com.example.weather.presentation.BaseFragment
+import com.example.weather.presentation.LoadingView
 import com.example.weather.presentation.State
 import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class DailyWeatherFragment : Fragment() {
+class DailyWeatherFragment : BaseFragment(), LoadingView {
     private var _binding: FragmentDailyWeatherBinding? = null
     private val binding: FragmentDailyWeatherBinding get() = _binding!!
     private val viewModel: DailyWeatherViewModel by viewModels()
@@ -41,10 +40,9 @@ class DailyWeatherFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
-            .setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
         setUpStatusBar()
+        lockNavigationDrawer()
         setProgressBarColor()
         observeViewModel()
         setUpEpoxyRecyclerView()
@@ -58,7 +56,7 @@ class DailyWeatherFragment : Fragment() {
             getWeatherData()
         }
 
-        viewModel.state.observe(viewLifecycleOwner) { state ->
+        viewModel.weatherState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Success -> {
                     hideLoading()
@@ -67,6 +65,7 @@ class DailyWeatherFragment : Fragment() {
                 }
 
                 is State.Error -> {
+                    makeToast(requireContext(), state.message?: "Unknown error", Toast.LENGTH_LONG)
                     hideLoading()
                 }
 
@@ -78,7 +77,7 @@ class DailyWeatherFragment : Fragment() {
     }
 
     private fun setActionBarTitle() {
-        (requireActivity() as MainActivity).supportActionBar?.apply {
+        actionBar?.apply {
             val actionBarTitleColor = ContextCompat.getColor(requireContext(), R.color.white)
             val titleSpannable = SpannableString(city.name)
             titleSpannable.setSpan(
@@ -91,20 +90,17 @@ class DailyWeatherFragment : Fragment() {
         }
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as MainActivity).supportActionBar?.apply {
+    override fun setUpActionBar() {
+        actionBar?.apply {
             // change background color
-            setBackgroundDrawable(
-                ColorDrawable(
-                    ContextCompat.getColor(requireContext(), R.color.blue)
-                )
-            )
+            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.blue)))
 
+            // change Up button icon
             setHomeAsUpIndicator(R.drawable.ic_arrow_left_white)
         }
     }
 
-    private fun setUpStatusBar() {
+    override fun setUpStatusBar() {
         requireActivity().window.apply {
             // change background color
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -134,11 +130,11 @@ class DailyWeatherFragment : Fragment() {
         binding.rvDailyWeather.setController(epoxyController)
     }
 
-    private fun displayLoading() {
+    override fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun hideLoading() {
+    override fun hideLoading() {
         binding.progressBar.visibility = View.INVISIBLE
     }
 

@@ -13,15 +13,12 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
-import com.example.weather.MainActivity
 import com.example.weather.R
-import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentManageCitiesBinding
+import com.example.weather.domain.models.cities.City
+import com.example.weather.presentation.BaseFragment
+import com.example.weather.presentation.LoadingView
 import com.example.weather.presentation.State
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
@@ -30,7 +27,7 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ManageCitiesFragment : Fragment() {
+class ManageCitiesFragment : BaseFragment(), LoadingView {
     private var _binding: FragmentManageCitiesBinding? = null
     private val binding: FragmentManageCitiesBinding get() = _binding!!
     private val viewModel: ManageCitiesViewModel by viewModels()
@@ -48,25 +45,16 @@ class ManageCitiesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
-            .setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        observeViewModel()
         setUpActionBar()
-        setUpEpoxyRecyclerView()
+        lockNavigationDrawer()
+        observeViewModel()
         getTopCities()
+        setUpEpoxyRecyclerView()
+        setUpSearch()
         searchCity()
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                Log.d("CitiesListFragment", "viewModel.searchQuery: ${viewModel.searchQuery}")
-                viewModel.searchCity(viewModel.searchQuery ?: "")
-                hideKeyboard()
-                return@setOnEditorActionListener true
-            }
-            return@setOnEditorActionListener false
-        }
-        binding.etSearch.imeOptions = EditorInfo.IME_ACTION_SEARCH
+
         binding.fabOpenMapFragment.setOnClickListener {
-            findNavController().navigate(
+            navController.navigate(
                 ManageCitiesFragmentDirections.actionManageCitiesFragmentToMapFragment(
                     currentCity
                 )
@@ -74,12 +62,27 @@ class ManageCitiesFragment : Fragment() {
         }
     }
 
+    private fun setUpSearch() {
+        binding.etSearch.apply {
+            imeOptions = EditorInfo.IME_ACTION_SEARCH
+            setOnEditorActionListener { _, actionId, _ ->
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    viewModel.searchCity(viewModel.searchQuery ?: "")
+                    hideKeyboard()
+                    return@setOnEditorActionListener true
+                }
+                return@setOnEditorActionListener false
+            }
+        }
+    }
+
     private fun getTopCities() {
         viewModel.getTopCities()
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
+    override fun setUpActionBar() {
+        // change Up button icon
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
     }
 
     private fun observeViewModel() {
@@ -90,11 +93,18 @@ class ManageCitiesFragment : Fragment() {
         viewModel.citiesState.observe(viewLifecycleOwner) { state ->
             when (state) {
                 is State.Success -> {
+                    hideLoading()
                     epoxyController.topCities = state.data!!.cities
                 }
 
-                is State.Loading -> {}
-                is State.Error -> {}
+                is State.Loading -> {
+                    displayLoading()
+                }
+
+                is State.Error -> {
+                    makeToast(requireContext(), state.message!!, Toast.LENGTH_LONG)
+                    hideLoading()
+                }
             }
         }
 
@@ -105,17 +115,17 @@ class ManageCitiesFragment : Fragment() {
                     // to wait until the epoxy model is updated
                     Handler(Looper.getMainLooper()).postDelayed({
                         hideLoading()
-                        hideError()
+                        hideNoResultsMsg()
                     }, 500L)
                 }
 
                 is State.Error -> {
                     hideLoading()
-                    displayError()
+                    displayNoResultsMsg()
                 }
 
                 is State.Loading -> {
-                    hideError()
+                    hideNoResultsMsg()
                     displayLoading()
                 }
             }
@@ -124,12 +134,12 @@ class ManageCitiesFragment : Fragment() {
 
     private fun searchCity() {
         var job: Job? = null
-        binding.etSearch.addTextChangedListener {
+        binding.etSearch.addTextChangedListener { editable ->
             job?.cancel()
             job = MainScope().launch {
-                it?.let { query ->
+                editable?.let { query ->
                     if (query.isEmpty()) {
-                        hideError()
+                        hideNoResultsMsg()
                         epoxyController.searchResultCities = emptyList()
                     }
                     viewModel.searchQuery = query.toString()
@@ -163,7 +173,7 @@ class ManageCitiesFragment : Fragment() {
             .setPositiveButton("Yes") { dialog, _ ->
                 viewModel.setCurrentCity(city)
                 dialog.dismiss()
-                findNavController().popBackStack(R.id.homeWeatherFragment, true)
+                navController.popBackStack(R.id.homeWeatherFragment, true)
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.dismiss()
@@ -172,21 +182,21 @@ class ManageCitiesFragment : Fragment() {
             .show()
     }
 
-    private fun displayError() {
+    private fun displayNoResultsMsg() {
         binding.rvCities.visibility = View.INVISIBLE
         binding.tvMessageNoResults.visibility = View.VISIBLE
     }
 
-    private fun hideError() {
+    private fun hideNoResultsMsg() {
         binding.rvCities.visibility = View.VISIBLE
         binding.tvMessageNoResults.visibility = View.INVISIBLE
     }
 
-    private fun displayLoading() {
+    override fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun hideLoading() {
+    override fun hideLoading() {
         binding.progressBar.visibility = View.INVISIBLE
     }
 

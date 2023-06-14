@@ -25,13 +25,14 @@ import com.example.weather.R
 import com.example.weather.common.Constants
 import com.example.weather.common.SharedPref
 import com.example.weather.databinding.FragmentUserProfileBinding
+import com.example.weather.presentation.BaseFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class UserProfileFragment : Fragment() {
+class UserProfileFragment : BaseFragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding: FragmentUserProfileBinding get() = _binding!!
     private val auth = FirebaseAuth.getInstance()
@@ -49,29 +50,35 @@ class UserProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
-            .setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         setUpActionBar()
+        lockNavigationDrawer()
         bindUserData()
         observeViewModel()
 
         binding.cardWeatherSource.setOnClickListener {
-            requireActivity().startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse(Constants.SOURCE_URL)
-                )
-            )
+            showWeatherDataSource()
         }
+
         binding.cardMeasurementUnit.setOnClickListener {
             setUpMeasurementUnitSelectionDialog().show()
         }
+
         binding.cardLogout.setOnClickListener {
             logout()
         }
+
         binding.cardSignIn.setOnClickListener {
            goToRegistrationFragment()
         }
+    }
+
+    private fun showWeatherDataSource() {
+        requireActivity().startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(SOURCE_URL)
+            )
+        )
     }
 
     private fun bindUserData() {
@@ -91,8 +98,9 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as MainActivity).supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
+    override fun setUpActionBar() {
+        // change Up button icon
+        actionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_left_blue)
     }
 
     private fun observeViewModel() {
@@ -117,7 +125,7 @@ class UserProfileFragment : Fragment() {
         if (auth.currentUser != null) {
             auth.signOut()
 
-            // to be able to choose from different accounts and not automatically log in in previously selected
+            // to enable Google account selection pop up window
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -141,5 +149,9 @@ class UserProfileFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        private const val SOURCE_URL = "https://openweathermap.org/"
     }
 }

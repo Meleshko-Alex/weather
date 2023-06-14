@@ -9,45 +9,45 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import androidx.navigation.fragment.findNavController
 import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.common.Constants
 import com.example.weather.common.Utils.convertEpochToLocalDate
 import com.example.weather.common.Utils.getWeatherIcon
+import com.example.weather.databinding.FragmentHomeWeatherFlatBinding
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.weather.OneHourWeather
-import com.example.weather.databinding.FragmentHomeWeatherFlatBinding
+import com.example.weather.presentation.BaseFragment
+import com.example.weather.presentation.LoadingView
 import com.example.weather.presentation.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeWeatherFragment : Fragment() {
+class HomeWeatherFragment : BaseFragment(), LoadingView {
     private var _binding: FragmentHomeWeatherFlatBinding? = null
     private val binding: FragmentHomeWeatherFlatBinding get() = _binding!!
     private val viewModel: HomeWeatherViewModel by viewModels()
     private lateinit var epoxyController: HourlyWeatherEpoxyController
     private lateinit var currentCity: City
     private lateinit var measurementUnit: String
-    private lateinit var hourlyWeather: List<OneHourWeather>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(
-            this,
+        // closes the app when user taps back button
+        requireActivity().onBackPressedDispatcher.addCallback(this,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     requireActivity().finish()
                 }
-            })
+            }
+        )
     }
 
     override fun onCreateView(
@@ -55,77 +55,31 @@ class HomeWeatherFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentHomeWeatherFlatBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requireActivity().findViewById<DrawerLayout>(R.id.drawerLayout)
-            .setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-        observeViewModel()
         setUpActionBar()
         setUpStatusBar()
+        unlockNavigationDrawer()
+        observeViewModel()
         setUpEpoxyRecyclerView()
         setUpMenu()
-        binding.swipeRefreshLayout.apply {
-            setOnRefreshListener {
-                viewModel.fetchData()
-                getWeatherData(currentCity, measurementUnit)
-                isRefreshing = false
-            }
-        }
+        setUpSwipeToRefresh()
     }
 
-    private fun setUpActionBar() {
-        (requireActivity() as MainActivity).supportActionBar?.apply {
-            setBackgroundDrawable(
-                ColorDrawable(
-                    ContextCompat.getColor(requireContext(), R.color.white)
-                )
-            )
+    override fun setUpActionBar() {
+        actionBar?.apply {
+            // change background color
+            setBackgroundDrawable(ColorDrawable(ContextCompat.getColor(requireContext(), R.color.white)))
             show()
         }
     }
 
-    private fun observeViewModel() {
-
-        viewModel.userPref.observe(viewLifecycleOwner) {
-            currentCity = it.city
-            measurementUnit = it.measurementUnit
-            setActionBarTitle()
-            getWeatherData(currentCity, measurementUnit)
-        }
-
-        viewModel.state.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                is State.Success -> {
-                    hideLoading()
-                    val weather = state.data!!
-                    hourlyWeather = weather.hourly
-                    epoxyController.items = weather.hourly
-//                    buildGraphV2()
-                    bindWeatherData(weather.current)
-                }
-
-                is State.Error -> {
-                    hideLoading()
-                }
-
-                is State.Loading -> {
-                    displayLoading()
-                }
-            }
-        }
-    }
-
-    private fun setActionBarTitle() {
-        (requireActivity() as MainActivity).supportActionBar?.title = currentCity.name
-    }
-
-    private fun setUpStatusBar() {
-        requireActivity().window.apply {
+    override fun setUpStatusBar() {
+        window.apply {
             // change background color
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             statusBarColor = ContextCompat.getColor(requireContext(), R.color.white)
@@ -135,6 +89,34 @@ class HomeWeatherFragment : Fragment() {
 
             // change navigation bar background color
             navigationBarColor = ContextCompat.getColor(requireContext(), R.color.white)
+        }
+    }
+
+    private fun observeViewModel() {
+        viewModel.userPref.observe(viewLifecycleOwner) {
+            currentCity = it.city
+            measurementUnit = it.measurementUnit
+            (requireActivity() as MainActivity).supportActionBar?.title = currentCity.name
+            getWeatherData(currentCity, measurementUnit)
+        }
+
+        viewModel.weatherState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                is State.Success -> {
+                    hideLoading()
+                    epoxyController.items = state.data!!.hourly
+                    bindWeatherData(state.data.current)
+                }
+
+                is State.Error -> {
+                    makeToast(requireContext(), state.message?: "Unknown error", Toast.LENGTH_LONG)
+                    hideLoading()
+                }
+
+                is State.Loading -> {
+                    displayLoading()
+                }
+            }
         }
     }
 
@@ -178,7 +160,7 @@ class HomeWeatherFragment : Fragment() {
         }
 
         binding.cardNext7Days.setOnClickListener {
-            findNavController().navigate(R.id.action_homeWeatherFragment_to_dailyWeatherFragment)
+            navController.navigate(R.id.action_homeWeatherFragment_to_dailyWeatherFragment)
         }
     }
 
@@ -191,7 +173,7 @@ class HomeWeatherFragment : Fragment() {
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 return when (menuItem.itemId) {
                     R.id.menu_item_cities -> {
-                        findNavController().navigate(R.id.action_homeWeatherFragment_to_citiesListFragment)
+                        navController.navigate(R.id.action_homeWeatherFragment_to_citiesListFragment)
                         true
                     }
 
@@ -201,11 +183,21 @@ class HomeWeatherFragment : Fragment() {
         }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun displayLoading() {
+    private fun setUpSwipeToRefresh() {
+        binding.swipeRefreshLayout.apply {
+            setOnRefreshListener {
+                viewModel.fetchData()
+                getWeatherData(currentCity, measurementUnit)
+                isRefreshing = false
+            }
+        }
+    }
+
+    override fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
     }
 
-    private fun hideLoading() {
+    override fun hideLoading() {
         binding.progressBar.visibility = View.INVISIBLE
     }
 

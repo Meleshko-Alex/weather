@@ -5,7 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.example.weather.common.Constants
 
-@Entity(tableName = Constants.HOURLY_WEATHER_CACHE_TABLENAME)
+/**
+ * Represents a hourly weather entity in the local database
+ */
+@Entity(tableName = Constants.HOURLY_WEATHER_CACHE_TABLE_NAME)
 data class OneHourWeatherEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,

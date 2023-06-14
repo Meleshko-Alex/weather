@@ -8,13 +8,23 @@ import com.example.weather.data.local.entities.OneHourWeatherEntity
 
 @Dao
 interface HourlyWeatherDao {
-
+    /**
+     * Inserts a list of [OneHourWeatherEntity] objects into the database.
+     * @param hourlyWeather The list of hourly weather entities to be inserted.
+     */
     @Insert
     suspend fun insertHourlyWeather(hourlyWeather: List<OneHourWeatherEntity>)
 
-    @Query("SELECT * FROM ${Constants.HOURLY_WEATHER_CACHE_TABLENAME}")
+    /**
+     * Retrieves all hourly weather data from the database.
+     * @return a list of [OneHourWeatherEntity] objects representing all the hourly weather data in the database.
+     */
+    @Query("SELECT * FROM ${Constants.HOURLY_WEATHER_CACHE_TABLE_NAME}")
     suspend fun getAllHourlyWeather(): List<OneHourWeatherEntity>
 
-    @Query("DELETE FROM ${Constants.HOURLY_WEATHER_CACHE_TABLENAME}")
+    /**
+     * Deletes all hourly weather data from the database.
+     */
+    @Query("DELETE FROM ${Constants.HOURLY_WEATHER_CACHE_TABLE_NAME}")
     suspend fun deleteAllHourlyWeather()
 }

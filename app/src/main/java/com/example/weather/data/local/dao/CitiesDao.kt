@@ -4,11 +4,13 @@ import androidx.room.Dao
 import androidx.room.Query
 import com.example.weather.common.Constants
 import com.example.weather.data.local.entities.CityEntity
-import com.example.weather.domain.models.cities.City
 
 @Dao
 interface CitiesDao {
-
-    @Query("SELECT * FROM ${Constants.CITIES_TABLENAME}")
+    /**
+     * Retrieves all cities from the database.
+     * @return A list of [CityEntity] objects representing all the cities in the database.
+     */
+    @Query("SELECT * FROM ${Constants.CITIES_TABLE_NAME}")
     suspend fun getAll(): List<CityEntity>
 }
