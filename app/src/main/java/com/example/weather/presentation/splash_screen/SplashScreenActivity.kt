@@ -9,9 +9,8 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.example.weather.MainActivity
 import com.example.weather.R
-import com.example.weather.common.Constants
+import com.example.weather.presentation.main.MainActivity
 
 @SuppressLint("CustomSplashScreen")
 class SplashScreenActivity : AppCompatActivity() {

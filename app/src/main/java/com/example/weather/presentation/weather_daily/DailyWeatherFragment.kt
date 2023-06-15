@@ -6,18 +6,20 @@ import android.os.Bundle
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.viewModels
-import com.example.weather.MainActivity
 import com.example.weather.R
-import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentDailyWeatherBinding
-import com.example.weather.presentation.BaseFragment
-import com.example.weather.presentation.LoadingView
-import com.example.weather.presentation.State
+import com.example.weather.domain.models.cities.City
+import com.example.weather.presentation.main.BaseFragment
+import com.example.weather.presentation.main.LoadingView
+import com.example.weather.presentation.main.State
 import dagger.hilt.android.AndroidEntryPoint
 
 

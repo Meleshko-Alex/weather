@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.common.DataStoreManager
-import com.example.weather.domain.models.cities.City
 import com.example.weather.common.Resource
+import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.cities.SearchCityResult
 import com.example.weather.domain.models.cities.TopCities
 import com.example.weather.domain.repository.AccuWeatherRepository
 import com.example.weather.domain.repository.WeatherDatabaseRepository
-import com.example.weather.presentation.State
+import com.example.weather.presentation.main.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +30,9 @@ class ManageCitiesViewModel @Inject constructor(
     var searchQuery: String? = null
     val currentCity = dataStoreManager.getCurrentCity().asLiveData()
 
+    /**
+     * Retrieves the list of top 150 cities from the database
+     */
     fun getTopCities() {
         _citiesState.value = State.Loading()
 
@@ -46,6 +49,11 @@ class ManageCitiesViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Performs a search for a city based on the given query.
+     *
+     * @param query the query used for searching
+     */
     fun searchCity(query: String) {
         _searchCityState.value = State.Loading()
 
@@ -62,6 +70,12 @@ class ManageCitiesViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Sets the current city to the provided [city]
+     * The city is set in the DataStore
+     *
+     * @param city the city to be set
+     */
     fun setCurrentCity(city: City) {
         viewModelScope.launch {
             dataStoreManager.setCurrentCity(city)

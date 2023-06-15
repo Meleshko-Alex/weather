@@ -13,23 +13,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
-import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.databinding.FragmentHistoricalWeatherBinding
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.weather.HistoricalWeather
-import com.example.weather.presentation.BaseFragment
-import com.example.weather.presentation.LoadingView
-import com.example.weather.presentation.State
+import com.example.weather.presentation.main.BaseFragment
+import com.example.weather.presentation.main.LoadingView
+import com.example.weather.presentation.main.MainActivity
+import com.example.weather.presentation.main.State
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -65,7 +60,7 @@ class HistoricalWeatherFragment : BaseFragment(), LoadingView {
         setUpEndDateField()
 
         binding.btnGenerate.setOnClickListener {
-            viewModel.getHistoricalDataRange(
+            viewModel.getHistoricalWeather(
                 latitude = city.latitude,
                 longitude = city.longitude,
                 units = measurementUnit

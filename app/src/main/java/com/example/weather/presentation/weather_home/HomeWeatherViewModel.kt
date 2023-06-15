@@ -9,20 +9,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.weather.domain.notifications.NotificationWorker
 import com.example.weather.R
 import com.example.weather.WeatherApplication
 import com.example.weather.common.DataStoreManager
+import com.example.weather.common.Resource
 import com.example.weather.common.SharedPref
 import com.example.weather.common.Utils
-import com.example.weather.common.Resource
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.models.weather.HourlyWeather
 import com.example.weather.domain.models.weather.OneDayWeather
 import com.example.weather.domain.models.weather.WeatherTomorrow
+import com.example.weather.domain.notifications.NotificationWorker
 import com.example.weather.domain.repository.OpenWeatherRepository
 import com.example.weather.domain.repository.WeatherDatabaseRepository
-import com.example.weather.presentation.State
+import com.example.weather.presentation.main.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,13 +44,23 @@ class HomeWeatherViewModel @Inject constructor(
         scheduleWeatherNotification()
     }
 
+    /**
+     * Retrieves weather data for the specified location.
+     *
+     * @param latitude the latitude of the location.
+     * @param longitude the longitude of the location.
+     * @param measurementUnit the unit of measurement for the weather data.
+     */
     fun getWeatherData(
         latitude: Double,
         longitude: Double,
         measurementUnit: String
     ) {
-        // get cached data from db if not Internet connection detected, make an api call otherwise
+        // get cached data from db if no Internet connection detected, make an api call otherwise
         if (!hasInternetConnection() || isFetched) {
+            if (SharedPref(app).getIsFirstLaunch()) {
+                return
+            }
             getCachedData()
         } else {
             viewModelScope.launch {
@@ -73,6 +83,9 @@ class HomeWeatherViewModel @Inject constructor(
 
                         // save weather data for the next day in Shared Preferences
                         saveTomorrowWeather(result.data.daily[0])
+
+                        // check that the app has already been launched and fetched data
+                        SharedPref(app).setIsFirstLaunch(false)
                     }
 
                     is Resource.Error -> {

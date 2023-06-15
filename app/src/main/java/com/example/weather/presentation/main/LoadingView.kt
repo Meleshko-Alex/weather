@@ -1,4 +1,4 @@
-package com.example.weather.presentation
+package com.example.weather.presentation.main
 
 interface LoadingView {
     /**

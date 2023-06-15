@@ -9,7 +9,7 @@ import com.example.weather.common.DataStoreManager
 import com.example.weather.common.Resource
 import com.example.weather.domain.models.weather.DailyWeather
 import com.example.weather.domain.repository.WeatherDatabaseRepository
-import com.example.weather.presentation.State
+import com.example.weather.presentation.main.State
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -25,6 +25,9 @@ class DailyWeatherViewModel @Inject constructor(
     val weatherState: LiveData<State<DailyWeather>> = _weatherState
     val userPref = dataStoreManager.getUserPref().asLiveData()
 
+    /**
+     * Retrieves the cached daily weather data from the database.
+     */
     fun getDailyWeatherData() {
         _weatherState.value = State.Loading()
 

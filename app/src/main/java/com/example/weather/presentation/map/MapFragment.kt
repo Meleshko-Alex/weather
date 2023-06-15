@@ -1,6 +1,8 @@
 package com.example.weather.presentation.map
 
+import android.location.Address
 import android.location.Geocoder
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -16,9 +18,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.weather.R
-import com.example.weather.domain.models.cities.City
 import com.example.weather.databinding.FragmentMapBinding
-import com.example.weather.presentation.BaseFragment
+import com.example.weather.domain.models.cities.City
+import com.example.weather.presentation.main.BaseFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener
@@ -82,9 +84,11 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, OnMapClickListener, OnMa
         )
         lastSelectedMarker = marker
         marker?.showInfoWindow()
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 10f))
-        googleMap.setOnMapClickListener(this)
-        googleMap.setOnMarkerClickListener(this)
+        googleMap.apply {
+            moveCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 10f))
+            setOnMapClickListener(this@MapFragment)
+            setOnMarkerClickListener(this@MapFragment)
+        }
     }
 
     override fun onMapClick(positionClicked: LatLng) {
@@ -94,6 +98,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, OnMapClickListener, OnMa
             if (clickedCity != null) {
                 Log.d(TAG, "$clickedCity")
                 selectedCity = clickedCity
+
+                // add marker
                 lastSelectedMarker?.remove()
                 lastSelectedMarker = map.addMarker(
                     MarkerOptions()
@@ -103,6 +109,7 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, OnMapClickListener, OnMa
                 lastSelectedMarker?.showInfoWindow()
                 map.moveCamera(cameraUpdate)
 
+                // show action bar dialog
                 if (actionMode == null) {
                     actionMode = requireActivity().startActionMode(actionModelCallback)
                 }
@@ -118,6 +125,8 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, OnMapClickListener, OnMa
         city?.let {
             Log.d(TAG, "$it")
             selectedCity = it
+
+            // show action bar dialog
             if (actionMode == null) {
                 actionMode = requireActivity().startActionMode(actionModelCallback)
             }
@@ -128,11 +137,17 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, OnMapClickListener, OnMa
 
     private fun getClickedCityPosition(positionClicked: LatLng): City? {
         val geocoder = Geocoder(requireContext(), Locale.getDefault())
-        val addresses =
-            geocoder.getFromLocation(positionClicked.latitude, positionClicked.longitude, 1)
-        Log.d(TAG, "$addresses")
-        if (!addresses.isNullOrEmpty()) {
-            if (addresses[0].locality == null) {
+        var address: Address? = null
+        if (Build.VERSION.SDK_INT >= 33) {
+            geocoder.getFromLocation(positionClicked.latitude, positionClicked.longitude, 1) {
+                address = it.firstOrNull()
+            }
+        } else {
+            address = geocoder.getFromLocation(positionClicked.latitude, positionClicked.longitude, 1)?.firstOrNull()
+        }
+        Log.d(TAG, "$address")
+        address?.let {
+            if (it.locality == null) {
                 makeToast(
                     requireContext(),
                     "No city detected. Pick another place or zoom in more and try again",
@@ -140,9 +155,9 @@ class MapFragment : BaseFragment(), OnMapReadyCallback, OnMapClickListener, OnMa
                 )
             } else {
                 return City(
-                    name = addresses[0].locality,
-                    latitude = addresses[0].latitude,
-                    longitude = addresses[0].longitude
+                    name = it.locality,
+                    latitude = it.latitude,
+                    longitude = it.longitude
                 )
             }
         }

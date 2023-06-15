@@ -1,15 +1,13 @@
 package com.example.weather.data.repository
 
 import android.util.Log
-import com.example.weather.data.remote.DtoMapper
 import com.example.weather.common.Resource
+import com.example.weather.data.remote.DtoMapper
 import com.example.weather.data.remote.api.OpenWeatherService
 import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.models.weather.Weather
 import com.example.weather.domain.repository.OpenWeatherRepository
-import com.example.weather.presentation.State
 import java.util.Calendar
-import java.util.TreeMap
 import javax.inject.Inject
 
 class OpenWeatherRepositoryImpl @Inject constructor(

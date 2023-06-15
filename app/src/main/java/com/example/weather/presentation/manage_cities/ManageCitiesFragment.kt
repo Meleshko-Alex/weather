@@ -17,9 +17,9 @@ import androidx.fragment.app.viewModels
 import com.example.weather.R
 import com.example.weather.databinding.FragmentManageCitiesBinding
 import com.example.weather.domain.models.cities.City
-import com.example.weather.presentation.BaseFragment
-import com.example.weather.presentation.LoadingView
-import com.example.weather.presentation.State
+import com.example.weather.presentation.main.BaseFragment
+import com.example.weather.presentation.main.LoadingView
+import com.example.weather.presentation.main.State
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Job

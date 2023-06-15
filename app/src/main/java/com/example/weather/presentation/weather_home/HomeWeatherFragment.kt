@@ -16,7 +16,6 @@ import androidx.core.view.MenuProvider
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
-import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.common.Constants
 import com.example.weather.common.Utils.convertEpochToLocalDate
@@ -24,9 +23,10 @@ import com.example.weather.common.Utils.getWeatherIcon
 import com.example.weather.databinding.FragmentHomeWeatherFlatBinding
 import com.example.weather.domain.models.cities.City
 import com.example.weather.domain.models.weather.OneHourWeather
-import com.example.weather.presentation.BaseFragment
-import com.example.weather.presentation.LoadingView
-import com.example.weather.presentation.State
+import com.example.weather.presentation.main.BaseFragment
+import com.example.weather.presentation.main.LoadingView
+import com.example.weather.presentation.main.MainActivity
+import com.example.weather.presentation.main.State
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -114,6 +114,11 @@ class HomeWeatherFragment : BaseFragment(), LoadingView {
                 }
 
                 is State.Loading -> {
+                    displayLoading()
+                }
+
+                else -> {
+                    makeToast(requireActivity(), "Result of when branch is not of class State", Toast.LENGTH_LONG)
                     displayLoading()
                 }
             }

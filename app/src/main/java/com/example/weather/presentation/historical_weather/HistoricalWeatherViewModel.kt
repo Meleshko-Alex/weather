@@ -1,6 +1,5 @@
 package com.example.weather.presentation.historical_weather
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,18 +9,14 @@ import com.example.weather.common.DataStoreManager
 import com.example.weather.common.Resource
 import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.repository.OpenWeatherRepository
-import com.example.weather.presentation.State
+import com.example.weather.presentation.main.State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import java.util.Calendar
 import java.util.Locale
-import java.util.TreeMap
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,12 +59,25 @@ class HistoricalWeatherViewModel @Inject constructor(
         _isGenerateButtonEnabled.value = value
     }
 
+    /**
+     * Converts a Calendar object into a formatted date string.
+     *
+     * @param date the [Calendar] object representing the date.
+     * @return the formatted date string in the format "dd.MM.yyyy".
+     */
     fun getDateString(date: Calendar): String {
         val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
         return dateFormat.format(date.time)
     }
 
-    fun getHistoricalDataRange(
+    /**
+     * Retrieves historical weather data for a specified location.
+     *
+     * @param latitude the latitude of the location.
+     * @param longitude the longitude of the location.
+     * @param units the measurement units for the weather data.
+     */
+    fun getHistoricalWeather(
         latitude: Double,
         longitude: Double,
         units: String
@@ -90,6 +98,12 @@ class HistoricalWeatherViewModel @Inject constructor(
         }
     }
 
+    /**
+     * Calculates the average temperature of the weather data
+     *
+     * @param data the [List] of [weather data][HistoricalWeather]
+     * @return the calculated average temperature in the [data list][data]
+     */
     fun getAverageTemp(data: List<HistoricalWeather>): Int {
         var sum = 0
         data.forEach {

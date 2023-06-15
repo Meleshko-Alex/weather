@@ -13,6 +13,11 @@ class MapViewModel @Inject constructor(
     private val dataStoreManager: DataStoreManager
 ) : ViewModel() {
 
+    /**
+     * Saves the selected city for the weather data in the DataStore
+     *
+     * @param city the selected city to be saved
+     */
     fun saveSelectedCity(city: City) {
         viewModelScope.launch {
             dataStoreManager.setCurrentCity(city)

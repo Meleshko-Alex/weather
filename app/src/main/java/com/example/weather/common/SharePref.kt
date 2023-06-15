@@ -18,7 +18,7 @@ class SharedPref(context: Context) {
      * @return the weather information for today.
      */
     fun getTomorrowWeather(): WeatherTomorrow {
-        val weatherJson = sharedPref.getString(SharedPreferencesKeys.SHARED_PREF_WEATHER_TOMORROW, "")
+        val weatherJson = sharedPref.getString(SharedPreferencesKeys.WEATHER_TOMORROW, "")
         return Gson().fromJson(weatherJson, WeatherTomorrow::class.java)
     }
 
@@ -30,7 +30,7 @@ class SharedPref(context: Context) {
     fun setTomorrowWeather(weather: WeatherTomorrow) {
         val weatherJson = Gson().toJson(weather, WeatherTomorrow::class.java)
         with(sharedPref.edit()) {
-            putString(SharedPreferencesKeys.SHARED_PREF_WEATHER_TOMORROW, weatherJson)
+            putString(SharedPreferencesKeys.WEATHER_TOMORROW, weatherJson)
             apply()
         }
     }
@@ -41,7 +41,7 @@ class SharedPref(context: Context) {
      * @return `true` if the user is a guest, `false` otherwise.
      */
     fun getIsGuest(): Boolean {
-        return sharedPref.getBoolean(SharedPreferencesKeys.SHARED_PREF_IS_GUEST, false)
+        return sharedPref.getBoolean(SharedPreferencesKeys.IS_GUEST, false)
     }
 
     /**
@@ -51,9 +51,30 @@ class SharedPref(context: Context) {
      */
     fun setIsGuest(value: Boolean) {
         with(sharedPref.edit()) {
-            putBoolean(SharedPreferencesKeys.SHARED_PREF_IS_GUEST, value)
+            putBoolean(SharedPreferencesKeys.IS_GUEST, value)
             apply()
         }
+    }
+
+    /**
+     * Sets the value indicating whether the app is being launched for the first time.
+     *
+     * @param value the boolean value indicating if it is the first launch.
+     */
+    fun setIsFirstLaunch(value: Boolean) {
+        with(sharedPref.edit()) {
+            putBoolean(SharedPreferencesKeys.IS_FIRST_LAUNCH, value)
+            apply()
+        }
+    }
+
+    /**
+     * Retrieves the value indicating whether the app is being launched for the first time.
+     *
+     * @return a boolean value indicating if it is the first launch. Default value is true.
+     */
+    fun getIsFirstLaunch(): Boolean {
+        return sharedPref.getBoolean(SharedPreferencesKeys.IS_FIRST_LAUNCH, true)
     }
 
     companion object {

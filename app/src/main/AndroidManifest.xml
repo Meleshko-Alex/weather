@@ -3,9 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-feature android:name="android.hardware.screen.portrait" />
 
     <application
         android:name=".WeatherApplication"
@@ -19,7 +18,8 @@
         android:theme="@style/Theme.Weather"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".presentation.main.MainActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -28,6 +28,7 @@
 
         <activity
             android:name=".presentation.splash_screen.SplashScreenActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,21 +40,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-<!--        <service-->
-<!--            android:name=".MyFirebaseMessagingService"-->
-<!--            android:exported="false">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="com.google.firebase.MESSAGING_EVENT" />-->
-<!--                <action android:name="com.google.android.c2dm.permission.RECEIVE" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
-
-<!--        <receiver android:name=".NotificationBroadcast" />-->
-
-<!--        <service-->
-<!--            android:name=".NotificationService"-->
-<!--            android:exported="false" />-->
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

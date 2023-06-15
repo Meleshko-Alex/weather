@@ -44,18 +44,27 @@ class NotificationWorker (
                 target.add(Calendar.DAY_OF_YEAR, 1)
             }
 
-//             for testing purposes to receive a notification every 15 min use this
-//            val notificationRequest = PeriodicWorkRequestBuilder<NotificationWorker>(15, TimeUnit.MINUTES)
+            val notificationRequest =
+                PeriodicWorkRequestBuilder<NotificationWorker>(24, TimeUnit.HOURS)
+                    .addTag("TAG REMINDER WORKER")
+                    .setInitialDelay(
+                        target.timeInMillis - System.currentTimeMillis(),
+                        TimeUnit.MILLISECONDS
+                    )
+                    .setConstraints(constraints)
+                    .build()
+
+
+            // for testing purposes to receive a notification every 15 min (or 1h) use this code
+//            val target1 = Calendar.getInstance()
+//            target1.set(Calendar.MINUTE, 0)
+//            target1.add(Calendar.HOUR_OF_DAY, 1)
+//
+//            val notificationRequest = PeriodicWorkRequestBuilder<NotificationWorker>(1, TimeUnit.HOURS)
 //                .addTag("TAG REMINDER WORKER")
-//                .setInitialDelay(10_000L, TimeUnit.MILLISECONDS)
+//                .setInitialDelay(target1.timeInMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
 //                .setConstraints(constraints)
 //                .build()
-
-            val notificationRequest = PeriodicWorkRequestBuilder<NotificationWorker>(24, TimeUnit.HOURS)
-                .addTag("TAG REMINDER WORKER")
-                .setInitialDelay(target.timeInMillis - System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .setConstraints(constraints)
-                .build()
 
             WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 "notifications",

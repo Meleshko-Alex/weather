@@ -41,12 +41,12 @@ class NotificationHandler {
             .setAutoCancel(true)
             .build()
 
+
         if (ActivityCompat.checkSelfPermission(
                 context,
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            Log.d(this.javaClass.simpleName, "POST_NOTIFICATIONS permission is not granted")
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -56,7 +56,6 @@ class NotificationHandler {
             // for ActivityCompat#requestPermissions for more details.
             return
         }
-
         NotificationManagerCompat.from(context).notify(1, notification)
         Log.d(this.javaClass.simpleName, "Notification is created")
     }
@@ -79,7 +78,8 @@ class NotificationHandler {
         ).apply {
             description = "This channel send weather reports every N\\A"
         }
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.createNotificationChannel(notificationChannel)
         Log.d(this.javaClass.simpleName, "Notification channel is created")
     }

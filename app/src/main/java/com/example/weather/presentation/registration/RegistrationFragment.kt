@@ -8,24 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
-import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.weather.MainActivity
 import com.example.weather.R
 import com.example.weather.common.SharedPref
 import com.example.weather.databinding.FragmentRegistrationBinding
-import com.example.weather.presentation.BaseFragment
+import com.example.weather.presentation.main.BaseFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 
