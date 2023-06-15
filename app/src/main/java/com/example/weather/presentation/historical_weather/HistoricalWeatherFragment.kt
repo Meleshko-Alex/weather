@@ -10,6 +10,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuProvider
 import androidx.drawerlayout.widget.DrawerLayout
@@ -64,7 +65,7 @@ class HistoricalWeatherFragment : BaseFragment(), LoadingView {
         setUpEndDateField()
 
         binding.btnGenerate.setOnClickListener {
-            viewModel.getHistoricalData(
+            viewModel.getHistoricalDataRange(
                 latitude = city.latitude,
                 longitude = city.longitude,
                 units = measurementUnit
@@ -135,15 +136,19 @@ class HistoricalWeatherFragment : BaseFragment(), LoadingView {
             when (state) {
                 is State.Success -> {
                     hideLoading()
+                    binding.cardSparkInfo.visibility = View.VISIBLE
                     fillCardInfo(state.data!!)
                 }
 
                 is State.Loading -> {
                     displayLoading()
+                    binding.cardSparkInfo.visibility = View.INVISIBLE
                 }
 
                 is State.Error -> {
                     hideLoading()
+                    binding.cardSparkInfo.visibility = View.INVISIBLE
+                    makeToast(requireContext(), state.message!!, Toast.LENGTH_LONG)
                 }
             }
         }
@@ -283,12 +288,10 @@ class HistoricalWeatherFragment : BaseFragment(), LoadingView {
 
     override fun displayLoading() {
         binding.progressBar.visibility = View.VISIBLE
-        binding.cardSparkInfo.visibility = View.INVISIBLE
     }
 
     override fun hideLoading() {
         binding.progressBar.visibility = View.INVISIBLE
-        binding.cardSparkInfo.visibility = View.VISIBLE
     }
 
     override fun onDestroyView() {

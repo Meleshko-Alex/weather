@@ -3,6 +3,8 @@ package com.example.weather.domain.repository
 import com.example.weather.common.Resource
 import com.example.weather.domain.models.weather.HistoricalWeather
 import com.example.weather.domain.models.weather.Weather
+import java.util.Calendar
+import java.util.TreeMap
 
 interface OpenWeatherRepository {
     /**
@@ -34,4 +36,12 @@ interface OpenWeatherRepository {
         units: String,
         dateTime: Long
     ): Resource<HistoricalWeather>
+
+    suspend fun getHistoricalWeatherRange(
+        latitude: Double,
+        longitude: Double,
+        units: String,
+        startDate: Calendar,
+        endDate: Calendar
+    ): Resource<List<HistoricalWeather>>
 }

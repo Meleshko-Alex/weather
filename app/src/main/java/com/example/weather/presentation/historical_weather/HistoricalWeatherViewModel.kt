@@ -69,54 +69,24 @@ class HistoricalWeatherViewModel @Inject constructor(
         return dateFormat.format(date.time)
     }
 
-    private fun getNumberOfDays(): Int {
-        val d1 = with(startDate.value!!) {
-            LocalDate.of(
-                this.get(Calendar.YEAR),
-                this.get(Calendar.MONTH),
-                this.get(Calendar.DAY_OF_MONTH)
-            )
-        }
-        val d2 = with(endDate.value!!) {
-            LocalDate.of(
-                this.get(Calendar.YEAR),
-                this.get(Calendar.MONTH),
-                this.get(Calendar.DAY_OF_MONTH)
-            )
-        }
-
-        return ChronoUnit.DAYS.between(d1, d2).toInt()
-    }
-
-    fun getHistoricalData(
+    fun getHistoricalDataRange(
         latitude: Double,
         longitude: Double,
         units: String
     ) {
-        val map = TreeMap<Int, HistoricalWeather>()
-        val startDate = startDate.value.clone() as Calendar
-        var i = 0
-
         _historicalWeatherState.value = State.Loading()
 
         viewModelScope.launch {
-            val job = viewModelScope.launch(Dispatchers.IO) {
-                while(startDate <= endDate.value) {
-                    when (val result = remoteRepository.getHistoricalWeather(latitude, longitude, units, startDate.timeInMillis / 1000)) {
-                        is Resource.Success -> {
-                            map[i] = result.data!!
-                        }
 
-                        is Resource.Error -> {
-                            Log.e(this@HistoricalWeatherViewModel.javaClass.simpleName, result.message!!)
-                        }
-                    }
-                    i++
-                    startDate.add(Calendar.DATE, 1)
+            when (val resource = remoteRepository.getHistoricalWeatherRange(latitude, longitude, units,  startDate.value.clone() as Calendar, endDate.value)) {
+                is Resource.Success -> {
+                    _historicalWeatherState.postValue(State.Success(resource.data!!))
+                }
+
+                is Resource.Error -> {
+                    _historicalWeatherState.postValue(State.Error(resource.message!!))
                 }
             }
-            job.join()
-            _historicalWeatherState.postValue(State.Success(map.values.toList()))
         }
     }
 
