@@ -18,7 +18,7 @@ interface AccuWeatherService {
      */
     @GET("locations/v1/topcities/150")
     suspend fun getTopCities(
-        @Query("apikey") apiKey: String = BuildConfig.ACCUWEATHER_API_KEY
+        @Query("apikey") apiKey: String = ACCUWEATHER_API_KEY
     ): Response<List<CityDto>>
 
     /**
@@ -29,7 +29,11 @@ interface AccuWeatherService {
      */
     @GET("/locations/v1/cities/search")
     suspend fun searchCity(
-        @Query("apikey") apiKey: String = BuildConfig.ACCUWEATHER_API_KEY,
+        @Query("apikey") apiKey: String = ACCUWEATHER_API_KEY,
         @Query("q") query: String
     ): Response<List<SearchCityResultDto>>
+
+    companion object {
+        const val ACCUWEATHER_API_KEY = "RN8pDy2Ysog2abMQEVNUJCvAKre612Hd"
+    }
 }

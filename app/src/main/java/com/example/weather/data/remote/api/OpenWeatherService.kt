@@ -24,7 +24,7 @@ interface OpenWeatherService {
     suspend fun getWeather(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
-        @Query("appid") apiKey: String = BuildConfig.OPENWEATHER_API_KEY,
+        @Query("appid") apiKey: String = OPENWEATHER_API_KEY,
         @Query("units") units: String,
         @Query("exclude") excludeValues: String = "${Exclude.MINUTELY.value},${Exclude.CURRENT.value},${Exclude.ALERTS.value}"
     ): Response<WeatherDto>
@@ -42,7 +42,7 @@ interface OpenWeatherService {
     suspend fun getHistoricalWeather(
         @Query("lat") latitude: Double,
         @Query("lon") longitude: Double,
-        @Query("appid") apiKey: String = BuildConfig.OPENWEATHER_API_KEY,
+        @Query("appid") apiKey: String = OPENWEATHER_API_KEY,
         @Query("units") units: String,
         @Query("dt") dateTime: Long
     ): Response<HistoricalWeatherDto>
@@ -53,5 +53,9 @@ interface OpenWeatherService {
         HOURLY("hourly"),
         DAILY("daily"),
         ALERTS("alerts")
+    }
+
+    companion object {
+        const val OPENWEATHER_API_KEY = "124c24ac7ae91b33384bcfd450f0e40c";
     }
 }
