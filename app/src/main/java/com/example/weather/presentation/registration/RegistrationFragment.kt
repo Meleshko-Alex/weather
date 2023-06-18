@@ -133,7 +133,7 @@ class RegistrationFragment : BaseFragment() {
                 auth.signInWithCredential(authCredential)
                     .addOnCompleteListener { result ->
                         if (result.isSuccessful) {
-                            Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
+                                Toast.makeText(requireActivity(), getString(R.string.successful_authentication), Toast.LENGTH_LONG).show()
                             SharedPref(requireActivity()).setIsGuest(false)
                             findNavController().navigate(R.id.action_registrationFragment_to_homeWeatherFragment)
                         } else {

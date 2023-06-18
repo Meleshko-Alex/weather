@@ -26,7 +26,7 @@ class NotificationHandler {
             context,
             0,
             notificationIntent,
-            PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_MUTABLE
         )
 
         createNotificationChannel(context)
