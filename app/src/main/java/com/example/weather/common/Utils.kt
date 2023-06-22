@@ -5,6 +5,7 @@ import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 object Utils {
     private const val NIGHT_TIME = 21 // constant represents time - 21:00 - and is used for choosing a day/night icon
@@ -37,7 +38,7 @@ object Utils {
     */
     fun convertEpochToLocalDate(
         epoch: Long,
-        format: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d MMM")
+        format: DateTimeFormatter = DateTimeFormatter.ofPattern("EEEE, d MMM", Locale.US)
     ): String {
         val instant =
             Instant.ofEpochMilli(epoch * 1000) // Multiply by 1000 to convert to milliseconds

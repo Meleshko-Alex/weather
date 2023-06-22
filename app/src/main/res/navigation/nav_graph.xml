@@ -43,7 +43,8 @@
     <fragment
         android:id="@+id/dailyWeatherFragment"
         android:name="com.example.weather.presentation.weather_daily.DailyWeatherFragment"
-        android:label="DailyWeatherFragment" />
+        android:label="DailyWeatherFragment"
+        tools:layout="@layout/fragment_daily_weather" />
 
     <fragment
         android:id="@+id/manageCitiesFragment"
